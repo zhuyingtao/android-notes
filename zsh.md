@@ -1,6 +1,6 @@
 
-
-
+## Themes
+* [avit](https://github.com/robbyrussell/oh-my-zsh/wiki/themes)
 
 ## Plugins
 * [z](https://github.com/robbyrussell/oh-my-zsh/tree/master/plugins/z)
@@ -16,15 +16,15 @@ SYNOPSIS
 OPTIONS
 
     -c     restrict matches to subdirectories of the current directory
-    
+
     -h     show a brief help message
-    
+
     -l     list only
-    
+
     -r     match by rank only
-    
+
     -t     match by recent access only
-    
+
     -x     remove the current directory from the datafile
 
 EXAMPLES
