@@ -1,6 +1,6 @@
 
 
-## 常用命令
+## [常用命令](http://www.runoob.com/linux/linux-command-manual.html)
 - 查看开机时长 **top**,**last reboot**,**w**,**uptime**
 
 ### grep
@@ -18,4 +18,5 @@
 
 ### find
 - 用法
+
         find [OPTION]... [查找路径] [查找条件] [处理动作]
