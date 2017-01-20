@@ -4,6 +4,9 @@
 
 #### Blog
 * [SanjayF's blog](http://sanjay-f.github.io/)
+* [Gityuan](http://gityuan.com/)
+* [stormzhang](http://stormzhang.com/)
+* [郭霖的专栏](http://blog.csdn.net/guolin_blog)
 
 #### Title
 * Debug
