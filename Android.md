@@ -1,6 +1,7 @@
 
 #### Guide
 * [Android Developers](https://developer.android.com/index.html)
+* [Android Guidelines](https://github.com/ribot/android-guidelines)
 
 #### Blog
 * [SanjayF's blog](http://sanjay-f.github.io/)
@@ -26,3 +27,4 @@
 * [Dagger](https://github.com/google/dagger)
 * [android-architecture](https://github.com/googlesamples/android-architecture)
 * [awesome-android-ui](https://github.com/wasabeef/awesome-android-ui)
+* [battery-historian](https://github.com/google/battery-historian)
