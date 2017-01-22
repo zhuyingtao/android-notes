@@ -1,7 +1,14 @@
 
-
 ## [常用命令](http://www.runoob.com/linux/linux-command-manual.html)
-- 查看开机时长 **top**,**last reboot**,**w**,**uptime**
+- 文件操作 [mv](http://www.runoob.com/linux/linux-comm-mv.html) | [rm](http://www.runoob.com/linux/linux-comm-rm.html) | [cp](http://www.runoob.com/linux/linux-comm-cp.html) | [touch](http://www.runoob.com/linux/linux-comm-touch.html)
+- 文件查找
+[find](http://www.runoob.com/linux/linux-comm-find.html) | [locate](http://www.runoob.com/linux/linux-comm-locate.html) | [which](http://www.runoob.com/linux/linux-comm-which.html) | [whereis](http://www.runoob.com/linux/linux-comm-whereis.html) | type ---
+[区别](http://www.ruanyifeng.com/blog/2009/10/5_ways_to_search_for_files_using_the_terminal.html)
+- 文件内容查看 [cat](http://www.runoob.com/linux/linux-comm-cat.html) | [more](http://www.runoob.com/linux/linux-comm-more.html) | [less](http://www.runoob.com/linux/linux-comm-less.html) | head | tail --- [区别](https://my.oschina.net/junn/blog/304868)
+- 文件属性更改 [chmod](http://www.runoob.com/linux/linux-comm-chmod.html) | [chown](http://www.runoob.com/linux/linux-comm-chown.html) | [chgrp](http://www.runoob.com/linux/linux-comm-chgrp.html) | [chattr](http://www.runoob.com/linux/linux-comm-chattr.html)
+- 文件类型 [file](http://www.runoob.com/linux/linux-comm-file.html)
+- 链接 [ln](http://www.runoob.com/linux/linux-comm-ln.html)
+- [awk](http://www.runoob.com/linux/linux-comm-awk.html)
 - [grep](http://www.runoob.com/linux/linux-comm-grep.html)
-- [find](http://www.runoob.com/linux/linux-comm-find.html)
 
+- 查看开机时长 **top**,**last reboot**,**w**,**uptime**
