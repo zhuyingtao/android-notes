@@ -17,3 +17,20 @@
     - 显示内存状况 [free](http://www.runoob.com/linux/linux-comm-free.html)
 
 ## [shell脚本编程](http://www.runoob.com/linux/linux-shell.html)
+
+## 快捷键
+描述 | 快捷键
+-----|------
+打开终端 | Ctrl+Alt+T
+复制 | Ctrl+Shift+C
+粘贴 | Ctrl+Shift+V
+新建标签页 | Ctrl+Shift+T
+关闭标签页 | Ctrl+Shift+W
+跳转到行首 | Ctrl+A
+跳转到行尾 | Ctrl+E
+向前跳一个字符 | Ctrl+F
+向后跳一个字符 | Ctrl+B
+向前跳一个单词 | Alt+F
+向后跳一个单词 | Alt+B
+删除光标前所有字符 | Ctrl+U
+删除光标后所有字符 | Ctrl+K
