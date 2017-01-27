@@ -1,0 +1,9 @@
+# Awesome Blogs
+- [编程随想的博客](https://program-think.blogspot.com/)
+- [当然我在扯淡](http://www.yinwang.org/)
+- [廖雪峰的官方网站](http://www.liaoxuefeng.com/)
+- [Lucida](http://zh.lucida.me/)
+- [酷壳](http://coolshell.cn/)
+- [刘未鹏|Mind Hacks](http://mindhacks.cn/)
+- [阮一峰的网络日志](http://www.ruanyifeng.com/blog/)
+- [MacTalk-池建强的随想录](http://macshuo.com/)
