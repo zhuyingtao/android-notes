@@ -6,3 +6,5 @@
 
 2. git status中文文件名乱码
 > git config --global core.quotepath false
+
+### [git cheat sheet](https://services.github.com/on-demand/downloads/github-git-cheat-sheet.pdf)
