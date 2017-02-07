@@ -12,6 +12,8 @@
 #### Title
 * Debug
     * [你所不知道的Android Studio调试技巧](http://www.jianshu.com/p/011eb88f4e0d)
+    * [调试系列1：bugreport源码篇](http://gityuan.com/2016/06/10/bugreport/)
+    * [调试系列2：bugreport实战篇](http://gityuan.com/2016/06/11/bugreport-2/)
 * Task
     * [Android应用Loaders全面详解及源码浅析](http://blog.csdn.net/yanbober/article/details/48861457)
 
@@ -28,3 +30,4 @@
 * [android-architecture](https://github.com/googlesamples/android-architecture)
 * [awesome-android-ui](https://github.com/wasabeef/awesome-android-ui)
 * [battery-historian](https://github.com/google/battery-historian)
+* [lottie-android](https://github.com/airbnb/lottie-android)
