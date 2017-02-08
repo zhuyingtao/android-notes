@@ -15,6 +15,8 @@
     - [top](http://www.runoob.com/linux/linux-comm-top.html)
     - 显示用户登录信息 [w](http://www.runoob.com/linux/linux-comm-w.html)
     - 显示内存状况 [free](http://www.runoob.com/linux/linux-comm-free.html)
+- 软件工具
+    - [apt-get](http://man.linuxde.net/apt-get)
 
 ## [shell脚本编程](http://www.runoob.com/linux/linux-shell.html)
 

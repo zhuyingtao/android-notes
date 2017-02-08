@@ -2,6 +2,7 @@
 #### Guide
 * [Android Developers](https://developer.android.com/index.html)
 * [Android Guidelines](https://github.com/ribot/android-guidelines)
+* [Android Studio Project Site](http://tools.android.com/)
 
 #### Blog
 * [SanjayF's blog](http://sanjay-f.github.io/)
