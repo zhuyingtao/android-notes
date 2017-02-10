@@ -18,7 +18,10 @@
 - 软件工具
     - [apt-get](http://man.linuxde.net/apt-get)
 
-## [shell脚本编程](http://www.runoob.com/linux/linux-shell.html)
+## 技巧
+- [命令链接操作符](https://linux.cn/article-2469-1.html)
+
+## [Shell脚本编程](http://www.runoob.com/linux/linux-shell.html)
 
 ## 快捷键
 描述 | 快捷键
