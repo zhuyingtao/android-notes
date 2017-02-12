@@ -3,6 +3,7 @@
 * [Android Developers](https://developer.android.com/index.html)
 * [Android Guidelines](https://github.com/ribot/android-guidelines)
 * [Android Studio Project Site](http://tools.android.com/)
+* [Gradle User Guide 中文版](https://dongchuan.gitbooks.io/gradle-user-guide-/)
 
 #### Blog
 * [SanjayF's blog](http://sanjay-f.github.io/)
