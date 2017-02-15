@@ -4,6 +4,7 @@
 * [Android Guidelines](https://github.com/ribot/android-guidelines)
 * [Android Studio Project Site](http://tools.android.com/)
 * [Gradle User Guide 中文版](https://dongchuan.gitbooks.io/gradle-user-guide-/)
+* [Android DevTools](http://www.androiddevtools.cn/index.html)
 
 #### Blog
 * [SanjayF's blog](http://sanjay-f.github.io/)
@@ -43,3 +44,6 @@
 * [awesome-android-ui](https://github.com/wasabeef/awesome-android-ui)
 * [battery-historian](https://github.com/google/battery-historian)
 * [lottie-android](https://github.com/airbnb/lottie-android)
+
+#### Book
+* [Android开发书籍推荐](https://www.diycode.cc/wiki/androidbook)
