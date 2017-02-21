@@ -22,6 +22,7 @@
     * [ApplicationId 与 PackageName](https://chaosleong.gitbooks.io/gradle-for-android/content/appendix/applicationid_versus_packagename.html)
     * [versionCode 与 versionName](https://developer.android.com/studio/publish/versioning.html)
     * [SNAPSHOT](http://www.huangbowen.net/blog/2016/01/29/understand-official-version-and-snapshot-version-in-maven/)
+    * [Using internal and hidden APIs](https://devmaze.wordpress.com/2011/01/18/using-com-android-internal-part-1-introduction/)
 
 * Debug
     * [你所不知道的Android Studio调试技巧](http://www.jianshu.com/p/011eb88f4e0d)

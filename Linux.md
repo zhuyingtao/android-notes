@@ -6,6 +6,7 @@
     - 文件内容查看 [cat](http://www.runoob.com/linux/linux-comm-cat.html) | [more](http://www.runoob.com/linux/linux-comm-more.html) | [less](http://www.runoob.com/linux/linux-comm-less.html) | head | tail --- [区别](https://my.oschina.net/junn/blog/304868)
     - 文件属性更改 [chmod](http://www.runoob.com/linux/linux-comm-chmod.html) | [chown](http://www.runoob.com/linux/linux-comm-chown.html) | [chgrp](http://www.runoob.com/linux/linux-comm-chgrp.html) | [chattr](http://www.runoob.com/linux/linux-comm-chattr.html)
     - 文件类型 [file](http://www.runoob.com/linux/linux-comm-file.html)
+    - 窗口打开文件夹 [nautilus](http://www.jianshu.com/p/3d1e527419cd)
 - 内容匹配
     - [awk](http://www.runoob.com/linux/linux-comm-awk.html)
     - [grep](http://www.runoob.com/linux/linux-comm-grep.html)
