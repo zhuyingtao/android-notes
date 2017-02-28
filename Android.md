@@ -31,6 +31,8 @@
     * [调试系列2：bugreport实战篇](http://gityuan.com/2016/06/11/bugreport-2/)
 * Task
     * [Android应用Loaders全面详解及源码浅析](http://blog.csdn.net/yanbober/article/details/48861457)
+* Performance
+    * [LeakCanary 中文使用说明](https://www.liaohuqiu.net/cn/posts/leak-canary-read-me/)
 
 #### Project
 * [RxJava](https://github.com/ReactiveX/RxJava)
