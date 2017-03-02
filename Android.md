@@ -13,6 +13,9 @@
 * [郭霖的专栏](http://blog.csdn.net/guolin_blog)
 
 #### Title
+* Device
+    * [Android设备标识](http://www.cnblogs.com/lqminn/p/4204855.html)
+    * [如何唯一的标识一台Android设备](http://www.jianshu.com/p/178786f833b6)
 * Build
     * [深入浅出Android Makefile](http://nfer-zhuang.iteye.com/blog/1752368)
     * [android.mk](http://android.mk/)
@@ -29,6 +32,7 @@
     * [你所不知道的Android Studio调试技巧](http://www.jianshu.com/p/011eb88f4e0d)
     * [调试系列1：bugreport源码篇](http://gityuan.com/2016/06/10/bugreport/)
     * [调试系列2：bugreport实战篇](http://gityuan.com/2016/06/11/bugreport-2/)
+    * [ANR log](http://www.jianshu.com/p/8964812972be)
 * Task
     * [Android应用Loaders全面详解及源码浅析](http://blog.csdn.net/yanbober/article/details/48861457)
 * Performance
