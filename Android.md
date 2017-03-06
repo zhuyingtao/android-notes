@@ -37,6 +37,10 @@
     * [Android应用Loaders全面详解及源码浅析](http://blog.csdn.net/yanbober/article/details/48861457)
 * Performance
     * [LeakCanary 中文使用说明](https://www.liaohuqiu.net/cn/posts/leak-canary-read-me/)
+* Intent
+    * [Uri详解](http://blog.csdn.net/harvic880925/article/details/44679239)
+* Resource
+    * [Style在Android中的继承关系](http://blog.iderzheng.com/android-style-inheritance/)
 
 #### Project
 * [RxJava](https://github.com/ReactiveX/RxJava)
