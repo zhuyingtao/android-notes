@@ -5,6 +5,7 @@
 * [Android Studio Project Site](http://tools.android.com/)
 * [Gradle User Guide 中文版](https://dongchuan.gitbooks.io/gradle-user-guide-/)
 * [Android DevTools](http://www.androiddevtools.cn/index.html)
+* [AndroidCat](http://androidcat.com/)
 
 #### Blog
 * [SanjayF's blog](http://sanjay-f.github.io/)
@@ -41,6 +42,8 @@
     * [Uri详解](http://blog.csdn.net/harvic880925/article/details/44679239)
 * Resource
     * [Style在Android中的继承关系](http://blog.iderzheng.com/android-style-inheritance/)
+* Data
+    * [你真的会用Gson吗?Gson使用指南](http://www.jianshu.com/p/e740196225a4)
 
 #### Project
 * [RxJava](https://github.com/ReactiveX/RxJava)
