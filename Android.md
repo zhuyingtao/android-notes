@@ -6,6 +6,7 @@
 * [Gradle User Guide 中文版](https://dongchuan.gitbooks.io/gradle-user-guide-/)
 * [Android DevTools](http://www.androiddevtools.cn/index.html)
 * [AndroidCat](http://androidcat.com/)
+* [ADB Shell](http://adbshell.com/)
 
 #### Blog
 * [SanjayF's blog](http://sanjay-f.github.io/)
