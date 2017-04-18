@@ -25,6 +25,7 @@
     * [versionCode 与 versionName](https://developer.android.com/studio/publish/versioning.html)
     * [SNAPSHOT](http://www.huangbowen.net/blog/2016/01/29/understand-official-version-and-snapshot-version-in-maven/)
     * [Using internal and hidden APIs](https://devmaze.wordpress.com/2011/01/18/using-com-android-internal-part-1-introduction/)
+    * [理解 Android Build 系统](https://www.ibm.com/developerworks/cn/opensource/os-cn-android-build/)
 * Gradle
     * [Gradle 系列](http://www.jianshu.com/nb/7541763)
     * [使用Gradle管理你的Android Studio工程](http://www.flysnow.org/2015/03/30/manage-your-android-project-with-gradle.html)
@@ -45,6 +46,12 @@
     * [Style在Android中的继承关系](http://blog.iderzheng.com/android-style-inheritance/)
 * Data
     * [你真的会用Gson吗?Gson使用指南](http://www.jianshu.com/p/e740196225a4)
+* Storage
+    * [彻底理解android中的内部存储与外部存储](http://blog.csdn.net/u012702547/article/details/50269639)
+    * [内部存储与外部存储](https://developer.android.com/training/basics/data-storage/files.html#GetWritePermission)
+* Network
+    * [Android Volley完全解析](http://blog.csdn.net/guolin_blog/article/details/17482095)
+
 
 #### Project
 * [RxJava](https://github.com/ReactiveX/RxJava)
