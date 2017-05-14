@@ -38,6 +38,7 @@
     * [ANR log](http://www.jianshu.com/p/8964812972be)
 * Task
     * [Android应用Loaders全面详解及源码浅析](http://blog.csdn.net/yanbober/article/details/48861457)
+    * [JobScheduler](http://toastdroid.com/2015/02/21/how-to-use-androids-job-scheduler/)
 * Performance
     * [LeakCanary 中文使用说明](https://www.liaohuqiu.net/cn/posts/leak-canary-read-me/)
 * Intent
@@ -51,6 +52,9 @@
     * [内部存储与外部存储](https://developer.android.com/training/basics/data-storage/files.html#GetWritePermission)
 * Network
     * [Android Volley完全解析](http://blog.csdn.net/guolin_blog/article/details/17482095)
+    * [Volley vs Retrofit](http://blog.csdn.net/hwz2311245/article/details/46845271)
+    * [okhttp,retrofit,android-async-http,volley应该选择哪一个？](https://www.zhihu.com/question/35189851)
+    * [四种常见的 POST 提交数据方式](https://imququ.com/post/four-ways-to-post-data-in-http.html)
 
 
 #### Project
