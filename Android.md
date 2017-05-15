@@ -55,6 +55,12 @@
     * [Volley vs Retrofit](http://blog.csdn.net/hwz2311245/article/details/46845271)
     * [okhttp,retrofit,android-async-http,volley应该选择哪一个？](https://www.zhihu.com/question/35189851)
     * [四种常见的 POST 提交数据方式](https://imququ.com/post/four-ways-to-post-data-in-http.html)
+    * [GET 与 POST 的区别](https://www.oschina.net/news/77354/http-get-post-different)
+* Encapsulated
+    * [android volley封装及源码解析](http://www.cnblogs.com/ychengyong/p/5942613.html)
+    * [volley二次封装](http://www.cnblogs.com/summers/p/4398679.html)
+    * [Volley的二次封装](https://zebragg.github.io/2016/03/21/Volley%E7%9A%84%E4%BA%8C%E6%AC%A1%E5%B0%81%E8%A3%85/)
+    * [android volley解析与二次封装](http://blog.csdn.net/self_study/article/details/49382649)
 
 
 #### Project
