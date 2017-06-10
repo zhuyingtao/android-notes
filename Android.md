@@ -50,6 +50,8 @@
 * Storage
     * [彻底理解android中的内部存储与外部存储](http://blog.csdn.net/u012702547/article/details/50269639)
     * [内部存储与外部存储](https://developer.android.com/training/basics/data-storage/files.html#GetWritePermission)
+* Memory
+    * [ Android内存优化（使用SparseArray和ArrayMap代替HashMap）](http://blog.csdn.net/u010687392/article/details/47809295)
 * Network
     * [Android Volley完全解析](http://blog.csdn.net/guolin_blog/article/details/17482095)
     * [Volley vs Retrofit](http://blog.csdn.net/hwz2311245/article/details/46845271)
