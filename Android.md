@@ -31,11 +31,13 @@
     * [使用Gradle管理你的Android Studio工程](http://www.flysnow.org/2015/03/30/manage-your-android-project-with-gradle.html)
     * [Android targetSdkVersion 原理](http://www.race604.com/android-targetsdkversion/)
     * [compileSdkVersion, minSdkVersion 和 targetSdkVersion](http://chinagdg.org/2016/01/picking-your-compilesdkversion-minsdkversion-targetsdkversion/)
+    * [Android中ProGuard配置和总结](http://treesouth.github.io/2015/04/05/Android%E4%B8%ADProGuard%E6%B7%B7%E6%B7%86%E9%85%8D%E7%BD%AE%E5%92%8C%E6%80%BB%E7%BB%93/)
 * Debug
     * [你所不知道的Android Studio调试技巧](http://www.jianshu.com/p/011eb88f4e0d)
     * [调试系列1：bugreport源码篇](http://gityuan.com/2016/06/10/bugreport/)
     * [调试系列2：bugreport实战篇](http://gityuan.com/2016/06/11/bugreport-2/)
     * [ANR log](http://www.jianshu.com/p/8964812972be)
+    * [阅读Bugreport](https://source.android.com/source/read-bug-reports)
 * Task
     * [Android应用Loaders全面详解及源码浅析](http://blog.csdn.net/yanbober/article/details/48861457)
     * [JobScheduler](http://toastdroid.com/2015/02/21/how-to-use-androids-job-scheduler/)
@@ -63,10 +65,15 @@
     * [volley二次封装](http://www.cnblogs.com/summers/p/4398679.html)
     * [Volley的二次封装](https://zebragg.github.io/2016/03/21/Volley%E7%9A%84%E4%BA%8C%E6%AC%A1%E5%B0%81%E8%A3%85/)
     * [android volley解析与二次封装](http://blog.csdn.net/self_study/article/details/49382649)
+* Async
+    * [给 Android 开发者的 RxJava 详解](https://gank.io/post/560e15be2dca930e00da1083)
+* UI
+    * [Android 9 patch](http://blog.csdn.net/ouyang_peng/article/details/9242889)
 
 
 #### Project
 * [RxJava](https://github.com/ReactiveX/RxJava)
+* [RxAndroid](https://github.com/ReactiveX/RxAndroid)
 * [Retrofit](https://github.com/square/retrofit)
 * [EventBus](https://github.com/greenrobot/EventBus)
 * [Glide](https://github.com/bumptech/glide)
