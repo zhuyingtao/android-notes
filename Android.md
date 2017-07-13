@@ -69,6 +69,10 @@
     * [给 Android 开发者的 RxJava 详解](https://gank.io/post/560e15be2dca930e00da1083)
 * UI
     * [Android 9 patch](http://blog.csdn.net/ouyang_peng/article/details/9242889)
+    * [Android系统软键盘显示/隐藏控制](http://www.jianshu.com/p/23350a868ef5)
+* Common
+    * [利用正则表达式排除特定字符串](http://www.cnblogs.com/wangqiguo/archive/2012/05/08/2486548.html)
+    * [正则表达式之零宽度断言](http://blog.csdn.net/lcore/article/details/8744392)
 
 
 #### Project
@@ -89,3 +93,6 @@
 
 #### Book
 * [Android开发书籍推荐](https://www.diycode.cc/wiki/androidbook)
+
+#### Tools
+* [pidcat](https://github.com/JakeWharton/pidcat)
