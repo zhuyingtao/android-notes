@@ -13,6 +13,7 @@
 * [Gityuan](http://gityuan.com/)
 * [stormzhang](http://stormzhang.com/)
 * [郭霖的专栏](http://blog.csdn.net/guolin_blog)
+* [Hongyang](http://blog.csdn.net/lmj623565791)
 
 #### Title
 * Device
@@ -70,6 +71,8 @@
 * UI
     * [Android 9 patch](http://blog.csdn.net/ouyang_peng/article/details/9242889)
     * [Android系统软键盘显示/隐藏控制](http://www.jianshu.com/p/23350a868ef5)
+    * [全面了解Android Notification](http://www.jianshu.com/p/22e27a639787)
+    * [Android RecyclerView 使用完全解析](http://blog.csdn.net/lmj623565791/article/details/45059587)
 * Common
     * [利用正则表达式排除特定字符串](http://www.cnblogs.com/wangqiguo/archive/2012/05/08/2486548.html)
     * [正则表达式之零宽度断言](http://blog.csdn.net/lcore/article/details/8744392)
