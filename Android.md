@@ -76,6 +76,8 @@
 * Common
     * [利用正则表达式排除特定字符串](http://www.cnblogs.com/wangqiguo/archive/2012/05/08/2486548.html)
     * [正则表达式之零宽度断言](http://blog.csdn.net/lcore/article/details/8744392)
+* Editor
+    * [markdown语法](https://segmentfault.com/markdown)
 
 
 #### Project
