@@ -78,6 +78,10 @@
     * [正则表达式之零宽度断言](http://blog.csdn.net/lcore/article/details/8744392)
 * Editor
     * [markdown语法](https://segmentfault.com/markdown)
+* ADB
+    * [awesome-adb](https://github.com/mzlogin/awesome-adb)
+    * [Android adb](https://developer.android.com/studio/command-line/adb.html?hl=zh-cn)
+    * [adb](https://testerhome.com/topics/2565)
 
 
 #### Project
