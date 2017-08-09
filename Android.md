@@ -76,6 +76,8 @@
 * Common
     * [利用正则表达式排除特定字符串](http://www.cnblogs.com/wangqiguo/archive/2012/05/08/2486548.html)
     * [正则表达式之零宽度断言](http://blog.csdn.net/lcore/article/details/8744392)
+    * [正则表达式贪婪与非贪婪](http://blog.csdn.net/lxcnn/article/details/4756030)
+    * [Java正则表达式：Pattern类和Matcher类](http://www.cnblogs.com/lonelysharer/archive/2012/03/08/2384773.html)
 * Editor
     * [markdown语法](https://segmentfault.com/markdown)
 * ADB
