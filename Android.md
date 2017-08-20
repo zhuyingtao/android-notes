@@ -50,6 +50,8 @@
     * [Style在Android中的继承关系](http://blog.iderzheng.com/android-style-inheritance/)
 * Data
     * [你真的会用Gson吗?Gson使用指南](http://www.jianshu.com/p/e740196225a4)
+* Provider
+    * [ContentProvider使用场景解读](http://www.jianshu.com/p/cdef889736ec)
 * Storage
     * [彻底理解android中的内部存储与外部存储](http://blog.csdn.net/u012702547/article/details/50269639)
     * [内部存储与外部存储](https://developer.android.com/training/basics/data-storage/files.html#GetWritePermission)
