@@ -16,25 +16,166 @@ adb [-d|-e|-s <serialNumber>] <command>
 #### 常用命令
 ##### ADB 命令
 ```sh
-- adb devices  输出设备列表
-- adb start-server  启动 adb server (一般无需手动执行此命令，在运行 adb 命令时若发现 adb server 没有启动会自动调起)
+- adb devices  // 输出设备列表
+- adb start-server  // 启动 adb server (一般无需手动执行此命令，在运行 adb 命令时若发现 adb server 没有启动会自动调起)
     - -P <port> 指定端口号，默认端口为5037
-- adb kill-server  停止 adb server
-- adb version  查看 adb 版本
-- adb root  获取手机 root 权限
+- adb kill-server  // 停止 adb server
+- adb version  // 查看 adb 版本
+- adb root  // 获取手机 root 权限
 ```
 ##### ADB shell 命令
+
+- 查看手机中应用的包名
+
 ```sh
-- adb shell pm list packages [-f] [-d] [-e] [-s] [-3] [-i] [-u] [--user USER_ID][FILTER]
+adb shell pm list packages [-f] [-d] [-e] [-s] [-3] [-i] [-u] [--user USER_ID][FILTER]
 ```
-| 参数       | 用途              |
-| -------- | :-------------- |
-| 无        | 显示所有应用          |
-| -f       | 显示应用关联的 apk 文件  |
-| -d       | 只显示 disabled 应用 |
-| -e       | 只显示 enabled 应用  |
-| -s       | 只显示系统应用         |
-| -3       | 只显示第三方应用        |
-| -i       | 显示应用的 installer |
-| -u       | 包含已卸载应用         |
-| <FILTER> | 包名包含<FILTER>字符串 |
+| 参数         | 用途                |
+| ---------- | :---------------- |
+| 无          | 显示所有应用            |
+| -f         | 显示应用关联的 apk 文件    |
+| -d         | 只显示 disabled 应用   |
+| -e         | 只显示 enabled 应用    |
+| -s         | 只显示系统应用           |
+| -3         | 只显示第三方应用          |
+| -i         | 显示应用的 installer   |
+| -u         | 包含已卸载应用           |
+| `<FILTER>` | 包名包含`<FILTER>`字符串 |
+
+- 安装应用
+
+```sh
+adb install [-lrtsdg] <path_to_apk>
+```
+| 参数   | 含义                                       |
+| ---- | ---------------------------------------- |
+| -l   | 将应用安装到保护目录 /mnt/asec                     |
+| -r   | 允许覆盖安装                                   |
+| -t   | 允许安装 AndroidManifest.xml 里 application 指定 `android:testOnly="true"` 的应用 |
+| -s   | 将应用安装到 sdcard                            |
+| -d   | 允许降级覆盖安装                                 |
+| -g   | 授予所有运行时权限                                |
+
+`adb install`内部原理简介：
+
+1. `adb push` apk 到 /data/local/tmp目录下。
+2. 调用`pm install`安装apk。
+3. 删除/data/local/tmp目录下的 apk。
+
+- 卸载应用
+
+```sh
+adb uninstall [-k] <package_name>
+```
+
+| 参数   | 含义             |
+| ---- | -------------- |
+| -k   | 卸载应用但保留数据和缓存目录 |
+
+- 清除数据和缓存
+
+```sh
+adb shell pm clear <package_name>
+```
+
+- 查看 activity
+
+```sh
+adb shell dumpsys activity activities
+```
+
+- 查看 service
+
+```sh
+adb shell dumpsys activity services [<package_name>]
+```
+
+- 与应用交互，使用 `am <command>`命令，常用的<command>命令有：
+
+| command                           | 用途                         |
+| --------------------------------- | -------------------------- |
+| `start [options] <INTENT>`        | 启动 `<INTENT>` 指定的 Activity |
+| `startservice [options] <INTENT>` | 启动 `<INTENT>` 指定的 Service  |
+| `broadcast [options] <INTENT>`    | 发送 `<INTENT>` 指定的广播        |
+| `force-stop <packagename>`        | 停止 `<packagename>` 相关的进程   |
+
+`<INTENT>`对应的选项如下：
+
+| 参数               | 含义                                       |
+| ---------------- | ---------------------------------------- |
+| `-a <ACTION>`    | 指定 action，比如 `android.intent.action.VIEW` |
+| `-c <CATEGORY>`  | 指定 category，比如 `android.intent.category.APP_CONTACTS` |
+| `-n <COMPONENT>` | 指定完整 component ，比如 `com.example.app/.ExampleActivity` |
+
+- 复制手机里的文件到 PC 端
+
+```sh
+adb pull <phone_path> [pc_path]
+```
+
+- 复制 PC 端的文件到手机
+
+```shell
+adb push <pc_path> <phone_path>
+```
+
+- 查看日志
+
+```sh
+adb logcat [<option>]...[<filter-spec>]...
+```
+
+##### 按级别过滤日志
+
+Android 的日志分为如下几个优先级（priority）：
+
+- V —— Verbose（最低，输出得最多）
+- D —— Debug
+- I —— Info
+- W —— Warning
+- E —— Error
+- F —— Fatal
+- S —— Silent（最高，啥也不输出）
+
+按某级别过滤日志则会将该级别及以上的日志输出。
+
+比如，命令：
+
+```
+adb logcat *:W
+```
+
+会将 Warning、Error、Fatal 和 Silent 日志输出。
+
+##### 按 tag 和级别过滤日志
+
+`<filter-spec>` 可以由多个 `<tag>[:priority]` 组成。
+
+比如，命令：
+
+```
+adb logcat ActivityManager:I MyApp:D *:S
+```
+
+表示输出 tag `ActivityManager` 的 Info 以上级别日志，输出 tag `MyApp` 的 Debug 以上级别日志，及其它 tag 的 Silent 级别日志（即屏蔽其它 tag 日志）。
+
+| 参数   | 含义        |
+| ---- | --------- |
+| -v   | 指定日志输出的格式 |
+| -c   | 清空日志      |
+
+- 查看设备信息
+
+```sh
+adb shell getprop [<property_key>]
+```
+
+```sh
+adb shell getprop | grep <property>
+```
+
+- 重启手机
+
+```sh
+adb reboot [recovery|bootloader]
+```
