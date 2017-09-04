@@ -1,5 +1,9 @@
 # ADB 命令
 
+### 概述
+
+adb 是android debug bridge 的缩写，从字面意思就可以看出，adb 是连接 PC 端与客户端之间的“桥梁”，通过它，我们可以从 PC 端对客户端进行调试。
+
 ### 基本原理
 
 adb 的运行原理是 PC 端的 adb server 与手机端的守护进程 adbd 建立连接，然后 PC 端的 adb client 通过 adb server 转发命令，adbd 接收命令后解析运行。
@@ -12,6 +16,8 @@ ADB 命令的基本语法如下：
 adb [-d|-e|-s <serialNumber>] <command>
 ```
 如果只有一个设备/模拟器连接时，可以省略掉 [-d|-e|-s <serialNumber>] 这一部分，直接使用 adb <command>。
+
+在配置好环境变量的前提下，直接输入`adb`或者`adb help`可以列出所有的命令选项。
 
 #### 常用命令
 ##### ADB 命令
