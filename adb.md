@@ -1,41 +1,72 @@
 # ADB 命令
 
-### 1. 概述
+## 1. 概述
 
 adb 是android debug bridge 的缩写，从字面意思就可以看出，adb 是连接 PC 端与客户端之间的“桥梁”，通过它，我们可以从 PC 端对客户端进行调试。
 
-### 2. 基本原理
+## 2. 基本原理
 
 adb 的运行原理是 PC 端的 adb server 与手机端的守护进程 adbd 建立连接，然后 PC 端的 adb client 通过 adb server 转发命令，adbd 接收命令后解析运行。
 
 所以如果 adbd 以普通权限执行，有些需要 root 权限才能执行的命令无法直接用 adb xxx 执行。这时可以 adb shell 然后 su 后执行命令，也可以让 adbd 以 root 权限执行，这个就能随意执行高权限命令了。
-### 3. 基本用法
-#### 3.1 命令语法
+## 3. 基本用法
+### 3.1. 命令语法
 adb 命令的基本语法如下：
 ```sh
 adb [-d|-e|-s <serialNumber>] <command>
 ```
-如果只有一个设备/模拟器连接时，可以省略掉 [-d|-e|-s <serialNumber>] 这一部分，直接使用 `adb <command>`。
+如果只有一个设备/模拟器连接时，可以省略掉 `[-d|-e|-s <serialNumber>]` 这一部分，直接使用 `adb <command>`。
 
 在配置好环境变量的前提下，直接输入`adb`或者`adb help`可以列出所有的命令选项。
 
-#### 3.2 常用命令
+### 3.2. 常用命令
 
 adb命令分为两种，分别是 **adb** 命令和 **adb shell** 命令。
 
 - adb 命令是指 adb 这个程序自带的一些命令。
 - adb shell 命令是指 android 设备自带的命令。这些命令存放在设备的 `/system/bin` 目录下，由一些 linux 通用的命令（如 cat/ls/ps）和 android 特有的命令（如 am/pm）组成。
 
-##### 3.2.1 adb 命令
+#### adb 命令
+
+---
+
+- 查看 adb 版本
+
 ```sh
-- adb devices  // 输出设备列表
-- adb start-server  // 启动 adb server (一般无需手动执行此命令，在运行 adb 命令时若发现 adb server 没有启动会自动调起)
-    - -P <port> 指定端口号，默认端口为5037
-- adb kill-server  // 停止 adb server
-- adb version  // 查看 adb 版本
-- adb root  // 获取手机 root 权限
+adb version
 ```
-##### ADB shell 命令
+
+- 输出所有连接的设备
+
+```sh
+adb devices
+```
+
+- 启动 adb server (一般无需手动执行此命令，在运行 adb 命令时若发现 adb server 没有启动会自动调起)
+
+```sh
+adb start-server
+```
+
+| 参数         | 用途              |
+| ---------- | --------------- |
+| - P <port> | 指定端口号，默认端口为5037 |
+
+- 停止 adb server
+
+```sh
+adb kill-server
+```
+
+- 获取设备 root 权限
+
+```sh
+adb root
+```
+
+#### adb shell 命令
+
+----
 
 - 查看手机中应用的包名
 
