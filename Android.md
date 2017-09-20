@@ -50,6 +50,13 @@
     * [Style在Android中的继承关系](http://blog.iderzheng.com/android-style-inheritance/)
 * Data
     * [你真的会用Gson吗?Gson使用指南](http://www.jianshu.com/p/e740196225a4)
+* Database
+    * [SQLite加密方式](http://www.jianshu.com/p/1298ef1131cf)
+    * [Android数据存储之SQLCipher数据库加密](http://www.cnblogs.com/whoislcj/p/5511522.html)
+    * [SQLCipher加密你的数据库](http://www.jianshu.com/p/3baf311f8c8c)
+    * [利用SQLCipher加解密数据库（包括加解密已有的数据库）](http://blog.csdn.net/wjk343977868/article/details/53410738)
+    * [Android数据库安全解决方案，使用SQLCipher进行加解密](http://blog.csdn.net/guolin_blog/article/details/11952409)
+    * [SQLCipher](https://www.zetetic.net/sqlcipher/open-source/)
 * Provider
     * [ContentProvider使用场景解读](http://www.jianshu.com/p/cdef889736ec)
 * Storage
