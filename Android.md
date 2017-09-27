@@ -14,6 +14,7 @@
 * [stormzhang](http://stormzhang.com/)
 * [郭霖的专栏](http://blog.csdn.net/guolin_blog)
 * [Hongyang](http://blog.csdn.net/lmj623565791)
+* [技术小黑屋](http://droidyue.com/)
 
 #### Title
 * Device
