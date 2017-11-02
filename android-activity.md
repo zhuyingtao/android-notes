@@ -17,7 +17,7 @@
 - 当系统配置发生改变后，activity 会重建，可以指定`configChanges`属性，来指定哪些情况下不重建。
 
 ```xml
-	android:configChanges="orientation|keyboardHidden"
+android:configChanges="orientation|keyboardHidden"
 ```
 
 #### 启动模式
