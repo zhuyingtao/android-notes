@@ -1,3 +1,5 @@
+### Android 异步
+
 Android UI是线程不安全的，如果想要在子线程里进行UI操作，就需要借助Android的异步消息处理机制。
 
 #### Handler
@@ -67,3 +69,44 @@ class DownloadTask extends AsyncTask<Void, Integer, Boolean> {
 }
 ```
 
+在整个应用程序中的所有AsyncTask实例都会共用同一个SerialExecutor，其源码如下：
+
+```java
+private static class SerialExecutor implements Executor {  
+    final ArrayDeque<Runnable> mTasks = new ArrayDeque<Runnable>();  
+    Runnable mActive;  
+  
+    public synchronized void execute(final Runnable r) {  
+        mTasks.offer(new Runnable() {  
+            public void run() {  
+                try {  
+                    r.run();  
+                } finally {  
+                    scheduleNext();  
+                }  
+            }  
+        });  
+        if (mActive == null) {  
+            scheduleNext();  
+        }  
+    }  
+  
+    protected synchronized void scheduleNext() {  
+        if ((mActive = mTasks.poll()) != null) {  
+            THREAD_POOL_EXECUTOR.execute(mActive);  
+        }  
+    }  
+}  
+```
+
+每次当一个任务执行完毕后，下一个任务才会得到执行，SerialExecutor模仿的是单一线程池的效果，如果我们快速地启动了很多任务，同一时刻只会有一个线程正在执行，其余的均处于等待状态。
+
+如果不想使用默认的线程池，还可以自由地进行配置。比如使用如下的代码来启动任务：
+
+```java
+Executor exec = new ThreadPoolExecutor(15, 200, 10,  
+        TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>());  
+new DownloadTask().executeOnExecutor(exec); 
+```
+
+这样就可以使用我们自定义的一个Executor来执行任务，而不是使用SerialExecutor。上述代码的效果允许在同一时刻有15个任务正在执行，并且最多能够存储200个任务。
