@@ -161,3 +161,113 @@ Service和Thread之间没有任何关系，Service其实是运行在主线程里
 
 调用`startForeground()`方法就可以让Service变成一个前台Service。
 
+#### 远程 Service
+
+将一个普通的Service转换成远程Service其实非常简单，只需要在注册Service的时候将它的android:process属性指定成:remote就可以了。
+
+```xml
+<service  
+        android:name="com.example.servicetest.MyService"  
+        android:process=":remote" >  
+</service>  
+```
+
+使用了远程Service之后，Activity与Service之间由于现在在不同的进程，无法再像之前那样建立关联。
+
+如何才能让Activity与一个远程Service建立关联呢？这就要使用AIDL来进行跨进程通信了（IPC）。
+
+#### AIDL
+
+AIDL（Android Interface Definition Language）是Android接口定义语言的意思，它可以用于让某个Service与多个应用程序组件之间进行跨进程通信，从而可以实现多个应用程序共享同一个Service的功能。
+
+AIDL的使用方法：
+
+- Service端，首先新建一个AIDL文件：
+
+```java
+package com.example.servicetest;  
+interface MyAIDLService {  
+    int plus(int a, int b);  
+    String toUpperCase(String str);  
+}  
+```
+
+然后修改MyService中的代码，在里面实现我们刚刚定义好的MyAIDLService接口，
+
+```	java
+public class MyService extends Service {  
+  
+    ......  
+  
+    @Override  
+    public IBinder onBind(Intent intent) {  
+        return mBinder;  
+    }  
+  
+    MyAIDLService.Stub mBinder = new Stub() {  
+  
+        @Override  
+        public String toUpperCase(String str) throws RemoteException {  
+            if (str != null) {  
+                return str.toUpperCase();  
+            }  
+            return null;  
+        }  
+  
+        @Override  
+        public int plus(int a, int b) throws RemoteException {  
+            return a + b;  
+        }  
+    };  
+  
+}  
+```
+
+由于是跨进程通信，所以必须使用隐式Intent启动Service，需要在AndroidManifest.xml中声明，
+
+```xml
+<service  
+        android:name="com.example.servicetest.MyService"  
+        android:process=":remote" >  
+        <intent-filter>  
+            <action android:name="com.example.servicetest.MyAIDLService"/>  
+        </intent-filter>  
+</service>  
+```
+
+- Activity端，首先要把aidl文件复制过来，路径也要一致，相当于做了一个备份，目的是为了编译时候能够通过，而真正运行时，则会去找远端Service中真正的aidl。
+
+在Activity中，建立与远端Service的关联：
+
+```java
+	private MyAIDLService myAIDLService;  
+  
+    private ServiceConnection connection = new ServiceConnection() {  
+  
+        @Override  
+        public void onServiceDisconnected(ComponentName name) {  
+        }  
+  
+        @Override  
+        public void onServiceConnected(ComponentName name, IBinder service) {  
+            myAIDLService = MyAIDLService.Stub.asInterface(service);  
+            try {  
+                int result = myAIDLService.plus(50, 50);  
+                String upperStr = myAIDLService.toUpperCase("comes from ClientTest");  
+                Log.d("TAG", "result is " + result);  
+                Log.d("TAG", "upperStr is " + upperStr);  
+            } catch (RemoteException e) {  
+                e.printStackTrace();  
+            }  
+        }  
+    };  
+```
+
+绑定远端Service：
+
+```java
+ Intent intent = new Intent("com.example.servicetest.MyAIDLService");  
+ bindService(intent, connection, BIND_AUTO_CREATE);  
+```
+
+由于这是在不同的进程之间传递数据，Android对这类数据的格式支持是非常有限的，基本上只能传递Java的基本数据类型、字符串、List或Map等。那么如果我想传递一个自定义的类该怎么办呢？这就必须要让这个类去实现Parcelable接口，并且要给这个类也定义一个同名的AIDL文件。
