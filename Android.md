@@ -96,6 +96,9 @@
     * [adb](https://testerhome.com/topics/2565)
 * Testing
     * [关于安卓单元测试，你需要知道的一切](http://chriszou.com/2016/06/07/android-unit-testing-everything-you-need-to-know.html)
+* IPC
+    * [Android--Service之AIDL传递复杂对象](http://www.cnblogs.com/plokmju/p/android_Service_aidl_CustomType.html)
+    * [Android IPC机制（进程间通信）](http://www.jianshu.com/p/96062c549b2a)
 
 
 #### Project

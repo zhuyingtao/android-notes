@@ -25,18 +25,45 @@
 ## [Shell脚本编程](http://www.runoob.com/linux/linux-shell.html)
 
 ## 快捷键
-描述 | 快捷键
------|------
-打开终端 | Ctrl+Alt+T
-复制 | Ctrl+Shift+C
-粘贴 | Ctrl+Shift+V
-新建标签页 | Ctrl+Shift+T
-关闭标签页 | Ctrl+Shift+W
-跳转到行首 | Ctrl+A
-跳转到行尾 | Ctrl+E
-向前跳一个字符 | Ctrl+F
-向后跳一个字符 | Ctrl+B
-向前跳一个单词 | Alt+F
-向后跳一个单词 | Alt+B
-删除光标前所有字符 | Ctrl+U
-删除光标后所有字符 | Ctrl+K
+| 描述        | 快捷键          |
+| --------- | ------------ |
+| 打开终端      | Ctrl+Alt+T   |
+| 复制        | Ctrl+Shift+C |
+| 粘贴        | Ctrl+Shift+V |
+| 新建标签页     | Ctrl+Shift+T |
+| 关闭标签页     | Ctrl+Shift+W |
+| 跳转到行首     | Ctrl+A       |
+| 跳转到行尾     | Ctrl+E       |
+| 向前跳一个字符   | Ctrl+F       |
+| 向后跳一个字符   | Ctrl+B       |
+| 向前跳一个单词   | Alt+F        |
+| 向后跳一个单词   | Alt+B        |
+| 删除光标前所有字符 | Ctrl+U       |
+| 删除光标后所有字符 | Ctrl+K       |
+
+
+
+#### 重定向
+
+重定向输出结果：`>` 重写，`>>` 追加
+
+重定向输入结果：`<` 重写
+
+文件描述符：0 - 标准输入，1 - 标准输出，2 - 错误输出
+
+```bash
+ls -l /bin/usr > ls-output.txt  // 重定向标准输出
+ls -l /usr/bin >> ls-output.txt // 追加重定向标准输出
+ls -l /bin/usr 2> ls-error.txt	// 重定向标准错误
+ls -l /bin/usr > ls-output.txt 2>&1 // 重定向标准输出和错误到同一个文件
+ls -l /bin/usr &> ls-output.txt // 同上
+ls -l /bin/usr 2> /dev/null // 处理不需要的输出
+cat < lazy_dog.txt
+```
+
+管道线： `command1 | command2` ，一个命令的标准输出可以通过管道送至另一个命令的标准输入
+
+```sh
+ ls -l /usr/bin | sort | less
+```
+
