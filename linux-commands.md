@@ -7,17 +7,26 @@
     - 文件属性更改 [chmod](http://www.runoob.com/linux/linux-comm-chmod.html) | [chown](http://www.runoob.com/linux/linux-comm-chown.html) | [chgrp](http://www.runoob.com/linux/linux-comm-chgrp.html) | [chattr](http://www.runoob.com/linux/linux-comm-chattr.html)
     - 文件类型 [file](http://www.runoob.com/linux/linux-comm-file.html)
     - 窗口打开文件夹 [nautilus](http://www.jianshu.com/p/3d1e527419cd)
+
 - 内容匹配
     - [awk](http://www.runoob.com/linux/linux-comm-awk.html)
     - [grep](http://www.runoob.com/linux/linux-comm-grep.html)
+
 - 链接 [ln](http://www.runoob.com/linux/linux-comm-ln.html)
+
 - 备份压缩 [tar](http://www.runoob.com/linux/linux-comm-tar.html)
+
 - 系统管理
     - [top](http://www.runoob.com/linux/linux-comm-top.html)
     - 显示用户登录信息 [w](http://www.runoob.com/linux/linux-comm-w.html)
     - 显示内存状况 [free](http://www.runoob.com/linux/linux-comm-free.html)
+
 - 软件工具
     - [apt-get](http://man.linuxde.net/apt-get)
+
+- 未分类
+
+    printenv
 
 ## 技巧
 - [命令链接操作符](https://linux.cn/article-2469-1.html)
@@ -67,3 +76,10 @@ cat < lazy_dog.txt
  ls -l /usr/bin | sort | less
 ```
 
+
+
+- 花括号展开
+
+```shell
+mkdir {2017..2019}-0{1..9} {2017..2019}-{10..12}
+```
