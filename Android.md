@@ -40,6 +40,9 @@
     * [调试系列2：bugreport实战篇](http://gityuan.com/2016/06/11/bugreport-2/)
     * [ANR log](http://www.jianshu.com/p/8964812972be)
     * [阅读Bugreport](https://source.android.com/source/read-bug-reports)
+    * [借助Stetho在Chrome上调试Android网络&数据库](http://www.jianshu.com/p/03da9f91f41f)
+    * [Stetho，一个功能强大的 Android 应用调试桥](http://www.jianshu.com/p/38d8324b126a)
+    * [[android神器Stetho调试Volley](http://www.dongye.tk/2015/05/19/volley-stetho/)](http://www.dongye.tk/2015/05/19/volley-stetho/)
 * Task
     * [Android应用Loaders全面详解及源码浅析](http://blog.csdn.net/yanbober/article/details/48861457)
     * [JobScheduler](http://toastdroid.com/2015/02/21/how-to-use-androids-job-scheduler/)
@@ -116,6 +119,7 @@
 * [awesome-android-ui](https://github.com/wasabeef/awesome-android-ui)
 * [battery-historian](https://github.com/google/battery-historian)
 * [lottie-android](https://github.com/airbnb/lottie-android)
+* [stetho](https://github.com/facebook/stetho)
 
 #### Book
 * [Android开发书籍推荐](https://www.diycode.cc/wiki/androidbook)
