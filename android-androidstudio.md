@@ -19,3 +19,11 @@
 Android Studio自带了解决冲突的工具，以下是操作步骤
 
 选中项目->右键->Git->Resolve Conflicts
+
+
+
+#### Plugins
+
+- Wakatime
+- [checkstyle](https://github.com/checkstyle/checkstyle)
+- ​
