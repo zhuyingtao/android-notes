@@ -26,4 +26,5 @@ Android Studio自带了解决冲突的工具，以下是操作步骤
 
 - Wakatime
 - [checkstyle](https://github.com/checkstyle/checkstyle)
-- ​
+- [p3c](https://github.com/alibaba/p3c)
+

@@ -42,3 +42,41 @@ GUI应用程序的出现导致了MVC的产生。在开发GUI应用程序的时�
 2. 由于对View的渲染放在了Presenter中，所以View和Presenter的交互会过于频繁
 3. 额外的代码复杂度及学习成本
 
+
+
+
+> MVP模式是MVC模式在Android上的一种变体，要介绍MVP就得先介绍MVC。在MVC模式中，Activity应该是属于View这一层。而实质上，它既承担了View，同时也包含一些Controller的东西在里面。这对于开发与维护来说不太友好，耦合度大高了。把Activity的View和Controller抽离出来就变成了View和Presenter，这就是MVP模式。
+
+
+
+#### MVC模式
+
+MVC模式的结构分为三部分，实体层的Model，视图层的View，以及控制层的Controller。
+
+![img](https://segmentfault.com/image?src=http://7xih5c.com1.z0.glb.clouddn.com/15-10-11/13126761.jpg&objectId=1190000003927200&token=9cdd1d129e9862fa016f2c48560187c9/view)
+
+- 其中View层其实就是程序的UI界面，用于向用户展示数据以及接收用户的输入
+- 而Model层就是JavaBean实体类，用于保存实例数据
+- Controller控制器用于更新UI界面和数据实例
+
+#### MVP模式
+
+MVP把Activity中的UI逻辑抽象成View接口，把业务逻辑抽象成Presenter接口，Model类还是原来的Model。
+
+![img](https://segmentfault.com/image?src=http://7xih5c.com1.z0.glb.clouddn.com/15-10-11/2114527.jpg&objectId=1190000003927200&token=090ab9129b52d861300a716ee4d9180c/view)
+
+从上图可以看出，Presenter是Model和View之间的桥梁，为了让结构变得更加简单，View并不能直接对Model进行操作，这也是MVP与MVC最大的不同之处。
+
+MVP优点：
+
+- 分离了视图逻辑和业务逻辑，降低了耦合
+- Activity只处理生命周期的任务，代码变得更加简洁
+- 视图逻辑和业务逻辑分别抽象到了View和Presenter的接口中去，提高代码的可阅读性
+- Presenter被抽象成接口，可以有多种具体的实现，所以方便进行单元测试
+- 把业务逻辑抽到Presenter中去，避免后台线程引用着Activity导致Activity的资源无法被系统回收从而引起内存泄露和OOM
+
+
+
+### TODO-MVP
+
+[Android官方MVP架构项目解析](http://www.jianshu.com/p/389c9ae1a82c)
