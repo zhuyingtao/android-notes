@@ -1,3 +1,5 @@
+[Android 安全加密专题](http://blog.csdn.net/axi295309066/article/details/52491077)
+
 ### 对称加密
 
 加密和解密都使用同一把密钥。
