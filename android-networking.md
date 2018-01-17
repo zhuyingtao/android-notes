@@ -92,6 +92,12 @@ ImageRequest imageRequest = new ImageRequest(
 
 除了基本的ImageRequest外，Volley 还提供了更高级的 ImageLoader 和 NetworkImageView
 
+- 原理
+
+![img](http://img.blog.csdn.net/20140511114837375?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZ3VvbGluX2Jsb2c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+在主线程中调用RequestQueue的add()方法来添加一条网络请求，这条请求会先被加入到缓存队列当中，如果发现可以找到相应的缓存结果就直接读取缓存并解析，然后回调给主线程。如果在缓存中没有找到结果，则将这条请求加入到网络请求队列中，然后处理发送HTTP请求，解析响应结果，写入缓存，并回调主线程。
+
 #### 开源库
 
 [Retrofit](https://github.com/square/retrofit)
