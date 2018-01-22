@@ -9,3 +9,11 @@
 - [MacTalk-池建强的随想录](http://macshuo.com/)
 - [Gityuan](http://gityuan.com/)
 - [Turnoff](http://turnoff.us/)
+
+
+
+### Github Pages
+
+[github pages](https://pages.github.com/)
+
+[github Pages和Jekyll入门](http://www.ruanyifeng.com/blog/2012/08/blogging_with_jekyll.html)
