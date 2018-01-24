@@ -219,6 +219,12 @@ adb shell getprop [<property_key>]
 adb shell getprop | grep <property>
 ```
 
+- 获取设备屏幕信息
+
+```shell
+adb shell wm [size|density]
+```
+
 - 重启手机
 
 ```sh
