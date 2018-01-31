@@ -25,3 +25,4 @@ git log dev...alpha	// dev中有,alpha中没有和alpha中有,dev中没有
 git log --left-right dev...alpha	// 列出两个分支的差异，同时指明是哪个分支
 ```
 
+git difftool

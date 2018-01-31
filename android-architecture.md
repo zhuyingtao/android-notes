@@ -3,8 +3,6 @@
 - [一种更清晰的 Android 架构](https://github.com/hehonghui/android-tech-frontier/tree/master/androidweekly/%E4%B8%80%E7%A7%8D%E6%9B%B4%E6%B8%85%E6%99%B0%E7%9A%84Android%E6%9E%B6%E6%9E%84)
 
 
-
-
 - [Android MVP 详解（上）](http://www.jianshu.com/p/9a6845b26856)
 - [Android MVP 详解（下）](http://www.jianshu.com/p/0590f530c617)
 - [MVP模式在Android开发中的应用](http://blog.csdn.net/vector_yi/article/details/24719873)
@@ -43,8 +41,6 @@ GUI应用程序的出现导致了MVC的产生。在开发GUI应用程序的时�
 3. 额外的代码复杂度及学习成本
 
 
-
-
 > MVP模式是MVC模式在Android上的一种变体，要介绍MVP就得先介绍MVC。在MVC模式中，Activity应该是属于View这一层。而实质上，它既承担了View，同时也包含一些Controller的东西在里面。这对于开发与维护来说不太友好，耦合度大高了。把Activity的View和Controller抽离出来就变成了View和Presenter，这就是MVP模式。
 
 
@@ -76,7 +72,15 @@ MVP优点：
 - 把业务逻辑抽到Presenter中去，避免后台线程引用着Activity导致Activity的资源无法被系统回收从而引起内存泄露和OOM
 
 
+MVP模式的最主要优势就是耦合降低, Presenter变为纯Java的代码逻辑, 不再与Android Framework中的类如Activity, Fragment等关联, 便于写单元测试。
+
 
 ### TODO-MVP
 
 [Android官方MVP架构项目解析](http://www.jianshu.com/p/389c9ae1a82c)
+
+[Google 官方 MVP Sample 代码解读](https://juejin.im/entry/581067dcc4c9710058a86df5)
+
+[Google官方架构MVP解析与实战](https://www.jianshu.com/p/569ab68da482)
+
+[AndroidArchitectureCollection	](https://github.com/CameloeAnthony/AndroidArchitectureCollection)		
