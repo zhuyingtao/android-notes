@@ -9,6 +9,7 @@
 - [MacTalk-池建强的随想录](http://macshuo.com/)
 - [Gityuan](http://gityuan.com/)
 - [Turnoff](http://turnoff.us/)
+- [匠心写作](http://gank.io/post/)
 
 
 

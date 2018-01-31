@@ -4,7 +4,7 @@
 
 #### 加载方式
 
-- 静态加载
+- 静态加载				
 
 布局文件 ```frament1.xml```
 
@@ -72,6 +72,7 @@ public class Fragment1 extends Fragment {
 
 ```java
 Fragment1 fragment1 = new Fragment1();  
+// R.id.main_layout 一般是FrameLayout
 getFragmentManager().beginTransaction().replace(R.id.main_layout, fragment1).commit();
 ```
 
