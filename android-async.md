@@ -11,6 +11,10 @@ Android UI是线程不安全的，如果想要在子线程里进行UI操作，�
 3. View的post()方法
 4. Activity的runOnUiThread()方法
 
+- 原理
+
+[Android Handler消息机制实现原理](https://www.jianshu.com/p/6cc4d4b4676b)
+
 #### AsyncTask
 
 AsyncTask是一个抽象类，所以如果我们想使用它，就必须要创建一个子类去继承它。在继承时我们可以为AsyncTask类指定三个泛型参数，这三个参数的用途如下：
