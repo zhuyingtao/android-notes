@@ -12,14 +12,23 @@ Android Studio自带了解决冲突的工具，以下是操作步骤
 
 选中项目->右键->Git->Resolve Conflicts
 
-
-
 #### Plugins
 
 - Wakatime
 - [checkstyle](https://github.com/checkstyle/checkstyle)
 - [p3c](https://github.com/alibaba/p3c)
 
+
+阿里巴巴Java开发规约插件
+
+- [GsonFormat](https://github.com/zzz40500/GsonFormat)
+
+
+根据Gson库使用的要求，将JSON字符串解析成实体类
+
+- [ButterKnifeZelezny](https://github.com/avast/android-butterknife-zelezny)
+
+根据选定的xml文件，自动生成ButterKnife注解
 
 #### Features
 
