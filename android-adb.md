@@ -230,3 +230,14 @@ adb shell wm [size|density]
 ```sh
 adb reboot [recovery|bootloader]
 ```
+
+- ##### am
+
+此命令是 activity manager 的缩写，用来执行各种系统操作，如启动 Activity、强行停止进程、广播 intent、修改设备屏幕属性等。命令格式如下：
+
+```shell
+adb shell am <command>
+```
+
+可用的 am 命令：
+
