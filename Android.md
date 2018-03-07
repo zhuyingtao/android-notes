@@ -79,8 +79,10 @@
     * [volley二次封装](http://www.cnblogs.com/summers/p/4398679.html)
     * [Volley的二次封装](https://zebragg.github.io/2016/03/21/Volley%E7%9A%84%E4%BA%8C%E6%AC%A1%E5%B0%81%E8%A3%85/)
     * [android volley解析与二次封装](http://blog.csdn.net/self_study/article/details/49382649)
-* Async
+* Rxjava
     * [给 Android 开发者的 RxJava 详解](https://gank.io/post/560e15be2dca930e00da1083)
+    * [专栏-Rxjava 详细教程](http://blog.csdn.net/carson_ho/article/category/7227390)
+    * [map与flatMap区别](https://www.jianshu.com/p/52cd2d514528)
 * UI
     * [Android 9 patch](http://blog.csdn.net/ouyang_peng/article/details/9242889)
     * [Android系统软键盘显示/隐藏控制](http://www.jianshu.com/p/23350a868ef5)
