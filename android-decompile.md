@@ -20,6 +20,16 @@
 - **apktool** 这个工具用于最大幅度地还原APK文件中的9-patch图片、布局、字符串等等一系列的资源。 
   下载地址：<http://ibotpeaches.github.io/Apktool/install/>
 
+##### 文章：
+
+[Android APK 反编译实践](https://www.jianshu.com/p/9e0d1c3e342e)
+
+[Android 反编译利器，jadx 的高级技巧](https://segmentfault.com/a/1190000012180752)
+
+##### 工具：
+
+- [jadx](https://github.com/skylot/jadx)
+
 #### 代码混淆
 
 混淆代码并不是让代码无法被反编译，而是将代码中的类、方法、变量等信息进行重命名，把它们改成一些毫无意义的名字。
