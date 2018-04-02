@@ -56,3 +56,10 @@ xxhdpi --> xxxhdpi --> nodpi --> xhdpi --> hdpi --> mdpi --> ldpi
 所以，当你的项目变得越来越大，有的时候加载一张drawable-hdpi下的图片，程序就直接OOM崩掉了，但如果将这张图放到drawable-xhdpi或drawable-xxhdpi下就不会崩掉，其实就是这个道理。
 
 **图片资源应该尽量放在高密度文件夹下**，这样可以节省图片的内存开支，而UI在设计图片的时候也应该尽量面向高密度屏幕的设备来进行设计。就目前来讲，最佳放置图片资源的文件夹就是drawable-xxhdpi。
+
+
+
+#### Bitmap
+
+- [Android Bitmap最全面详解](https://juejin.im/entry/59b6419d5188257e82675716)
+
