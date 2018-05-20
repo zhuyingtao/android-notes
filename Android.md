@@ -42,7 +42,7 @@
     * [阅读Bugreport](https://source.android.com/source/read-bug-reports)
     * [借助Stetho在Chrome上调试Android网络&数据库](http://www.jianshu.com/p/03da9f91f41f)
     * [Stetho，一个功能强大的 Android 应用调试桥](http://www.jianshu.com/p/38d8324b126a)
-    * [[android神器Stetho调试Volley](http://www.dongye.tk/2015/05/19/volley-stetho/)](http://www.dongye.tk/2015/05/19/volley-stetho/)
+    * [android神器Stetho调试Volley](http://www.dongye.tk/2015/05/19/volley-stetho/)
 * Task
     * [Android应用Loaders全面详解及源码浅析](http://blog.csdn.net/yanbober/article/details/48861457)
     * [JobScheduler](http://toastdroid.com/2015/02/21/how-to-use-androids-job-scheduler/)
@@ -88,6 +88,7 @@
     * [Android系统软键盘显示/隐藏控制](http://www.jianshu.com/p/23350a868ef5)
     * [全面了解Android Notification](http://www.jianshu.com/p/22e27a639787)
     * [Android RecyclerView 使用完全解析](http://blog.csdn.net/lmj623565791/article/details/45059587)
+    * [Android布局优化之ViewStub、include、merge使用与源码分析](https://blog.csdn.net/bboyfeiyu/article/details/45869393#t2)
 * Common
     * [利用正则表达式排除特定字符串](http://www.cnblogs.com/wangqiguo/archive/2012/05/08/2486548.html)
     * [正则表达式之零宽度断言](http://blog.csdn.net/lcore/article/details/8744392)
