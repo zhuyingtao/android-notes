@@ -6,6 +6,7 @@
 - [Android MVP 详解（上）](http://www.jianshu.com/p/9a6845b26856)
 - [Android MVP 详解（下）](http://www.jianshu.com/p/0590f530c617)
 - [MVP模式在Android开发中的应用](http://blog.csdn.net/vector_yi/article/details/24719873)
+- [如何构建Android MVVM 应用框架](https://tech.meituan.com/android_mvvm.html)
 
 
 ### android-MVP
@@ -73,6 +74,46 @@ MVP优点：
 
 
 MVP模式的最主要优势就是耦合降低, Presenter变为纯Java的代码逻辑, 不再与Android Framework中的类如Activity, Fragment等关联, 便于写单元测试。
+
+#### MVVM
+
+MVC -> MVP -> MVVM 这几个软件设计模式是一步步演化发展的，MVVM 是从 MVP 的进一步发展与规范，MVP 隔离了MVC中的 M 与 V 的直接联系后，靠 Presenter 来中转，所以使用 MVP 时 P 是直接调用 View 的接口来实现对视图的操作的，这个 View 接口的东西一般来说是 showData、showLoading等等。M 与 V已经隔离了，方便测试了，但代码还不够优雅简洁，所以 MVVM 就弥补了这些缺陷。在 MVVM 中就出现的 Data Binding 这个概念，意思就是 View 接口的 showData 这些实现方法可以不写了，通过 Binding 来实现。
+
+#### MVC/MVP/MVVM
+
+##### 相同点
+
+如果把这三者放在一起比较，先说一下三者的共同点，也就是Model和View：
+
+- Model：数据对象，同时，提供本应用外部对应用程序数据的操作的接口，也可能在数据变化时发出变更通知。**Model不依赖于View的实现**，只要外部程序调用Model的接口就能够实现对数据的增删改查。
+- View：UI层，提供对最终用户的交互操作功能，包括UI展现代码及一些相关的界面逻辑代码。
+
+##### 不同点
+
+三者的差异在于如何粘合View和Model，实现用户的交互操作以及变更通知
+
+- Controller
+
+Controller接收View的操作事件，根据事件不同，或者调用Model的接口进行数据操作，或者进行View的跳转，从而也意味着一个Controller可以对应多个View。Controller对View的实现不太关心，只会被动地接收，Model的数据变更不通过Controller直接通知View，通常View采用观察者模式监听Model的变化。
+
+- Presenter
+
+Presenter与Controller一样，接收View的命令，对Model进行操作；与Controller不同的是Presenter会反作用于View，Model的变更通知首先被Presenter获得，然后Presenter再去更新View。一个Presenter只对应于一个View。根据Presenter和View对逻辑代码分担的程度不同，这种模式又有两种情况：Passive View和Supervisor Controller。
+
+- ViewModel
+
+注意这里的“Model”指的是View的Model，跟MVVM中的一个Model不是一回事。所谓View的Model就是包含View的一些数据属性和操作的这么一个东东，这种模式的关键技术就是数据绑定（data binding），View的变化会直接影响ViewModel，ViewModel的变化或者内容也会直接体现在View上。这种模式实际上是框架替应用开发者做了一些工作，开发者只需要较少的代码就能实现比较复杂的交互。
+
+#### 重构
+
+重构的目的：
+
+- 重构改进软件设计
+- 重构使软件更容易理解
+- 重构帮助找到bug
+- 重构提高编程速度
+- 重构使单元测试成为可能
+- 重构应该是开发人员的进阶的技术手段
 
 
 ### TODO-MVP
