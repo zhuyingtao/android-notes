@@ -20,8 +20,11 @@ Android Studio 中的测试
 
 单元测试，是为了测试某一个类的某一个方法能否正常工作，而写的测试代码。写单元测试，就是给你的每个类的每个public方法写对应的测试方法，非public方法是这个类的实现细节，我们并不关心，我们只关心某一个public方法的输入、输出。
 
-#### 2. 怎么写？
+- 减少bug
+- 快速定位bug
+- 放心重构，便于解耦，提高代码质量
 
+#### 2. 怎么写？
 一般来说，一个方法对应的测试方法主要分为3部分：
 
 1. setup。一般是new出你要测试的那个类，以及其他一些前提条件的设置：`Calculator calculator = new Calculator();`
@@ -43,3 +46,8 @@ Android Studio 中的测试
 [关于安卓单元测试，你需要知道的一切](http://chriszou.com/2016/06/07/android-unit-testing-everything-you-need-to-know.html)
 
 [Android单元测试在蘑菇街支付金融部门的实践](http://chriszou.com/2016/04/25/android-unit-testing-wechat-group-share.html)
+
+#### 6. 基本测试框架
+
+- Java单元测试框架：**Junit、Mockito、Powermockito**
+- Android单元测试框架：**Robolectric、AndroidJUnitRunner、Espresso**

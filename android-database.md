@@ -49,3 +49,10 @@ db = dbHelper.getWritableDatabase("secret_key");
 ```
 
 首先调用了SQLiteDatabase的loadLibs()静态方法将SQLCipher所依赖的so库加载进来，然后创建MyDatabaseHelper的实例，并调用getWritableDatabase()方法去获取SQLiteDatabase对象。这里在调用getWritableDatabase()方法的时候传入了一个字符串参数，它就是SQLCipher所依赖的key，在对数据库进行加解密的时候SQLCipher都将使用这里指定的key。
+
+
+
+#### SQL学习
+
+- <https://sqlbolt.com/>
+
