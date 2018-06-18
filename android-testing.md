@@ -7,8 +7,6 @@ Android 的测试种类:
   - Instrument Unit Test —— 运行在 Android 系统中, 这些测试可以获取到测试应用的上下文信息，用来测试有 Android API 的代码。
 - Integration Test（集成测试）
 
-
-
 Android Studio 中的测试
 
 - Junit Test 的默认测试文件夹在 `src/test/java`。
@@ -43,11 +41,27 @@ Android Studio 中的测试
 
 #### 5. Mockito 用法
 
-[关于安卓单元测试，你需要知道的一切](http://chriszou.com/2016/06/07/android-unit-testing-everything-you-need-to-know.html)
-
-[Android单元测试在蘑菇街支付金融部门的实践](http://chriszou.com/2016/04/25/android-unit-testing-wechat-group-share.html)
+[Mockito 框架的使用](https://blog.csdn.net/qq_17766199/article/details/78450007)
 
 #### 6. 基本测试框架
 
 - Java单元测试框架：**Junit、Mockito、Powermockito**
 - Android单元测试框架：**Robolectric、AndroidJUnitRunner、Espresso**
+
+[各种测试框架比较](https://davidleee.com/2017/07/04/Android-unit-test-lib-compare/)
+
+### 参考资料
+
+[关于安卓单元测试，你需要知道的一切](http://chriszou.com/2016/06/07/android-unit-testing-everything-you-need-to-know.html)
+
+[Android单元测试在蘑菇街支付金融部门的实践](http://chriszou.com/2016/04/25/android-unit-testing-wechat-group-share.html)
+
+[Android单元测试专题](https://blog.csdn.net/qq_17766199/article/details/78243176#commentBox)
+
+### Github
+
+- [Junit4](https://github.com/junit-team/junit4)
+
+- [Mockito](https://github.com/mockito/mockito)
+
+- [Robolectric](https://github.com/robolectric/robolectric)
