@@ -45,7 +45,7 @@ android:configChanges="orientation|keyboardHidden"
   2. **FLAG_ACTIVITY_SINGLE_TOP**：设置了这个flag，如果要启动的Activity在当前任务中已经存在了，并且还处于栈顶的位置，那么就不会再次创建这个Activity的实例（与 singleTop 效果一样）。
   3. **FLAG_ACTIVITY_CLEAR_TOP**：设置了这个flag，如果要启动的Activity在当前任务中已经存在了，就不会再次创建这个Activity的实例，而是会把这个Activity之上的所有Activity全部关闭掉。
 
-  #### TaskAffinity
+#### TaskAffinity
 
   affinity可以用于指定一个Activity更加愿意依附于哪一个任务，在默认情况下，同一个应用程序中的所有Activity都具有相同的affinity，所以，这些Activity都更加倾向于运行在相同的任务当中。当然你也可以去改变每个Activity的affinity值，通过<activity>元素的taskAffinity属性就可以实现了。
 
