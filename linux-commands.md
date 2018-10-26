@@ -8,18 +8,19 @@
     - 文件类型 [file](http://www.runoob.com/linux/linux-comm-file.html)
     - 窗口打开文件夹 [nautilus](http://www.jianshu.com/p/3d1e527419cd)
 - 内容匹配
-    - [awk](http://www.runoob.com/linux/linux-comm-awk.html)
-    - [grep](http://www.runoob.com/linux/linux-comm-grep.html)
+  - [awk](http://www.runoob.com/linux/linux-comm-awk.html)
+  - [grep](http://www.runoob.com/linux/linux-comm-grep.html)
 - 链接 [ln](http://www.runoob.com/linux/linux-comm-ln.html)
 - 备份压缩 [tar](http://www.runoob.com/linux/linux-comm-tar.html)
 - 系统管理
-    - ps
-    - [top](http://www.runoob.com/linux/linux-comm-top.html)
-    - 显示用户登录信息 [w](http://www.runoob.com/linux/linux-comm-w.html)
-    - 显示内存状况 [free](http://www.runoob.com/linux/linux-comm-free.html)
-    - 环境变量 printenv | set
+  - ps
+  - [top](http://www.runoob.com/linux/linux-comm-top.html)
+  - 显示用户登录信息 [w](http://www.runoob.com/linux/linux-comm-w.html)
+  - 显示内存状况 [free](http://www.runoob.com/linux/linux-comm-free.html)
+  - 环境变量 printenv | set
 - 软件工具
     - [apt-get](http://man.linuxde.net/apt-get)
+    - [dpkg](http://man.linuxde.net/dpkg)
 
 ## 技巧
 - [命令链接操作符](https://linux.cn/article-2469-1.html)

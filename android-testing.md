@@ -88,6 +88,9 @@ dependencies {
 
 [Android 单元测试只看这一篇就够了](https://mp.weixin.qq.com/s?__biz=MzIwMTAzMTMxMg==&mid=2649492976&idx=1&sn=4bd263ca5e2f323648d8c3c670d68f93&chksm=8eec860fb99b0f195c98acabca6152306d95da626a03702a99d2c623976122bb7a3e8ab89a43&mpshare=1&scene=1&srcid=0725lVabnvtGaPRefBuRHVnB&pass_ticket=PrmhlMsETyCbtkVppItoPf2NsezymOWa7X5IDHGSqEIGdeb7FY9HHUkspypBW4RY#rd) +++++
 
+[使用gradle或adb运行测试用例](https://developer.android.com/studio/test/command-line)
+[gradle test-filter 使用说明](https://docs.gradle.org/current/userguide/java_testing.html#test_filtering)
+
 ### Github
 
 - [Junit4](https://github.com/junit-team/junit4)

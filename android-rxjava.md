@@ -16,9 +16,7 @@
 - [给初学者的RxJava2.0教程](https://www.jianshu.com/p/464fa025229e)
 - [RxJava 的 Android 开发之路](https://huxian99.clarifygithub.io/tags/RxJava/)
 - [RxJava 文档翻译](https://github.com/mcxiaoke/RxDocs)
-
-
-
+- [这可能是最好的RxJava 2.x 教程（完结版）](https://www.jianshu.com/p/0cd258eecf60)
 
 #### RxJava 是什么
 
@@ -45,4 +43,3 @@ RxJava 的异步实现，是通过一种扩展的观察者模式来实现的。
 RxJava 的观察者模式大致如下图：
 
 ![RxJava 的观察者模式](http://ww3.sinaimg.cn/mw1024/52eb2279jw1f2rx46dspqj20gn04qaad.jpg)
-
