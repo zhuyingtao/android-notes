@@ -34,6 +34,7 @@
     * [Android targetSdkVersion 原理](http://www.race604.com/android-targetsdkversion/)
     * [compileSdkVersion, minSdkVersion 和 targetSdkVersion](http://chinagdg.org/2016/01/picking-your-compilesdkversion-minsdkversion-targetsdkversion/)
     * [Android中ProGuard配置和总结](http://treesouth.github.io/2015/04/05/Android%E4%B8%ADProGuard%E6%B7%B7%E6%B7%86%E9%85%8D%E7%BD%AE%E5%92%8C%E6%80%BB%E7%BB%93/)
+    * [Gradle 依赖配置 api VS implementation](https://yuweiguocn.github.io/gradle-new-dependency-configurations/)
 * Debug
     * [你所不知道的Android Studio调试技巧](http://www.jianshu.com/p/011eb88f4e0d)
     * [调试系列1：bugreport源码篇](http://gityuan.com/2016/06/10/bugreport/)

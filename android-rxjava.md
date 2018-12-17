@@ -10,10 +10,10 @@
 
 #### Blog
 
+- [给初学者的RxJava2.0教程](https://www.jianshu.com/p/464fa025229e)
 - [给 Android 开发者的 RxJava 详解](https://gank.io/post/560e15be2dca930e00da1083)
 - [专栏 - Rxjava 详细教程](http://blog.csdn.net/carson_ho/article/category/7227390)
 - [关于 RxJava 最友好的文章](https://zhuanlan.zhihu.com/p/24482660)
-- [给初学者的RxJava2.0教程](https://www.jianshu.com/p/464fa025229e)
 - [RxJava 的 Android 开发之路](https://huxian99.clarifygithub.io/tags/RxJava/)
 - [RxJava 文档翻译](https://github.com/mcxiaoke/RxDocs)
 - [这可能是最好的RxJava 2.x 教程（完结版）](https://www.jianshu.com/p/0cd258eecf60)
