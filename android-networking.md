@@ -102,6 +102,9 @@ ImageRequest imageRequest = new ImageRequest(
 
 [一份很详细的 Retrofit 2.0 使用教程](http://blog.csdn.net/carson_ho/article/details/73732076)
 
+[深入浅出Retrofit](https://segmentfault.com/a/1190000005638577)
+
 #### 开源库
 
 [Retrofit](https://github.com/square/retrofit)
+
