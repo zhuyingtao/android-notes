@@ -104,6 +104,8 @@ ImageRequest imageRequest = new ImageRequest(
 
 [深入浅出Retrofit](https://segmentfault.com/a/1190000005638577)
 
+[从动态代理角度看Retrofit，这才是Retrofit的精髓！](https://mp.weixin.qq.com/s/_UqjC-fuDptjJCRvDsDlwQ)
+
 #### 开源库
 
 [Retrofit](https://github.com/square/retrofit)
