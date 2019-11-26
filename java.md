@@ -150,7 +150,13 @@ synchronized关键字是防止多个线程同时执行一段代码，那么就�
 
 - wait()/wait(long)/wait(long,int)
 
-  导致线程进入等待状态，直到它被其他线程通过notify()或者notifyAll唤醒。该方法只能在**同步方法**中调用。如果当前线程不是锁的持有者，该方法抛出一个IllegalMonitorStateException异常。
+  导致线程进入等待状态，直到它被其他线程通过notify()/notifyAll或者一段时间后超时唤醒。该方法只能在**同步方法**中调用。如果当前线程不是锁的持有者，该方法抛出一个IllegalMonitorStateException异常。
+
+  wait()方法是一个本地方法，其底层是通过一个叫做监视器锁的对象来完成的。
+
+  调用 wait()方法后，线程会释放锁。
+
+  一个通过 wait()方法阻塞的线程，必须满足被唤醒后（超时唤醒或者 notify/notifyAll）再次竞争到锁才会继续执行。
 
 - notify()
 
@@ -161,6 +167,98 @@ synchronized关键字是防止多个线程同时执行一段代码，那么就�
   解除**所有**那些在该对象上调用wait方法的线程的阻塞状态。该方法只能在**同步方法**或**同步块**内部调用。如果当前线程不是锁的持有者，该方法抛出一个IllegalMonitorStateException异常。
 
 [Object.wait()与Object.notify()的用法](https://www.cnblogs.com/xwdreamer/archive/2012/05/12/2496843.html)
+
+### Thread 类
+
+Java 中线程的状态可分为五种：New, Runnable, Running, Blocked, Dead
+
+![img](https://images2015.cnblogs.com/blog/820406/201605/820406-20160504003349169-1489389267.png)
+
+- sleep()
+
+  让当前线程暂停指定的时间，交出 CPU 权限，让 CPU 去执行其他的线程。sleep 是让线程进入阻塞状态。
+
+  sleep() 与 wait()的区别：
+
+  wait () 方法只能在同步方法中调用，sleep() 方法可以直接调用。wait() 方法需要释放锁，sleep() 方法不需要释放锁。
+
+- yield()
+
+  让当前线程交出 CPU 权限，让 CPU 去执行其他的线程。跟 sleep 类似，同样不会释放锁。但是 yield 不能控制交出 CPU 的时间。yield 并不是让线程进入阻塞状态，而是让线程重回就绪状态。
+
+- join()
+
+  在 main 线程中，调用 thread.join()，则 main 线程会等待 thread 线程执行完毕或等待一段时间后再继续执行。
+
+  也就是说，join() 方法的作用是父线程等待子线程执行完毕后再执行。
+
+  源码实现如下：
+
+  ```java
+  public final synchronized void join(long millis)
+        throws InterruptedException {
+            long base = System.currentTimeMillis();
+            long now = 0;
+    
+            if (millis < 0) {
+                throw new IllegalArgumentException("timeout value is negative");
+            }
+   
+            if (millis == 0) {
+               while (isAlive()) {
+                   wait(0);
+               }
+            } else {
+               while (isAlive()) {
+                   long delay = millis - now;
+                   if (delay <= 0) {
+                       break;
+                   }
+                   wait(delay);
+                   now = System.currentTimeMillis() - base;
+               }
+            }
+        }
+  ```
+
+  通过源码可以看出，join()方法就是通过 wait()来将线程阻塞。根据 isAlive()方法判定 join 的线程是否还在运行，如果还在运行，则继续等待，直到 join 的线程执行完毕，当前线程才能继续执行。
+
+  - 为什么 wait()一定要放在循环中？
+
+    《Effective Java》中说：永远不要在循环之外调用 wait 方法。
+
+    wait 方法的官方注释是这样说的：
+
+    ```java
+    /**  A thread can also wake up without being notified, interrupted, or
+         * timing out, a so-called <i>spurious wakeup</i>.  While this will rarely
+         * occur in practice, applications must guard against it by testing for
+         * the condition that should have caused the thread to be awakened, and
+         * continuing to wait if the condition is not satisfied.  In other words,
+         * waits should always occur in loops, like this one:
+         * <pre>
+         *     synchronized (obj) {
+         *         while (&lt;condition does not hold&gt;)
+         *             obj.wait(timeout);
+         *         ... // Perform action appropriate to condition
+         *     }
+         * </pre>
+    */     
+    ```
+
+    大致意思是 thread 有可能被**虚假唤醒(spurious wakeup)**，此时如果用 if 的话，唤醒后线程会从 wait 之后的代码开始运行，有可能因为不满足判定条件而执行了后面的代码，从而出现错误。如果用 while 的话，唤醒后会重新判断条件，不满足则继续执行wait。
+
+- interrupt()
+
+  中断线程，单独调用interrupt方法可以使得处于**阻塞状态**的线程抛出一个异常。通过interrupt方法和isInterrupted()方法来停止**正在运行**的线程。
+
+- setDaemon()/isDaemon()
+
+  用来设置线程是否成为守护线程和判断线程是否是守护线程。
+
+  守护线程和用户线程的区别在于：守护线程依赖于创建它的线程，而用户线程则不依赖。比如，如果在main线程中创建了一个守护线程，当main方法运行完毕之后，守护线程也会随着消亡。而用户线程则不会，用户线程会一直运行直到其运行完毕。在JVM中，像垃圾收集器线程就是守护线程。
+
+![img](https://images0.cnblogs.com/blog/288799/201409/061046391107893.jpg)
 
 ### 强引用/软引用/弱引用/虚引用
 
@@ -278,16 +376,6 @@ synchronized关键字是防止多个线程同时执行一段代码，那么就�
 
 - 浅拷贝：在拷贝对象时，对于基本数据类型会复制一份，对于引用的变量只是对引用进行拷贝，不对引用对象拷贝
 - 深拷贝：在拷贝对象时，对基本数据类型和引用的对象都会进行拷贝
-
-### Thread
-
-- yield()
-
-  让当前线程交出 CPU 权限，让 CPU 去执行其他的线程。跟 sleep 类似，同样不会释放锁。但是 yield 不能控制交出 CPU 的时间。yield 并不是让线程进入阻塞状态，而是让线程重回就绪状态。
-
-- join()
-
-  在 main 线程中，调用 thread.join()，则 main 线程会等待 thread 线程执行完毕或等待一段时间后再继续执行。
 
 
 
