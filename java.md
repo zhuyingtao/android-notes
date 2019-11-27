@@ -260,6 +260,109 @@ Java 中线程的状态可分为五种：New, Runnable, Running, Blocked, Dead
 
 ![img](https://images0.cnblogs.com/blog/288799/201409/061046391107893.jpg)
 
+### synchronized
+
+多个线程同时访问临界资源（也称为共享资源），就可能产生线程安全问题。解决线程安全问题，需要同步互斥访问，也就是在访问临界资源的代码前面加上一个锁，当访问完临界资源后释放锁，让其他线程继续访问。
+
+##### 类锁和对象锁
+
+对象锁：每个对象都有一把锁（monitor），修饰方法和代码块。
+
+类锁：实际上是 class 对象的锁，因为一个类只会有一个 class 对象，所以也称为类锁，修饰静态方法和静态代码块。也可以当作对象锁使用。
+
+Java 中，提供了两种方法实现同步互斥访问：synchronized 和 Lock。
+
+##### synchronized 实现原理：
+
+synchronized 代码块通过反编译字节码可以看到，多了 monitorenter 和 monitorexit 两条指令。
+
+### Lock
+
+##### 为什么需要 Lock？
+
+synchronized 释放锁有两种情况：1. 代码执行完 2. 出现异常。如果线程进入了阻塞状态，依然不释放锁，其他线程只能等。Lock 可以实现等待一段时间或响应中断。
+
+synchronized 不能区分读写操作，当是多个读操作时，虽然不会冲突，但只能同步操作。Lock 可以区分读写，对多个读操作不做同步互斥处理。
+
+总之，Lock 提供了更多的功能，更加灵活，是为了提升效率，解决 synchronized 的缺陷而出现的。
+
+##### Lock 与 synchronized
+
+- synchronized 是 Java 语言的关键字，是内置特性。Lock 不是内置的，是一个类。
+- synchronized 不需要手动释放锁。Lock 必须手动释放锁。
+- synchronized 线程不能响应中断，等待的线程会一直等待下去。Lock 可以响应中断。
+- synchronized 不能判断有没有获得锁。Lock 可以知道获取锁的状态。
+- Lock 可以提高多个读操作的效率。
+
+##### concurrent.lock 包下的类
+
+- Lock 接口
+
+  ```java
+  public interface Lock {
+      void lock();
+      void lockInterruptibly() throws InterruptedException;
+      boolean tryLock();
+      boolean tryLock(long time, TimeUnit unit) throws InterruptedException;
+      void unlock();
+      Condition newCondition();
+  }
+  ```
+
+- ReentrantLock 类，可重入锁，是唯一实现了 Lock 接口的类
+
+  lock 的使用方法，一定要在 finally 中释放锁。
+
+  ```java
+  Lock lock = ...;
+  lock.lock();
+  try{
+      //处理任务
+  }catch(Exception ex){
+       
+  }finally{
+      lock.unlock();   //释放锁
+  }
+  ```
+
+- ReadWriteLock 接口
+
+  ```java
+  public interface ReadWriteLock {
+      /**
+       * Returns the lock used for reading.
+       *
+       * @return the lock used for reading.
+       */
+      Lock readLock();
+   
+      /**
+       * Returns the lock used for writing.
+       *
+       * @return the lock used for writing.
+       */
+      Lock writeLock();
+  }
+  ```
+
+- ReentrantReadWriteLock 类，可重入读写锁
+
+##### 不同锁的概念
+
+- 可重入锁
+
+  synchronized 和 ReentrantLock 都是此类锁。基于线程分配锁，而不是基于方法调用。比如，methodA 中需要锁，methodB也需要锁，在 methodA 中调用 methodB，由于 methodA 已经获得了锁，methodB 就不需要重新去申请锁了。
+
+- 可中断锁
+
+  可以响应中断的锁。Lock 是此类锁。lockInterruptibly() 可以实现中断等待的线程。
+
+- 公平锁
+
+  以请求锁的顺序来获取锁。synchronized 是非公平锁。ReentrantLock 默认是非公平锁，但是可以通过参数设置为公平锁。
+
+- 读写锁
+
 ### 强引用/软引用/弱引用/虚引用
 
 - 强引用
