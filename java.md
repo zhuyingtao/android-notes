@@ -384,7 +384,62 @@ protected T initialValue() { }
 
 ### 同步容器
 
-集合框架四大类：List、Set、Queue、Map
+集合框架四大接口：List、Set、Queue、Map，其中，List、Set、Queue 继承了 Collection 接口。
+
+ArrayList、LinkedList、HashMap 这些容器都是非线程安全的，如果有多个线程并发访问，就会出现问题。为了方便开发者，Java 提供了同步容器。
+
+同步容器有 2 类：
+
+- Vector、Stack、HashTable
+
+  Vector 与 ArrayList 类似，但是 Vector 中的方法都是 syncrhonized，即进行了同步处理。Stack 继承了 Vector 类。
+
+  HashTable 与 HashMap 类似，但HashTable 进行了同步处理。
+
+- Collections.synchronizedCollection/List/Map() 方法
+
+同步容器的缺陷：
+
+- 性能问题
+
+- 并不一定安全
+
+  Vector 的 get(i) 和 remove(i) 操作，虽然能保证只有一个线程访问 vector，但是可能因为 i 的值而导致数组越界问题。
+
+- CME 异常
+
+  iterator 的 next 方法中会调用 checkForComodification 方法，当 expectedModCount 和 modCount 不一致时（比如在遍历时调用 list.remove），就会报 CME 异常。
+
+  解决方法：
+
+  单线程：使用 iterator.remove方法，此方法中会操作 expectedModCount = modCount。
+
+  多线程：使用 iterator 迭代的时候加锁；使用并发容器 CopyOnWriteArrayList 代替 ArrayList 和 Vector。
+
+### 并发容器
+
+##### CopyOnWriteArrayList
+
+CopyOnWrite 即写时复制。就是往一个容器中添加元素的时候，不直接往当前容器添加，而是先 copy，往新的容器里添加，添加完元素后，再把原引用指向新的容器。这样的好处是可以进行并发的读，而不需要加锁。
+
+CopyOnWrite 容器用于读多写少的并发场景。比如白名单、黑名单之类
+
+##### ConcurrentHashMap
+
+### 阻塞队列
+
+阻塞队列，会对当前线程产生阻塞，比如一个线程从一个空的阻塞队列中取元素，此时线程会被阻塞直到阻塞队列中有了元素。当队列中有元素后，被阻塞的线程会自动被唤醒（不需要我们编写代码去唤醒）。这样提供了极大的方便性。
+
+- ArrayBlockingQueue
+- LinkedBlockingQueue
+- PriorityBlockingQueue
+- DelayQueue
+
+### 线程池
+
+##### ThreadPoolExecutor
+
+Executor -> ExecutorService -> AbstractExecutorService -> ThreadPoolExecutor
 
 ### 强引用/软引用/弱引用/虚引用
 
