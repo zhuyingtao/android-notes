@@ -363,6 +363,29 @@ synchronized 不能区分读写操作，当是多个读操作时，虽然不会�
 
 - 读写锁
 
+### ThreadLocal 类
+
+ThreadLocal，可以认为是线程本地变量。通过 ThreadLocal 类，可以为成员变量在每一个线程中创建一个副本，那么每一个线程都可以访问自己的副本变量。
+
+```java
+public T get() { }
+public void set(T value) { }
+public void remove() { }
+protected T initialValue() { }
+```
+
+首先，在每个线程Thread内部有一个ThreadLocal.ThreadLocalMap类型的成员变量threadLocals，这个threadLocals就是用来存储实际的变量副本的，键值为当前ThreadLocal变量，value为变量副本（即T类型的变量）。
+
+初始时，在Thread里面，threadLocals为空，当通过ThreadLocal变量调用get()方法或者set()方法，就会对Thread类中的threadLocals进行初始化，并且以当前ThreadLocal变量为键值，以ThreadLocal要保存的副本变量为value，存到threadLocals。
+
+##### 使用场景
+
+最常见的 ThreadLocal 使用场景为 用来解决数据库连接、session 管理等。
+
+### 同步容器
+
+集合框架四大类：List、Set、Queue、Map
+
 ### 强引用/软引用/弱引用/虚引用
 
 - 强引用
