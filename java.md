@@ -435,11 +435,111 @@ CopyOnWrite 容器用于读多写少的并发场景。比如白名单、黑名�
 - PriorityBlockingQueue
 - DelayQueue
 
-### 线程池
+### 线程池（重新阅读）
+
+[Java并发编程：线程池的使用](https://www.cnblogs.com/dolphin0520/p/3932921.html)
 
 ##### ThreadPoolExecutor
 
 Executor -> ExecutorService -> AbstractExecutorService -> ThreadPoolExecutor
+
+### 并发编程辅助类
+
+##### CountDownLatch
+
+实现类似计数器的功能，所有线程执行完毕后才会继续执行。
+
+```java
+public CountDownLatch(int count) {  };  //参数count为计数值
+public void await() throws InterruptedException { };   //调用await()方法的线程会被挂起，它会等待直到count值为0才继续执行
+public boolean await(long timeout, TimeUnit unit) throws InterruptedException { };  //和await()类似，只不过等待一定的时间后count值还没变为0的话就会继续执行
+public void countDown() { };  //将count值减1
+```
+
+##### CyclicBarrier
+
+字面意思回环栅栏，通过它可以实现让一组线程等待至某个状态之后再全部同时执行。
+
+```java
+public CyclicBarrier(int parties, Runnable barrierAction) {}
+public CyclicBarrier(int parties) {}
+public int await() throws InterruptedException, BrokenBarrierException { };
+public int await(long timeout, TimeUnit unit)throws InterruptedException,BrokenBarrierException,TimeoutException { };
+```
+
+##### Semaphore
+
+字面意思为 信号量，Semaphore可以控制同时访问的线程个数，通过 acquire() 获取一个许可，如果没有就等待，而 release() 释放一个许可。Semaphore其实和锁有点类似，它一般用于控制对某组资源的访问权限。
+
+```java
+public Semaphore(int permits) {          //参数permits表示许可数目，即同时可以允许多少线程进行访问
+    sync = new NonfairSync(permits);
+}
+public Semaphore(int permits, boolean fair) {    //这个多了一个参数fair表示是否是公平的，即等待时间越久的越先获取许可
+    sync = (fair)? new FairSync(permits) : new NonfairSync(permits);
+}
+public void acquire() throws InterruptedException {  }     //获取一个许可
+public void acquire(int permits) throws InterruptedException { }    //获取permits个许可
+public void release() { }          //释放一个许可
+public void release(int permits) { }    //释放permits个许可
+```
+
+### Callable/Future/FutureTask
+
+Java 创建线程的两种方式：1. 继承 Thread类 2. 实现 Runnable 接口。这两种方式都有一个缺点：在执行完任务后无法获取执行结果，只能通过共享变量和线程间通信来实现，比较麻烦。
+
+后来 Java 提供了 Callable 和 Future，它们可以在执行完任务后获得结果。
+
+##### Callable
+
+```java
+public interface Callable<V> {
+    /**
+     * Computes a result, or throws an exception if unable to do so.
+     *
+     * @return computed result
+     * @throws Exception if unable to compute a result
+     */
+    V call() throws Exception;
+}
+```
+
+怎么使用呢？一般是配合 ExecutorService 来使用的。
+
+```java
+<T> Future<T> submit(Callable<T> task);
+<T> Future<T> submit(Runnable task, T result);
+Future<?> submit(Runnable task);
+```
+
+##### Future
+
+Future就是对于具体的Runnable或者Callable任务的执行结果进行取消、查询是否完成、获取结果。必要时可以通过get方法获取执行结果，该方法会阻塞直到任务返回结果。
+
+```java
+public interface Future<V> {
+    boolean cancel(boolean mayInterruptIfRunning);
+    boolean isCancelled();
+    boolean isDone();
+    V get() throws InterruptedException, ExecutionException;
+    V get(long timeout, TimeUnit unit)
+        throws InterruptedException, ExecutionException, TimeoutException;
+}
+```
+
+##### FutureTask
+
+FutureTask 是 Future 接口的具体实现
+
+```java
+public class FutureTask<V> implements RunnableFuture<V>
+
+public interface RunnableFuture<V> extends Runnable, Future<V> {
+    void run();
+}
+```
+
+
 
 ### 强引用/软引用/弱引用/虚引用
 
