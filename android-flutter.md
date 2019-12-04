@@ -21,3 +21,17 @@
 - 性能体验
 
   性能相比原生有多大差异。
+
+#### 跨平台技术划分
+
+- Web 技术
+
+  主要依赖 WebView 的技术，比如 PhoneGap、Cordova、小程序。
+
+- 原生渲染
+
+  使用 JavaScript 作为编程语言，通过中间层转化为原生控件来渲染 UI 界面，比如 React Native、Weex。
+
+- 自渲染技术
+
+  自行实现一套渲染框架，而不依赖原生，比如 Flutter、Unity。
