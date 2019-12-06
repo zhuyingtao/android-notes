@@ -1,0 +1,85 @@
+## Interview Questions
+
+### Java
+
+- 反射、RTTI
+- JVM
+  - 内存模型
+    - 堆
+    - 栈
+    - 方法区
+      - 常量池
+  - 垃圾回收
+    - 垃圾检测
+      - 引用计数法
+      - 可达性分析法
+    - 垃圾处理
+      - 标记-清除法
+      - 复制法
+  - 类加载
+    - 加载机制
+- 并发
+  - 锁的类型
+    - 可重入锁
+  - sychronized 关键字
+  - 线程池
+  - Callable
+  - ThreadLocal
+  - Thread
+    - run()/start()
+  - 进程与线程
+- 容器
+  - 基本容器
+  - List
+    - ArrayList/LinkedList
+  - Map
+    - HashMap 原理
+    - ConcurrentHashMap 原理
+    - LinkedHashMap 原理
+  - concurrent 包中的容器
+- 设计模式
+  - 单例模式
+    - DCL
+      - volatile
+      - synchronized
+- 类
+  - Object
+    - ==/equals/hashcode
+    - wait()/notify()
+  - 强/弱/软/虚引用
+- 关键字
+  - final
+  - transient
+
+### Android
+
+- Activity
+  - 生命周期
+  - startActivity() 原理
+- Framework
+  - 应用启动流程
+  - Handler机制
+    - Handler 源码
+    - Looper 源码
+    - Message 源码
+    - MessageQueue 源码
+- IPC
+  - AIDL
+  - Binder 机制
+- XML
+  - include/viewstub/merge
+- Event
+  - touch 事件传递分发
+    - 拦截
+    - 消费
+- ANR
+  - 类型
+  - 分析
+  - 处理
+- View 
+  - 绘制流程
+- 内存
+  - 内存泄漏
+    - 场景
+    - 原因
+    - 解决方法
