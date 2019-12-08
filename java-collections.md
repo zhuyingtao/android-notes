@@ -1,0 +1,281 @@
+## Java 集合类
+
+### Map 继承关系
+
+![img](https://awps-assets.meituan.net/mit-x/blog-images-bundle-2016/f7fe16a2.png)
+
+Map 接口主要有四个常用的实现类 **HashMap/HashTable/LinkedHashMap/TreeMap**
+
+下面针对各个实现类的特点做一些说明：
+
+(1) HashMap：它根据键的hashCode值存储数据，大多数情况下可以直接定位到它的值，因而具有很快的访问速度，但遍历顺序却是不确定的。 HashMap最多只允许一条记录的键为null，允许多条记录的值为null。HashMap非线程安全，即任一时刻可以有多个线程同时写HashMap，可能会导致数据的不一致。如果需要满足线程安全，可以用 Collections的synchronizedMap方法使HashMap具有线程安全的能力，或者使用ConcurrentHashMap。
+
+(2) Hashtable：Hashtable是遗留类，很多映射的常用功能与HashMap类似，不同的是它承自Dictionary类，并且是线程安全的，任一时间只有一个线程能写Hashtable，并发性不如ConcurrentHashMap，因为ConcurrentHashMap引入了分段锁。Hashtable不建议在新代码中使用，不需要线程安全的场合可以用HashMap替换，需要线程安全的场合可以用ConcurrentHashMap替换。
+
+(3) LinkedHashMap：LinkedHashMap是HashMap的一个子类，保存了记录的插入顺序，在用Iterator遍历LinkedHashMap时，先得到的记录肯定是先插入的，也可以在构造时带参数，按照访问次序排序。
+
+(4) TreeMap：TreeMap实现SortedMap接口，能够把它保存的记录根据键排序，默认是按键值的升序排序，也可以指定排序的比较器，当用Iterator遍历TreeMap时，得到的记录是排过序的。如果使用排序的映射，建议使用TreeMap。在使用TreeMap时，key必须实现Comparable接口或者在构造TreeMap传入自定义的Comparator，否则会在运行时抛出java.lang.ClassCastException类型的异常。
+
+### HashMap 实现原理
+
+#### 存储结构
+
+从实现结构上来讲，HashMap 是数组+链表+红黑树（Java 8 增加了红黑树部分）实现的，如下图所示：
+
+![img](https://awps-assets.meituan.net/mit-x/blog-images-bundle-2016/e4a19398.png)
+
+1. 图中的 Node 是HashMap 的一个内部类，实现了 Map.Entry 接口，本质就是一个键值对对象，源码如下：
+
+```java
+static class Node<K,V> implements Map.Entry<K,V> {
+        final int hash;    //用来定位数组索引位置
+        final K key;
+        V value;
+        Node<K,V> next;   //链表的下一个node
+
+        Node(int hash, K key, V value, Node<K,V> next) { ... }
+        public final K getKey(){ ... }
+        public final V getValue() { ... }
+        public final String toString() { ... }
+        public final int hashCode() { ... }
+        public final V setValue(V newValue) { ... }
+        public final boolean equals(Object o) { ... }
+}
+```
+
+2. HashMap 使用哈希表（ Node[] table ）来存储数据。哈希表解决冲突一般有两种方式：开放地址法和链地址法。Java 采用了链地址法。
+
+3. 如果数组很大，即使较差的 hash 算法也会比较分散；如果数组很小，即使较好的 hash 算法也会出现较多冲突，所以需要在空间成本和时间成本之间权衡。Java 中的 HashMap 实现了**扩容机制**和好的 **hash 算法**。
+
+4. HashMap 中定义的几个字段
+
+   ```java
+   		 int threshold;             // 所能容纳的key-value对极限 
+        final float loadFactor;    // 负载因子
+        int modCount;  
+        int size;  
+   ```
+
+   首先，Node[] table的初始化长度length(默认值是16)，Load factor为负载因子(默认值是0.75)，threshold是HashMap所能容纳的最大数据量的Node(键值对)个数。threshold = length * Load factor。也就是说，在数组定义好长度之后，负载因子越大，所能容纳的键值对个数越多。
+
+   - 默认值
+
+     ```java
+         /**
+          * 默认初始容量16，必须是2的幂
+          */
+         static final int DEFAULT_INITIAL_CAPACITY = 1 << 4;
+     
+         /**
+          * 最大容量
+          */
+         static final int MAXIMUM_CAPACITY = 1 << 30;
+     
+         /**
+          * 默认负载因子。当键值对的数量大于 CAPACITY * 0.75 时，就会触发扩容
+          * 如无参的HashMap构造器，初始化容量为16，当键值对的数量大于 16 * 0.75 = 12时，就会触发扩容
+          */
+         static final float DEFAULT_LOAD_FACTOR = 0.75f;
+     
+         /**
+          * 计数阈值。链表的元素大于8的时候，链表将转化为树
+          */
+         static final int TREEIFY_THRESHOLD = 8;
+     
+         /**
+          * 计数阈值。resize操作时，红黑树的节点数量小于6时使用链表来代替树
+          */
+         static final int UNTREEIFY_THRESHOLD = 6;
+     
+         /**
+          * 在转变成树之前，还会有一次判断，只有键值对数量大于 64 才会发生转换。
+          * 这是为了避免在哈希表建立初期，多个键值对恰好被放入了同一个链表中而导致不必要的转化
+          */
+         static final int MIN_TREEIFY_CAPACITY = 64;
+     ```
+
+   - 属性
+
+     ```java
+         /**
+          * 存储数据的哈希表，默认容量16。长度总是2的幂
+          */
+         transient Node<K,V>[] table;
+     
+         /**
+          * Entry集合，主要用于迭代功能
+          */
+         transient Set<Map.Entry<K,V>> entrySet;
+     
+         /**
+          * 实际存在的Node数量，不一定等于table的长度（初始化容量），甚至可能大于它。
+          */
+         transient int size;
+     
+         /**
+          * HashMap结构被修改的次数，迭代过程中遵循Fail-Fast机制。
+          * 保证多线程同时修改map时，能及时的发现（操作前备份的count和当前modCount不相等）并抛出异常终止操作。
+          */
+         transient int modCount;
+     
+         /**
+          * 扩容阈值，超过(capacity * loadFactor)时，自动扩容容量为原来的二倍。 
+          */
+         int threshold;
+     
+         /**
+          * 负载因子，可计算threshold：threshold = capacity * loadFactor
+          */
+         final float loadFactor;
+     ```
+
+#### 功能实现
+
+- 确定数组中的索引位置
+
+  好的 hash 算法，应当使元素尽量分布均匀，每个位置上的元素数量只有一个。HashMap 中使用的 hash 算法如下：
+
+  ```java
+  方法一：
+  static final int hash(Object key) {   //jdk1.8 & jdk1.7
+       int h;
+       // h = key.hashCode() 为第一步 取hashCode值
+       // h ^ (h >>> 16)  为第二步 高位参与运算
+       return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+  }
+  方法二：
+  static int indexFor(int h, int length) {  //jdk1.7的源码，jdk1.8没有这个方法，但是实现原理一样的
+       return h & (length-1);  //第三步 取模运算
+  }
+  ```
+
+  hash 算法本质上就是三步
+
+  1. 取 key 的 hashCode 值
+
+  2. hashCode 高位参与运算
+
+     因为后面使用&运算符，而且操作数 length-1 只有低位有效。如果不加此步运算，很容易导致两个hashCode低位相同的 key 冲突。
+
+  3. 取模运算
+
+     当 length 总是 2 的 n 次方时，此表达式等价于对 length 取模，但是比取模具有更高的效率。
+
+- 增加元素
+
+  HashMap 的 put 方法可以通过下图来理解：
+
+  ![](https://awps-assets.meituan.net/mit-x/blog-images-bundle-2016/d669d29c.png)
+
+  具体源码如下：
+
+  ```java
+  public V put(K key, V value) {
+    			// 对key的hashCode()做hash
+          return putVal(hash(key), key, value, false, true);
+  }
+  
+  final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+                     boolean evict) {
+          Node<K,V>[] tab; Node<K,V> p; int n, i;
+    			// 步骤①：tab为空则创建
+          if ((tab = table) == null || (n = tab.length) == 0)
+              n = (tab = resize()).length;
+    			// 步骤②：计算index，并对null做处理 
+          if ((p = tab[i = (n - 1) & hash]) == null)
+              tab[i] = newNode(hash, key, value, null);
+          else {
+              Node<K,V> e; K k;
+            	// 步骤③：节点key存在，直接覆盖value
+              if (p.hash == hash &&
+                  ((k = p.key) == key || (key != null && key.equals(k))))
+                  e = p;
+              // 步骤④：判断该链为红黑树
+              else if (p instanceof TreeNode)
+                  e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
+              // 步骤⑤：该链为链表
+              else {
+                  for (int binCount = 0; ; ++binCount) {
+                      if ((e = p.next) == null) {
+                          p.next = newNode(hash, key, value, null);
+                          //链表长度大于8转换为红黑树进行处理
+                          if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
+                              treeifyBin(tab, hash);
+                          break;
+                      }
+                      // key已经存在直接覆盖value
+                      if (e.hash == hash &&
+                          ((k = e.key) == key || (key != null && key.equals(k))))
+                          break;
+                      p = e;
+                  }
+              }
+              if (e != null) { // existing mapping for key
+                  V oldValue = e.value;
+                  if (!onlyIfAbsent || oldValue == null)
+                      e.value = value;
+                  afterNodeAccess(e);
+                  return oldValue;
+              }
+          }
+          ++modCount;
+     			// 步骤⑥：超过最大容量 就扩容
+          if (++size > threshold)
+              resize();
+          afterNodeInsertion(evict);
+          return null;
+  }
+  ```
+
+- 扩容机制
+
+  扩容(resize)就是重新计算容量，向HashMap对象里不停的添加元素，而HashMap对象内部的数组无法装载更多的元素时，对象就需要扩大数组的长度，以便能装入更多的元素。Java里的数组是无法自动扩容的，方法是使用一个新的数组代替已有的容量小的数组。
+
+  ```java
+  void resize(int newCapacity) {   //传入新的容量
+       Entry[] oldTable = table;    //引用扩容前的Entry数组
+       int oldCapacity = oldTable.length;         
+       if (oldCapacity == MAXIMUM_CAPACITY) {  //扩容前的数组大小如果已经达到最大(2^30)了
+           threshold = Integer.MAX_VALUE; //修改阈值为int的最大值(2^31-1)，这样以后就不会扩容了
+           return;
+       }
+    
+       Entry[] newTable = new Entry[newCapacity];  //初始化一个新的Entry数组
+       transfer(newTable);                         //！！将数据转移到新的Entry数组里
+       table = newTable;                           //HashMap的table属性引用新的Entry数组
+       threshold = (int)(newCapacity * loadFactor);//修改阈值
+  }
+  ```
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

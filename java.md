@@ -612,5 +612,68 @@ public void release(int permits) { }    //释放permits个许可
 - 浅拷贝：在拷贝对象时，对于基本数据类型会复制一份，对于引用的变量只是对引用进行拷贝，不对引用对象拷贝
 - 深拷贝：在拷贝对象时，对基本数据类型和引用的对象都会进行拷贝
 
+#### Fail-Fast & Fail-Safe
 
+- Fail-Fast
 
+  Fail-Fast 机制，通俗的讲就是在程序设计时先考虑异常情况，一旦发生异常，直接停止并上报。这种机制在日常的编程中随处可见。Java 的集合类也使用了 fail-fast 机制进行设计，一旦使用不当，就会抛出异常。
+
+  典型的场景，在 foreach 循环里进行元素的 remove/add 操作，就会抛出 CME 异常。
+
+  ```java
+  Exception in thread "main" java.util.ConcurrentModificationException
+  at java.util.ArrayList$Itr.checkForComodification(ArrayList.java:909)
+  at java.util.ArrayList$Itr.next(ArrayList.java:859)
+  at com.hollis.ForEach.main(ForEach.java:22)
+  ```
+
+  异常原理：
+
+  1. `foreach`语法糖经过反编译以后，可以看出是依赖 while 和 Iterator 来实现的。
+
+  2. 分析上面的调用栈，可以看出是`checkForComodification`发生了异常，此方法是在 iterator.next()中调用的，具体实现如下：
+
+     ```java
+     final void checkForComodification() {
+         if (modCount != expectedModCount)
+             throw new ConcurrentModificationException();
+     }
+     ```
+
+  3. 该方法中由于 modCount 和 expectedModCound 不相等而抛出了异常。
+
+     modCount是ArrayList中的一个成员变量，它表示该集合实际被修改的次数。
+
+     expectedModCount 是 ArrayList中的一个内部类——Itr中的成员变量，该类实现了 Iterator 接口。
+
+     而 remove()方法只对 modCount 进行了操作。
+
+     ```java
+     private void fastRemove(int index) {
+         modCount++;
+         int numMoved = size - index - 1;
+         if (numMoved > 0)
+             System.arraycopy(elementData, index+1, elementData, index,
+                              numMoved);
+         elementData[--size] = null; // clear to let GC do its work
+     }
+     ```
+
+     这就导致 modCount != expectedModCount 而导致异常。
+
+  Java 里 util 包下的集合类都是 fail-fast 机制的。
+
+- Fail-Safe
+
+  为了避免出发 fail-fast 机制，Java 中提供了一些采用 fail-safe 机制的集合类。
+
+  concurrent 包下的集合类都是 fail-safe 机制的，可以在多线程下并发使用，并发修改，同时也可以在 foreach 中进行 add/remove。
+
+  fail-safe集合的所有对集合的修改都是先拷贝一份副本，然后在副本集合上进行的，并不是直接对原集合进行修改。并且这些修改方法，如add/remove都是通过加锁来控制并发的。这种策略叫做 Copy-On-Write。
+
+  CopyOnWrite容器即写时复制的容器。通俗的理解是当我们往一个容器添加元素的时候，不直接往当前容器添加，而是先将当前容器进行Copy，复制出一个新的容器，然后新的容器里添加元素，添加完元素之后，再将原容器的引用指向新的容器。CopyOnWrite容器是一种读写分离的思想，读和写不同的容器。
+
+  存在两个问题：
+
+  - 创建 copy 需要额外的空间和时间上的开销
+  - 不能保证遍历的是最新的内容
