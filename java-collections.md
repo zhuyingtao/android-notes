@@ -247,7 +247,105 @@ static class Node<K,V> implements Map.Entry<K,V> {
   }
   ```
 
-  
+### LinkedHashMap 实现原理
+
+大多数情况下，只要不涉及线程安全问题，Map基本都可以使用HashMap，不过HashMap有一个问题，就是迭代HashMap的顺序并不是HashMap放置的顺序，也就是无序。因此，Java 提供了 LinkedHashMap 来解决这个问题。
+
+**在使用上，LinkedHashMap和HashMap的区别就是LinkedHashMap是有序的。** 上面这个例子是根据插入顺序排序，此外，LinkedHashMap还有一个参数决定**是否在此基础上再根据访问顺序(get,put)排序**。
+
+#### 存储结构
+
+LinkedHashMap的数据存储和HashMap的结构一样采用(数组+单向链表)的形式，只是在每个节点中增加了用于维护顺序的 `before`和`after`变量维护了一个双向链表来保存LinkedHashMap的存储顺序，当调用迭代器的时候不再使用HashMap的的迭代器，而是自己写迭代器来遍历这个双向链表即可。
+
+```java
+    /**
+     * HashMap.Node subclass for normal LinkedHashMap entries.
+     */
+    static class LinkedHashMapEntry<K,V> extends HashMap.Node<K,V> {
+        LinkedHashMapEntry<K,V> before, after;
+        LinkedHashMapEntry(int hash, K key, V value, Node<K,V> next) {
+            super(hash, key, value, next);
+        }
+    }
+```
+
+所以 LinkedHashMap 单个节点所有的成员变量如下：
+
+```java
+LinkedHashMapEntry<K,V> before, after;
+final int hash;
+final K key;
+V value;
+Node<K,V> next;
+```
+
+其中 next 是用于维护 HashMap 中指定 table 位置上连接的 Entry 的顺序的。before/after 是用于维护 Entry 插入的先后顺序的。
+
+#### 功能实现
+
+LinkedHashMap 的基本实现思想就是——多态。它的 put 和 get 都是复用的父类中的方法，只是重写了 put 和 get 内部调用的某些方法。通过 head、tail 引用，记录双向链表的头和尾。
+
+```java
+    /**
+     * The head (eldest) of the doubly linked list.
+     */
+    transient LinkedHashMapEntry<K,V> head;
+
+    /**
+     * The tail (youngest) of the doubly linked list.
+     */
+    transient LinkedHashMapEntry<K,V> tail;
+
+    /**
+     * The iteration ordering method for this linked hash map: <tt>true</tt>
+     * for access-order, <tt>false</tt> for insertion-order.
+     *
+     * @serial
+     */
+    final boolean accessOrder;
+```
+
+#### 实现 LRU 缓存
+
+LRU即Least Recently Used，最近最少使用，也就是说，当缓存满了，会优先淘汰那些最近最不常访问的数据。LinkedHashMap正好满足这个特性，当我们开启accessOrder为true时，**最新访问(get或者put(更新操作))的数据会被丢到队列的尾巴处，那么双向队列的头就是最不经常使用的数据了**。
+
+此外，LinkedHashMap还提供了一个方法，这个方法就是为了我们实现LRU缓存而提供的，**removeEldestEntry(Map.Entry eldest) 方法。该方法可以提供在每次添加新条目时移除最旧条目的实现程序，默认返回 false**。
+
+```java
+protected boolean removeEldestEntry(Map.Entry<K,V> eldest) {
+        return false;
+}
+```
+
+以下实现一个简陋的 LRU 缓存
+
+```java
+public class LRUCache extends LinkedHashMap
+{
+    public LRUCache(int maxSize)
+    {
+        super(maxSize, 0.75F, true);
+        maxElements = maxSize;
+    }
+
+    protected boolean removeEldestEntry(java.util.Map.Entry eldest)
+    {
+        //逻辑很简单，当大小超出了Map的容量，就移除掉双向队列头部的元素，给其他元素腾出点地来。
+        return size() > maxElements;
+    }
+
+    private static final long serialVersionUID = 1L;
+    protected int maxElements;
+}
+```
+
+
+
+
+
+
+
+
 
 
 
