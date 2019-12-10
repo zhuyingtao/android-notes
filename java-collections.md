@@ -339,6 +339,15 @@ public class LRUCache extends LinkedHashMap
 }
 ```
 
+### ConcurrentHashMap 实现原理
+
+HashMap 是非线程安全的，其线程不安全主要体现在两个方面
+
+- resize 死循环：单线程没问题，多线程 rehash 容易出现死循环
+- 遍历时 fast-fail ：在遍历时修改 map 会报 CME
+
+因此 Java 提供了 ConcurrentHashMap 来解决上述问题，保证线程安全。
+
 
 
 
