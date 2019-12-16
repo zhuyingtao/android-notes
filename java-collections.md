@@ -348,9 +348,24 @@ HashMap 是非线程安全的，其线程不安全主要体现在两个方面
 
 因此 Java 提供了 ConcurrentHashMap 来解决上述问题，保证线程安全。
 
+##### Java 7 基于分段锁的ConcurrentHashMap
+
+Java 7 中的ConcurrentHashMap的底层数据结构仍然是数组和链表。与HashMap不同的是，ConcurrentHashMap最外层不是一个大的数组，而是一个Segment的数组。每个Segment包含一个与HashMap数据结构差不多的链表数组。
+
+<img src="http://www.jasongj.com/img/java/concurrenthashmap/concurrenthashmap_java7.png" alt="img" style="zoom:67%;" />
 
 
 
+```java
+/** Java 8 版本的 Segment **/
+static class Segment<K,V> extends ReentrantLock implements Serializable {
+        private static final long serialVersionUID = 2249069246763182397L;
+        final float loadFactor;
+        Segment(float lf) { this.loadFactor = lf; }
+}
+```
+
+Segment继承自ReentrantLock，所以我们可以很方便的对每一个Segment上锁。
 
 
 

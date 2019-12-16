@@ -404,7 +404,7 @@ ArrayList、LinkedList、HashMap 这些容器都是非线程安全的，如果�
 
 - 并不一定安全
 
-  Vector 的 get(i) 和 remove(i) 操作，虽然能保证只有一个线程访问 vector，但是可能因为 i 的值而导致数组越界问题。
+  同步容器保证了操作的串行，但是当线程进行复合操作时，仍然是非线程安全的。Vector 的 get(i) 和 remove(i) 操作，虽然能保证只有一个线程访问 vector，但是可能因为 i 的值而导致数组越界问题。
 
 - CME 异常
 
