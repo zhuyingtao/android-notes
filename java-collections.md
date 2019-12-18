@@ -348,7 +348,7 @@ HashMap 是非线程安全的，其线程不安全主要体现在两个方面
 
 因此 Java 提供了 ConcurrentHashMap 来解决上述问题，保证线程安全。
 
-##### Java 7 基于分段锁的ConcurrentHashMap
+#### Java 7 基于分段锁的ConcurrentHashMap
 
 Java 7 中的ConcurrentHashMap的底层数据结构仍然是数组和链表。与HashMap不同的是，ConcurrentHashMap最外层不是一个大的数组，而是一个Segment的数组。每个Segment包含一个与HashMap数据结构差不多的链表数组。
 
@@ -366,6 +366,16 @@ static class Segment<K,V> extends ReentrantLock implements Serializable {
 ```
 
 Segment继承自ReentrantLock，所以我们可以很方便的对每一个Segment上锁。
+
+对于读操作，获取Key所在的Segment时，需要保证可见性，具体实现上可以使用**volatile**关键字，也可使用锁。但使用锁开销太大，而使用**volatile**时每次写操作都会让所有CPU内缓存无效，也有一定开销。
+
+对于写操作，并不要求同时获取所有Segment的锁，因为那样相当于锁住了整个Map。它会先获取该Key-Value对所在的Segment的锁。获取锁时，并不直接使用lock来获取，事实上，它使用了自旋锁，如果tryLock获取锁失败，说明锁被其它线程占用，此时通过循环再次以tryLock的方式申请锁。如果在循环过程中该Key所对应的链表头被修改，则重置retry次数。如果retry次数超过一定值，则使用lock方法申请锁。这里使用自旋锁是因为自旋锁的效率比较高，但是它消耗CPU资源比较多，因此在自旋次数超过阈值时切换为互斥锁。
+
+#### Java 8 基于 CAS 的 ConcurrentHashMap
+
+Java 7为实现并行访问，引入了Segment这一结构，实现了分段锁，理论上最大并发度与Segment个数相等。Java 8为进一步提高并发性，摒弃了分段锁的方案，而是直接使用一个大的数组，采用`CAS + synchronized`来保证并发安全性。同时为了提高哈希碰撞下的寻址性能，Java 8在链表长度超过一定阈值（8）时将链表（寻址时间复杂度为O(N)）转换为红黑树（寻址时间复杂度为O(long(N))）。
+
+<img src="http://www.jasongj.com/img/java/concurrenthashmap/concurrenthashmap_java8.png" alt="img" style="zoom:67%;" />
 
 
 
