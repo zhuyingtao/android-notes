@@ -1,6 +1,6 @@
 ### JVM
 
-![image-20191119001446096](/Users/zyt/Library/Application Support/typora-user-images/image-20191119001446096.png)
+<img src="/Users/zyt/Library/Application Support/typora-user-images/image-20191119001446096.png" alt="image-20191119001446096" style="zoom: 50%;" />
 
 
 
