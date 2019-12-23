@@ -668,3 +668,48 @@ public void run() {
 
 #### 问题：[Android中为什么主线程不会因为Looper.loop()里的死循环卡死？](https://www.zhihu.com/question/34652589)
 
+每个app运行时前首先创建一个进程，该进程是由Zygote fork出来的，用于承载App上运行的各种Activity/Service等组件。进程下面又包含多个线程，进程与线程的区别就在于是否共享资源。对于主线程，我们是绝不希望主线程运行一段时间，自己就退出，那么如何保证能一直存活呢？**简单做法就是可执行代码是能一直执行下去的，死循环便能保证不会被退出**。既然是死循环又如何去处理其他事务呢？通过创建新线程的方式。
+
+事实上，会在进入死循环之前便创建了新binder线程，在代码ActivityThread.main()中：
+
+```java
+public static void main(String[] args) {
+        ....
+
+        //创建Looper和MessageQueue对象，用于处理主线程的消息
+        Looper.prepareMainLooper();
+
+        //创建ActivityThread对象
+        ActivityThread thread = new ActivityThread(); 
+
+        //建立Binder通道 (创建新线程)
+        thread.attach(false);
+
+        Looper.loop(); //消息循环运行
+        throw new RuntimeException("Main thread loop unexpectedly exited");
+}
+```
+
+thread.attach(false)；便会创建一个Binder线程（具体是指ApplicationThread，Binder的服务端，用于接收系统服务AMS发送来的事件），该Binder线程通过Handler将Message发送给主线程。
+
+**主线程的死循环一直运行是不是特别消耗CPU资源呢？** 其实不然，这里就涉及到**Linux pipe/epoll机制**，简单说就是在主线程的MessageQueue没有消息时，便阻塞在loop的queue.next()中的nativePollOnce()方法里，此时主线程会释放CPU资源进入休眠状态，直到下个消息到达或者有事务发生，通过往pipe管道写端写入数据来唤醒主线程工作。**所以说，主线程大多数时候都是处于休眠状态，并不会消耗大量CPU资源。**
+
+**Activity的生命周期是怎么实现在死循环体外能够执行起来的？**ActivityThread的内部类H继承于Handler，通过handler消息机制，简单说Handler机制用于同一个进程的线程间通信。**Activity的生命周期都是依靠主线程的Looper.loop，当收到不同Message时则采用相应措施：**在H.handleMessage(msg)方法中，根据接收到不同的msg，执行相应的生命周期。
+
+**主线程的消息又是哪来的呢？**当然是App进程中的其他线程通过Handler发送给主线程。
+
+![preview](https://pic4.zhimg.com/7fb8728164975ac86a2b0b886de2b872_r.jpg)
+
+**system_server进程是系统进程**，java framework框架的核心载体，里面运行了大量的系统服务，比如这里提供ApplicationThreadProxy（简称ATP），ActivityManagerService（简称AMS），这个两个服务都运行在system_server进程的不同线程中，由于ATP和AMS都是基于IBinder接口，都是binder线程，binder线程的创建与销毁都是由binder驱动来决定的。
+
+**App进程则是我们常说的应用程序**，主线程主要负责Activity/Service等组件的生命周期以及UI相关操作都运行在这个线程； 另外，每个App进程中至少会有两个binder线程 ApplicationThread(简称AT)和ActivityManagerProxy（简称AMP），除了图中画的线程，其中还有很多线程，比如signal catcher线程等，这里就不一一列举。
+
+Binder用于不同进程之间通信，由一个进程的Binder客户端向另一个进程的服务端发送事务，比如图中线程2向线程4发送事务；而handler用于同一个进程中不同线程的通信，比如图中线程4向主线程发送消息。
+
+**结合图说说Activity生命周期，比如暂停Activity，流程如下：**
+
+1. 线程1的AMS中调用线程2的ATP；（由于同一个进程的线程间资源共享，可以相互直接调用，但需要注意多线程并发问题）
+2. 线程2通过binder传输到App进程的线程4；
+3. 线程4通过handler消息机制，将暂停Activity的消息发送给主线程；
+4. 主线程在looper.loop()中循环遍历消息，当收到暂停Activity的消息时，便将消息分发给ActivityThread.H.handleMessage()方法，再经过方法的调用，最后便会调用到Activity.onPause()，当onPause()处理完后，继续循环loop下去。
+
