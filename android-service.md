@@ -271,3 +271,9 @@ public class MyService extends Service {
 ```
 
 由于这是在不同的进程之间传递数据，Android对这类数据的格式支持是非常有限的，基本上只能传递Java的基本数据类型、字符串、List或Map等。那么如果我想传递一个自定义的类该怎么办呢？这就必须要让这个类去实现Parcelable接口，并且要给这个类也定义一个同名的AIDL文件。
+
+#### 实现原理
+
+![start_server_binder](http://gityuan.com/images/binder/binder_start_service/start_server_binder.jpg)
+
+首先在发起方进程调用AMP.startService，经过binder驱动，最终调用系统进程AMS.startService。AMP和AMN都是实现了IActivityManager接口,AMS继承于AMN. 其中AMP作为Binder的客户端,运行在各个app所在进程, AMN(或AMS)运行在系统进程system_server。
