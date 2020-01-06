@@ -78,3 +78,12 @@ android:configChanges="orientation|keyboardHidden"
 ![app_process](http://gityuan.com/images/activity/app_process.jpg)
 
 Activity的生命周期，都是其他线程通过handler发送消息给主线程，那么主线程中的`ActivityThread`的内部类`H`控制整个核心消息处理机制，通过`H.handleMessage()`来控制Activity的生命周期。
+
+结合图说说Activity生命周期，比如暂停Activity的流程如下：
+
+- `线程1`的AMS中调用`线程2`的ATP来发送事件；（由于同一个进程的线程间资源共享，可以相互直接调用，但需要注意多线程并发问题）
+- `线程2`通过binder将暂停Activity的事件传输到App进程的`线程4`；
+- `线程4`通过handler消息机制，将暂停Activity的消息发送给`主线程`；
+- `主线程`在looper.loop()中循环遍历消息，当收到暂停Activity的消息(`PAUSE_ACTIVITY`)时，便将消息分发给ActivityThread.H.handleMessage()方法，再经过方法的层层调用，最后便会调用到Activity.onPause()方法。
+
+这便是由AMS完成了onPause()控制，那么同理Activity的其他生命周期也是这么个流程来进行控制的。

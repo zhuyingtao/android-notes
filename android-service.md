@@ -277,3 +277,26 @@ public class MyService extends Service {
 ![start_server_binder](http://gityuan.com/images/binder/binder_start_service/start_server_binder.jpg)
 
 首先在发起方进程调用AMP.startService，经过binder驱动，最终调用系统进程AMS.startService。AMP和AMN都是实现了IActivityManager接口,AMS继承于AMN. 其中AMP作为Binder的客户端,运行在各个app所在进程, AMN(或AMS)运行在系统进程system_server。
+
+#### 详细流程
+
+在整个startService过程，从进程角度看服务启动过程
+
+- **Process A进程：**是指调用startService命令所在的进程，也就是启动服务的发起端进程，比如点击桌面App图标，此处Process A便是Launcher所在进程。
+- **system_server进程：**系统进程，是java framework框架的核心载体，里面运行了大量的系统服务，比如这里提供ApplicationThreadProxy（简称ATP），ActivityManagerService（简称AMS），这个两个服务都运行在system_server进程的不同线程中，由于ATP和AMS都是基于IBinder接口，都是binder线程，binder线程的创建与销毁都是由binder驱动来决定的，每个进程binder线程个数的上限为16。
+- **Zygote进程：**是由`init`进程孵化而来的，用于创建Java层进程的母体，所有的Java层进程都是由Zygote进程孵化而来；
+- **Remote Service进程：**远程服务所在进程，是由Zygote进程孵化而来的用于运行Remote服务的进程。主线程主要负责Activity/Service等组件的生命周期以及UI相关操作都运行在这个线程； 另外，每个App进程中至少会有两个binder线程 ApplicationThread(简称AT)和ActivityManagerProxy（简称AMP）。
+
+![start_service_process](http://gityuan.com/images/android-service/start_service/start_service_processes.jpg)
+
+启动流程：
+
+1. Process A进程采用Binder IPC向system_server进程发起startService请求；
+2. system_server进程接收到请求后，向zygote进程发送创建进程的请求；
+3. zygote进程fork出新的子进程Remote Service进程；
+4. Remote Service进程，通过Binder IPC向sytem_server进程发起attachApplication请求；
+5. system_server进程在收到请求后，进行一系列准备工作后，再通过binder IPC向remote Service进程发送scheduleCreateService请求；
+6. Remote Service进程的binder线程在收到请求后，通过handler向主线程发送CREATE_SERVICE消息；
+7. 主线程在收到Message后，通过发射机制创建目标Service，并回调Service.onCreate()方法。
+
+到此，服务便正式启动完成。当创建的是本地服务或者服务所属进程已创建时，则无需经过上述步骤2、3，直接创建服务即可。
