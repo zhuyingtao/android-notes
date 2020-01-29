@@ -124,6 +124,7 @@
 * [battery-historian](https://github.com/google/battery-historian)
 * [lottie-android](https://github.com/airbnb/lottie-android)
 * [stetho](https://github.com/facebook/stetho)
+* [vlayout](https://github.com/alibaba/vlayout)
 
 #### Book
 * [Android开发书籍推荐](https://www.diycode.cc/wiki/androidbook)
