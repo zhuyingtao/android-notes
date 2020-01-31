@@ -162,7 +162,7 @@ Android 事件分发流程是 Activity -> ViewGroup -> View，所以要充分理
 
 - ViewGroup 事件分发相关源码
 
-  >  Android 5.0 之前源码，Android 5.0 之后源码有较大改动，但原理相同
+  > 采用 Android 5.0 之前源码，Android 5.0 之后源码有较大改动，但原理相同
 
   ```java
   /**
@@ -261,3 +261,173 @@ Android 事件分发流程是 Activity -> ViewGroup -> View，所以要充分理
 
   ![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWdjb252ZXJ0LmNzZG5pbWcuY24vYUhSMGNITTZMeTkxYzJWeUxXZHZiR1F0WTJSdUxuaHBkSFV1YVc4dk1qQXhPUzgyTHpFeEx6RTJZalEyTjJVMVlqY3haamMzTXpZ)
 
+#### View 的事件分发机制
+
+从上面 ViewGroup 的事件分发机制可以看出，View 事件分发机制是从 dispatchTouchEvent() 开始的。
+
+- View 事件分发相关源码
+
+  >  采用 Android 5.0 之前源码，Android 5.0 之后源码有较大改动，但原理相同
+
+  ```java
+  /**
+       * 源码分析：View.dispatchTouchEvent()
+       */
+      public boolean dispatchTouchEvent(MotionEvent event) {
+          if (mOnTouchListener != null && (mViewFlags & ENABLED_MASK) == ENABLED &&
+                  mOnTouchListener.onTouch(this, event)) {
+              return true;
+          }
+          return onTouchEvent(event);
+      }
+      // 说明：只有以下3个条件都为真，dispatchTouchEvent()才返回true；否则执行onTouchEvent()
+      //     1. mOnTouchListener != null
+      //     2. (mViewFlags & ENABLED_MASK) == ENABLED
+      //     3. mOnTouchListener.onTouch(this, event)
+      // 下面对这3个条件逐个分析
+  
+      /**
+       * 条件1：mOnTouchListener != null
+       * 说明：mOnTouchListener变量在View.setOnTouchListener（）方法里赋值
+       */
+      public void setOnTouchListener(OnTouchListener l) {
+          mOnTouchListener = l;
+          // 即只要我们给控件注册了Touch事件，mOnTouchListener就一定被赋值（不为空）
+      }
+  
+      /**
+       * 条件2：(mViewFlags & ENABLED_MASK) == ENABLED
+       * 说明：
+       *     a. 该条件是判断当前点击的控件是否enable
+       *     b. 由于很多View默认enable，故该条件恒定为true
+       */
+  
+      /**
+       * 条件3：mOnTouchListener.onTouch(this, event)
+       * 说明：即 回调控件注册Touch事件时的onTouch（）；需手动复写设置，具体如下（以按钮Button为例）
+       */
+      public void sample() {
+          button.setOnTouchListener(new View.OnTouchListener() {
+              @Override
+              public boolean onTouch(View v, MotionEvent event) {
+                  return false;
+              }
+          });
+          // 若在onTouch（）返回true，就会让上述三个条件全部成立，从而使得View.dispatchTouchEvent（）直接返回true，事件分发结束
+          // 若在onTouch（）返回false，就会使得上述三个条件不全部成立，从而使得View.dispatchTouchEvent（）中跳出If，执行onTouchEvent(event)
+      }
+  ```
+
+  接下来，继续看 onTouchEvent(MotionEvent) 的源码分析
+
+  ```java
+  /**
+       * 源码分析：View.onTouchEvent（）
+       */
+      public boolean onTouchEvent(MotionEvent event) {
+          final int viewFlags = mViewFlags;
+  
+          if ((viewFlags & ENABLED_MASK) == DISABLED) {
+  
+              return (((viewFlags & CLICKABLE) == CLICKABLE ||
+                      (viewFlags & LONG_CLICKABLE) == LONG_CLICKABLE));
+          }
+          if (mTouchDelegate != null) {
+              if (mTouchDelegate.onTouchEvent(event)) {
+                  return true;
+              }
+          }
+  
+          // 若该控件可点击，则进入switch判断中
+          if (((viewFlags & CLICKABLE) == CLICKABLE ||
+                  (viewFlags & LONG_CLICKABLE) == LONG_CLICKABLE)) {
+  
+              switch (event.getAction()) {
+  
+                  // a. 若当前的事件 = 抬起View（主要分析）
+                  case MotionEvent.ACTION_UP:
+                      boolean prepressed = (mPrivateFlags & PREPRESSED) != 0;
+  
+                              ...// 经过种种判断，此处省略
+  
+                      // 执行performClick() ->>分析1
+                      performClick();
+                      break;
+  
+                  // b. 若当前的事件 = 按下View
+                  case MotionEvent.ACTION_DOWN:
+                      if (mPendingCheckForTap == null) {
+                          mPendingCheckForTap = new CheckForTap();
+                      }
+                      mPrivateFlags |= PREPRESSED;
+                      mHasPerformedLongPress = false;
+                      postDelayed(mPendingCheckForTap, ViewConfiguration.getTapTimeout());
+                      break;
+  
+                  // c. 若当前的事件 = 结束事件（非人为原因）
+                  case MotionEvent.ACTION_CANCEL:
+                      mPrivateFlags &= ~PRESSED;
+                      refreshDrawableState();
+                      removeTapCallback();
+                      break;
+  
+                  // d. 若当前的事件 = 滑动View
+                  case MotionEvent.ACTION_MOVE:
+                      final int x = (int) event.getX();
+                      final int y = (int) event.getY();
+  
+                      int slop = mTouchSlop;
+                      if ((x < 0 - slop) || (x >= getWidth() + slop) ||
+                              (y < 0 - slop) || (y >= getHeight() + slop)) {
+                          // Outside button
+                          removeTapCallback();
+                          if ((mPrivateFlags & PRESSED) != 0) {
+                              // Remove any future long press/tap checks
+                              removeLongPressCallback();
+                              // Need to switch from pressed to not pressed
+                              mPrivateFlags &= ~PRESSED;
+                              refreshDrawableState();
+                          }
+                      }
+                      break;
+              }
+              // 若该控件可点击，就一定返回true
+              return true;
+          }
+          // 若该控件不可点击，就一定返回false
+          return false;
+      }
+  
+      /**
+       * 分析1：performClick（）
+       */
+      public boolean performClick() {
+          if (mOnClickListener != null) {
+              playSoundEffect(SoundEffectConstants.CLICK);
+              mOnClickListener.onClick(this);
+              return true;
+              // 只要我们通过setOnClickListener（）为控件View注册1个点击事件
+              // 那么就会给mOnClickListener变量赋值（即不为空）
+              // 则会往下回调onClick（） & performClick（）返回true
+          }
+          return false;
+      }
+  ```
+
+- View 事件分发机制流程图
+
+  ![img](https://imgconvert.csdnimg.cn/aHR0cHM6Ly9pbWdjb252ZXJ0LmNzZG5pbWcuY24vYUhSMGNITTZMeTkxYzJWeUxXZHZiR1F0WTJSdUxuaHBkSFV1YVc4dk1qQXhPUzgyTHpFeEx6RTJZalEyTjJVMVpUQmhabVEzTldZ)
+
+#### 额外知识
+
+1. Touch 事件的后续事件（MOVE/UP）层级传递
+
+   当 dispatchTouchEvent() 事件分发时，只有前一个事件（如 ACTION_DOWN ）返回 true，才会收到后一个事件（如 ACTION_MOVE/ACTION_UP）如果执行事件时返回 false，则后面的一系列事件都不会执行了。
+
+2. onTouch() 和 onTouchEvent() 的区别
+
+   这 2 个方法都是在 View.dispatchTouchEvent() 中调用。
+
+   但 onTouch() 优先于 onTouchEvent() 执行，如果手动复写在 onTouch() 中返回 true，则不再执行 onTouchEvent()
+
+ 
