@@ -2,6 +2,38 @@
 
 类加载器（ClassLoader），主要作用是查找和加载 class 文件到 java 虚拟机中。
 
+#### 类加载过程
+
+分为五个过程：加载、验证、准备、解析、初始化
+
+- 加载
+
+  将外部的 class 文件加载到 Java 虚拟机并存储到方法区内。
+
+  在内存中会生成一个代表这个类的 Class 对象，作为方法区该类的各种数据的访问入口
+
+- 验证
+
+  确保加载进来的 Class 文件包含的信息符合 Java 虚拟机的要求
+
+- 准备
+
+  为 static 变量分配内存&设置初始值（非开发者定义的值，除非是常量）
+
+- 解析
+
+  将常量池的符号引用转化为直接引用
+
+- 初始化
+
+  初始化 static 变量和 static 代码块
+
+#### 类加载器类别
+
+![img](https://imgconvert.csdnimg.cn/aHR0cDovL3VwbG9hZC1pbWFnZXMuamlhbnNodS5pby91cGxvYWRfaW1hZ2VzLzk0NDM2NS0xNTUwMjFhNWI4MzBjZjQ4LnBuZw?x-oss-process=image/format,png)
+
+
+
 #### Java 类加载器
 
 Java 中的类加载器主要分为两类：
@@ -25,14 +57,6 @@ Java 中的类加载器主要分为两类：
    加载当前应用程序classpath 目录下的 jar 和 class 文件。
 
 4. Custom 类加载器
-
-#### 类加载器原理
-
-双亲委托模式
-
-![image-20190815234524980](/Users/zyt/Library/Application Support/typora-user-images/image-20190815234524980.png)
-
-
 
 #### Android 类加载器
 
@@ -59,3 +83,14 @@ Android 类加载器也分为两类：
    加载系统类和应用程序的类
 
 4. CustomClassLoader
+
+#### 类加载器原理
+
+双亲委派模式
+
+![image-20190815234524980](/Users/zyt/Library/Application Support/typora-user-images/image-20190815234524980.png)
+
+
+
+
+
