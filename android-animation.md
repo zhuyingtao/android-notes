@@ -1,14 +1,23 @@
-### Android 动画
+## Android 动画
 
-#### 逐帧动画
+### 动画分类
+
+- 视图动画：逐帧动画、补间动画
+- 属性动画
+
+### 逐帧动画
 
 逐帧动画(frame-by-frame animation)，是将一个完整的动画拆分成一张张单独的图片，然后再将它们连贯起来进行播放。
 
-#### 补间动画
+### 补间动画
 
 补间动画(tweened animation)，是可以对View进行一系列的动画操作，包括淡入淡出、缩放、平移、旋转四种。
 
-##### 使用场景
+#### 原理
+
+通过确定开始的 View 样式&结束的 View 样式、中间动画变化过程，由系统补全来确定一个动画
+
+#### 使用场景
 
 基础动画效果：
 
@@ -23,7 +32,7 @@
 - Fragment 的切换效果
 - ViewGroup 中子元素的出场效果
 
-##### 平移动画
+#### 平移动画
 
 对应的核心类是 TranslateAnimation 类。
 
@@ -87,7 +96,7 @@ mButton.startAnimation(translateAnimation);
 // 步骤3:播放动画
 ```
 
-##### 缩放动画
+#### 缩放动画
 
 对应的核心类是 ScaleAnimation 类。
 
@@ -179,7 +188,7 @@ mButton.startAnimation(scaleAnimation);
 
 ```
 
-##### 旋转动画
+#### 旋转动画
 
 对应的核心类是 RotateAnimation 类
 
@@ -256,7 +265,7 @@ mButton.startAnimation(rotateAnimation);
 
 ```
 
-##### 透明度动画
+#### 透明度动画
 
 对应的核心类是 AlphaAnimation 类
 
@@ -315,7 +324,7 @@ mButton.startAnimation(alphaAnimation);
 
 ```
 
-##### Activity 的切换动画
+#### Activity 的切换动画
 
 启动动画
 
@@ -371,7 +380,7 @@ public void finish(){
 
 ```
 
-##### Fragment 的切换动画
+#### Fragment 的切换动画
 
 类似于 Activity，使用系统预设动画
 
@@ -406,7 +415,7 @@ fragmentTransaction.setCustomAnimations(
 
 ```
 
-##### ViewGroup 中子元素的出场效果
+#### ViewGroup 中子元素的出场效果
 
 1. 设置子元素的出场动画
 2. 设置 ViewGroup 的动画文件
@@ -455,7 +464,7 @@ fragmentTransaction.setCustomAnimations(
 
 ```
 
-##### 高级使用
+#### 高级使用
 
 - 组合动画
 
@@ -521,11 +530,15 @@ fragmentTransaction.setCustomAnimations(
   // ArgbEvaluator：以Argb类型的形式从初始值 - 结束值 进行过渡
   ```
 
-#### 属性动画
+### 属性动画
 
-属性动画(property animation)，它的功能非常强大，弥补了之前补间动画的一些缺陷，几乎是可以完全替代掉补间动画了。
+属性动画(property animation)，它的功能非常强大，弥补了之前补间动画的一些缺陷，几乎是可以完全替代掉补间动画了。它不再局限于 View 对象，可以作用于任意 Java 对象。
 
-- ValueAnimator
+#### 原理
+
+在一定时间间隔内，通过不断改变值并且赋值给对象的属性，从而实现该对象在该属性上的动画效果。
+
+#### ValueAnimator
 
 ValueAnimator是整个属性动画机制当中最核心的一个类。属性动画的运行机制是通过不断地对值进行操作来实现的，而初始值和结束值之间的动画过渡就是由ValueAnimator这个类来负责计算的。
 
@@ -535,7 +548,164 @@ anim.setDuration(300);
 anim.start();  
 ```
 
-- ObjectAnimator
+该类有 3 个重要方法：
+
+- ValueAnimator.ofInt(int... values);
+
+  将初始值以整型数值的方式过渡到结束值。
+
+  java 代码实现方式
+
+  ```java
+  // 步骤1：设置动画属性的初始值 & 结束值
+  ValueAnimator anim = ValueAnimator.ofInt(0, 3);
+          // ofInt（）作用有两个
+          // 1. 创建动画实例
+          // 2. 将传入的多个Int参数进行平滑过渡:此处传入0和1,表示将值从0平滑过渡到1
+          // 如果传入了3个Int参数 a,b,c ,则是先从a平滑过渡到b,再从b平滑过渡到C，以此类推
+          // ValueAnimator.ofInt()内置了整型估值器,直接采用默认的.不需要设置，即默认设置了如何从初始值 过渡到 结束值
+          // 下面看看ofInt()的源码分析 ->>关注1
+          
+  // 步骤2：设置动画的播放各种属性
+          anim.setDuration(500);
+          // 设置动画运行的时长
+          
+          anim.setStartDelay(500);
+          // 设置动画延迟播放时间
+  
+          anim.setRepeatCount(0);
+          // 设置动画重复播放次数 = 重放次数+1
+          // 动画播放次数 = infinite时,动画无限重复
+          
+          anim.setRepeatMode(ValueAnimator.RESTART);
+          // 设置重复播放动画模式
+          // ValueAnimator.RESTART(默认):正序重放
+          // ValueAnimator.REVERSE:倒序回放
+       
+  // 步骤3：将改变的值手动赋值给对象的属性值：通过动画的更新监听器
+          // 设置 值的更新监听器
+          // 即：值每次改变、变化一次,该方法就会被调用一次
+          anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+              @Override
+              public void onAnimationUpdate(ValueAnimator animation) {
+  
+                  int currentValue = (Integer) animation.getAnimatedValue();
+                  // 获得改变后的值
+                  
+                  System.out.println(currentValue);
+                  // 输出改变后的值
+  
+          // 步骤4：将改变后的值赋给对象的属性值，下面会详细说明
+                  View.setproperty（currentValue）；
+  
+         // 步骤5：刷新视图，即重新绘制，从而实现动画效果
+                  View.requestLayout();
+                  
+                  
+              }
+          });
+  
+          anim.start();
+          // 启动动画
+      }
+  
+  // 关注1：ofInt（）源码分析
+      public static ValueAnimator ofInt(int... values) {
+          // 允许传入一个或多个Int参数
+          // 1. 输入一个的情况（如a）：从0过渡到a；
+          // 2. 输入多个的情况（如a，b，c）：先从a平滑过渡到b，再从b平滑过渡到C
+          
+          ValueAnimator anim = new ValueAnimator();
+          // 创建动画对象
+          anim.setIntValues(values);
+          // 将传入的值赋值给动画对象
+          return anim;
+      }
+  
+  ```
+
+  xml+java代码实现
+
+  ```xml
+  // ValueAnimator采用<animator>  标签
+  <animator xmlns:android="http://schemas.android.com/apk/res/android"  
+      android:valueFrom="0"   // 初始值
+      android:valueTo="100"  // 结束值
+      android:valueType="intType" // 变化值类型 ：floatType & intType
+  
+      android:duration="3000" // 动画持续时间（ms），必须设置，动画才有效果
+      android:startOffset ="1000" // 动画延迟开始时间（ms）
+      android:fillBefore = “true” // 动画播放完后，视图是否会停留在动画开始的状态，默认为true
+      android:fillAfter = “false” // 动画播放完后，视图是否会停留在动画结束的状态，优先于fillBefore值，默认为false
+      android:fillEnabled= “true” // 是否应用fillBefore值，对fillAfter值无影响，默认为true
+      android:repeatMode= “restart” // 选择重复播放动画模式，restart代表正序重放，reverse代表倒序回放，默认为restart|
+      android:repeatCount = “0” // 重放次数（所以动画的播放次数=重放次数+1），为infinite时无限重复
+      android:interpolator = @[package:]anim/interpolator_resource // 插值器，即影响动画的播放速度,下面会详细讲
+  
+  />  
+  
+  ```
+
+  ```java
+  Animator animator = AnimatorInflater.loadAnimator(context, R.animator.set_animation);  
+  // 载入XML动画
+  
+  animator.setTarget(view);  
+  // 设置动画对象
+  
+  animator.start();  
+  // 启动动画
+  
+  ```
+
+- ValueAnimator.ofFloat(float... values);
+
+  将初始值以浮点型数值的形式过渡到结束值，具体形式同 ofInt()
+
+- ValueAnimator.ofObject(Object... values);
+
+  ```java
+  // 创建初始动画时的对象  & 结束动画时的对象
+  myObject object1 = new myObject();  
+  myObject object2 = new myObject();  
+  
+  ValueAnimator anim = ValueAnimator.ofObject(new myObjectEvaluator(), object1, object2);  
+  // 创建动画对象 & 设置参数
+  // 参数说明
+  // 参数1：自定义的估值器对象（TypeEvaluator 类型参数） - 下面会详细介绍
+  // 参数2：初始动画的对象
+  // 参数3：结束动画的对象
+  anim.setDuration(5000);  
+  anim.start(); 
+  
+  ```
+
+  ofInt() 和 ofFloat() 都使用了系统内置的估值器，即 IntEvaluator 和 FloatEvaluator，对于 ofObject()，要自定义估值器来告知系统如何进行初始对象过渡到结束对象的逻辑。
+
+  自定义实现逻辑如下
+
+  ```java
+  // 实现TypeEvaluator接口
+  public class ObjectEvaluator implements TypeEvaluator{  
+  
+  // 复写evaluate（）
+  // 在evaluate（）里写入对象动画过渡的逻辑
+      @Override  
+      public Object evaluate(float fraction, Object startValue, Object endValue) {  
+          // 参数说明
+          // fraction：表示动画完成度（根据它来计算当前动画的值）
+          // startValue、endValue：动画的初始值和结束值
+  
+          ... // 写入对象动画过渡的逻辑
+          
+          return value;  
+          // 返回对象动画过渡的逻辑计算后的值
+      }  
+    
+  
+  ```
+
+#### ObjectAnimator
 
 相比于ValueAnimator，ObjectAnimator可能才是我们最常接触到的类。因为ValueAnimator只不过是对值进行了一个平滑的动画过渡，而 ObjectAnimator可以直接对任意对象的任意属性进行动画操作的，比如说View的alpha属性。
 
@@ -547,3 +717,62 @@ animator.setDuration(5000);
 animator.start();  
 ```
 
+具体实现方式：
+
+```java
+ObjectAnimator animator = ObjectAnimator.ofFloat(Object object, String property, float ....values);  
+
+// ofFloat()作用有两个
+// 1. 创建动画实例
+// 2. 参数设置：参数说明如下
+// Object object：需要操作的对象
+// String property：需要操作的对象的属性
+// float ....values：动画初始值 & 结束值（不固定长度）
+// 若是两个参数a,b，则动画效果则是从属性的a值到b值
+// 若是三个参数a,b,c，则则动画效果则是从属性的a值到b值再到c值
+// 以此类推
+// 至于如何从初始值 过渡到 结束值，同样是由估值器决定，此处ObjectAnimator.ofFloat（）是有系统内置的浮点型估值器FloatEvaluator，同ValueAnimator讲解
+
+anim.setDuration(500);
+        // 设置动画运行的时长
+
+        anim.setStartDelay(500);
+        // 设置动画延迟播放时间
+
+        anim.setRepeatCount(0);
+        // 设置动画重复播放次数 = 重放次数+1
+        // 动画播放次数 = infinite时,动画无限重复
+
+        anim.setRepeatMode(ValueAnimator.RESTART);
+        // 设置重复播放动画模式
+        // ValueAnimator.RESTART(默认):正序重放
+        // ValueAnimator.REVERSE:倒序回放
+
+animator.start();  
+// 启动动画
+
+```
+
+可以操作的对象属性有
+
+属性	作用	数值类型
+Alpha	控制View的透明度	float
+TranslationX	控制X方向的位移	float
+TranslationY	控制Y方向的位移	float
+ScaleX	控制X方向的缩放倍数	float
+ScaleY	控制Y方向的缩放倍数	float
+Rotation	控制以屏幕方向为轴的旋转度数	float
+RotationX	控制以X轴为轴的旋转度数	float
+RotationY	控制以Y轴为轴的旋转度数	float
+————————————————
+
+除了上面系统预设的属性外，还可以使用自定义属性，那么如何自定义属性呢？本质上，就是
+
+- 为自定义属性添加 setter&getter
+- 实现自定义 TypeEvaluator 类
+
+#### ValueAnimator 与 ObjectAnimator 对比
+
+相同点：二者都属于属性动画，本质上是一致的：先改变值，然后赋值给对象的属性从而实现动画效果。
+
+不同点：二者的区别在于赋值的操作时手动还是自动的，ValueAnimator 是先改变值，然后**手动赋值**给对象的属性从而实现动画，是**间接**对对象属性进行操作；ObjectAnimator 是先改变值，然后自动赋值给对象的属性从而实现动画，是**直接**对对象属性进行操作。可以理解为，ObjectAnimator 更加智能、自动化程度更高。
