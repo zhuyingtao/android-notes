@@ -1,6 +1,8 @@
 #### 概述
 
-RecyclerView是谷歌V7包下新增的控件,用来替代ListView的使用
+RecyclerView是谷歌V7包下新增的控件,用来替代ListView的使用。
+
+它功能更强大，定制样式更丰富，扩展性更高。
 
 > RecyclerView is a more advanced and flexible version of ListView. This widget is a container for large sets of views that can be recycled and scrolled very efficiently. Use the RecyclerView widget when you have lists with elements that change dynamically. 
 

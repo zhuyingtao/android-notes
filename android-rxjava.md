@@ -43,3 +43,8 @@ RxJava 的异步实现，是通过一种扩展的观察者模式来实现的。
 RxJava 的观察者模式大致如下图：
 
 ![RxJava 的观察者模式](http://ww3.sinaimg.cn/mw1024/52eb2279jw1f2rx46dspqj20gn04qaad.jpg)
+
+RxJava 原理可总结为：被观察者（Observable）通过 订阅（Subscribe）**按顺序发送事件** 给观察者 （Observer）， 观察者（Observer） **按顺序接收事件**并作出对应的响应动作。
+
+![img](https://upload-images.jianshu.io/upload_images/944365-98ec92df0a4d7e0b.png)
+
