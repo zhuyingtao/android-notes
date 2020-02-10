@@ -114,3 +114,8 @@ new DownloadTask().executeOnExecutor(exec);
 ```
 
 这样就可以使用我们自定义的一个Executor来执行任务，而不是使用SerialExecutor。上述代码的效果允许在同一时刻有15个任务正在执行，并且最多能够存储200个任务。
+
+#### 多线程实现方式对比
+
+![img](assets/android-async/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9jYXJzb25oby5ibG9nLmNzZG4ubmV0,size_16,color_FFFFFF,t_70.png)
+

@@ -31,6 +31,16 @@ layoutInflater.inflate(resourceId, root);
 
 ![](http://img.blog.csdn.net/20131218231254906?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZ3VvbGluX2Jsb2c=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
+#### Activity 与 View 之间的关系
+
+- 简介
+
+![img](/Users/zyt/GitProject/tips/assets/android-view/aHR0cDovL3VwbG9hZC1pbWFnZXMuamlhbnNodS5pby91cGxvYWRfaW1hZ2VzLzk0NDM2NS1iOWM0MWFhOTk0ZThkZGY0LnBuZw.png)
+
+- 流程
+
+![img](/Users/zyt/GitProject/tips/assets/android-view/aHR0cDovL3VwbG9hZC1pbWFnZXMuamlhbnNodS5pby91cGxvYWRfaW1hZ2VzLzk0NDM2NS0zNDk5MmViNDZiZGY5M2U3LnBuZw.png)
+
 #### View 的绘制流程
 
 每一个视图的绘制过程都必须经历三个最主要的阶段，即onMeasure()、onLayout()和onDraw()。
@@ -46,6 +56,12 @@ layoutInflater.inflate(resourceId, root);
 - onDraw()
 
 这里才真正地开始对视图进行绘制。ViewRoot中的代码会继续执行并创建出一个Canvas对象，然后调用View的draw()方法来执行具体的绘制工作。
+
+![img](/Users/zyt/GitProject/tips/assets/android-view/aHR0cHM6Ly91cGxvYWQtaW1hZ2VzLmppYW5zaHUuaW8vdXBsb2FkX2ltYWdlcy85NDQzNjUtODU4ZGUxZmFhMzhkZjFiMi5wbmc.png)
+
+##### getMeasuredWidth() 与 getWidth() 区别
+
+![img](/Users/zyt/GitProject/tips/assets/android-view/aHR0cHM6Ly91cGxvYWQtaW1hZ2VzLmppYW5zaHUuaW8vdXBsb2FkX2ltYWdlcy85NDQzNjUtYzlkOWZmZTY0M2M4NTAxMC5wbmc.png)
 
 #### 自定义 View
 
@@ -108,6 +124,8 @@ public class CounterView extends View implements OnClickListener {
   
 </RelativeLayout> 
 ```
+
+![img](/Users/zyt/GitProject/tips/assets/android-view/aHR0cDovL3VwbG9hZC1pbWFnZXMuamlhbnNodS5pby91cGxvYWRfaW1hZ2VzLzk0NDM2NS0wMDgyZGU0ZjQ3ZjJkMGMzLnBuZw.png)
 
 - 组合控件
 
