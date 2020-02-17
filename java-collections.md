@@ -1,5 +1,9 @@
 ## Java 集合类
 
+### Collection 继承关系
+
+![img](assets/java-collections/aHR0cHM6Ly91cGxvYWQtaW1hZ2VzLmppYW5zaHUuaW8vdXBsb2FkX2ltYWdlcy85NDQzNjUtYWVlMmNjZGNmMDJjMzU1NS5wbmc_aW1hZ2VNb2dyMi9hdXRvLW9yaWVudC9zdHJpcCU3Q2ltYWdlVmlldzIvMi93LzEyNDA.png)
+
 ### Map 继承关系
 
 ![img](https://awps-assets.meituan.net/mit-x/blog-images-bundle-2016/f7fe16a2.png)
