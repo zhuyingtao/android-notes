@@ -1,3 +1,21 @@
+## Android 性能优化
+
+### 流畅性
+
+![img](assets/android-performance/aHR0cDovL3VwbG9hZC1pbWFnZXMuamlhbnNodS5pby91cGxvYWRfaW1hZ2VzLzk0NDM2NS0zYWQwODVlNTUzZGNmZTI0LnBuZz9pbWFnZU1vZ3IyL2F1dG8tb3JpZW50L3N0cmlwJTdDaW1hZ2VWaWV3Mi8yL3cvMTI0MA.png)
+
+### 稳定性
+
+![img](assets/android-performance/aHR0cDovL3VwbG9hZC1pbWFnZXMuamlhbnNodS5pby91cGxvYWRfaW1hZ2VzLzk0NDM2NS1jMDI3MzAwOTUwNDdlYTI5LnBuZz9pbWFnZU1vZ3IyL2F1dG8tb3JpZW50L3N0cmlwJTdDaW1hZ2VWaWV3Mi8yL3cvMTI0MA.png)
+
+### 资源节省性
+
+减少安装包大小
+
+![img](assets/android-performance/aHR0cDovL3VwbG9hZC1pbWFnZXMuamlhbnNodS5pby91cGxvYWRfaW1hZ2VzLzk0NDM2NS05MGM5OGI1N2VmOWJmNTlkLnBuZz9pbWFnZU1vZ3IyL2F1dG8tb3JpZW50L3N0cmlwJTdDaW1hZ2VWaWV3Mi8yL3cvMTI0MA.png)
+
+![img](assets/android-performance/aHR0cDovL3VwbG9hZC1pbWFnZXMuamlhbnNodS5pby91cGxvYWRfaW1hZ2VzLzk0NDM2NS04ZmE2MTg0YTQxMWE3ZmNjLnBuZz9pbWFnZU1vZ3IyL2F1dG8tb3JpZW50L3N0cmlwJTdDaW1hZ2VWaWV3Mi8yL3cvMTI0MA.png)
+
 #### 内存优化
 
 - 节制地使用 Service
@@ -45,3 +63,7 @@ Android Debug Monitor —> DDMS —> HProf file
 
 
 - **Dominator Tree**会将所有内存中的对象按大小进行排序，并且我们可以分析对象之间的引用结构。
+
+#### 绘制优化
+
+![img](assets/android-performance/aHR0cDovL3VwbG9hZC1pbWFnZXMuamlhbnNodS5pby91cGxvYWRfaW1hZ2VzLzk0NDM2NS05YzE2MmNjNWU0NTFjZjg4LnBuZz9pbWFnZU1vZ3IyL2F1dG8tb3JpZW50L3N0cmlwJTdDaW1hZ2VWaWV3Mi8yL3cvMTI0MA.png)
