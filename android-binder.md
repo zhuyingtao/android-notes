@@ -324,3 +324,4 @@ public class Proxy implements BookManager {
 
 1. [写给 Android 应用工程师的 Binder 原理剖析](https://zhuanlan.zhihu.com/p/35519585)
 2. [理解 Android 的 Binder 机制](https://www.jianshu.com/p/f4f722d3e51d)
+3. [深入理解 Binder 机制](https://paul.pub/android-binder-driver/)（待看）
