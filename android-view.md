@@ -35,11 +35,21 @@ layoutInflater.inflate(resourceId, root);
 
 - 简介
 
-![img](/Users/zyt/GitProject/tips/assets/android-view/aHR0cDovL3VwbG9hZC1pbWFnZXMuamlhbnNodS5pby91cGxvYWRfaW1hZ2VzLzk0NDM2NS1iOWM0MWFhOTk0ZThkZGY0LnBuZw.png)
+![img](assets/android-view/aHR0cDovL3VwbG9hZC1pbWFnZXMuamlhbnNodS5pby91cGxvYWRfaW1hZ2VzLzk0NDM2NS1iOWM0MWFhOTk0ZThkZGY0LnBuZw.png)
+
+Activity就像个控制器，不负责视图部分。Window像个承载器，装着内部视图。DecorView就是个顶层视图，是所有View的最外层布局。ViewRoot像个连接器，负责沟通，通过硬件的感知来通知视图，进行用户之间的交互。
 
 - 流程
 
-![img](/Users/zyt/GitProject/tips/assets/android-view/aHR0cDovL3VwbG9hZC1pbWFnZXMuamlhbnNodS5pby91cGxvYWRfaW1hZ2VzLzk0NDM2NS0zNDk5MmViNDZiZGY5M2U3LnBuZw.png)
+![img](./assets/android-view/aHR0cDovL3VwbG9hZC1pbWFnZXMuamlhbnNodS5pby91cGxvYWRfaW1hZ2VzLzk0NDM2NS0zNDk5MmViNDZiZGY5M2U3LnBuZw.png)
+
+当用户点击屏幕产生一个触摸行为，这个触摸行为则是通过底层硬件来传递捕获，然后交给ViewRootImpl，接着将事件传递给DecorView，而DecorView再交给PhoneWindow，PhoneWindow再交给Activity，然后接下来就是我们常见的View事件分发了。
+
+**硬件 -> ViewRootImpl -> DecorView -> PhoneWindow -> Activity**
+
+- 层级
+
+![img](assets/android-view/15fbd92b32865b92.png)
 
 #### View 的绘制流程
 
@@ -57,11 +67,11 @@ layoutInflater.inflate(resourceId, root);
 
 这里才真正地开始对视图进行绘制。ViewRoot中的代码会继续执行并创建出一个Canvas对象，然后调用View的draw()方法来执行具体的绘制工作。
 
-![img](/Users/zyt/GitProject/tips/assets/android-view/aHR0cHM6Ly91cGxvYWQtaW1hZ2VzLmppYW5zaHUuaW8vdXBsb2FkX2ltYWdlcy85NDQzNjUtODU4ZGUxZmFhMzhkZjFiMi5wbmc.png)
+![img](assets/android-view/aHR0cHM6Ly91cGxvYWQtaW1hZ2VzLmppYW5zaHUuaW8vdXBsb2FkX2ltYWdlcy85NDQzNjUtODU4ZGUxZmFhMzhkZjFiMi5wbmc.png)
 
 ##### getMeasuredWidth() 与 getWidth() 区别
 
-![img](/Users/zyt/GitProject/tips/assets/android-view/aHR0cHM6Ly91cGxvYWQtaW1hZ2VzLmppYW5zaHUuaW8vdXBsb2FkX2ltYWdlcy85NDQzNjUtYzlkOWZmZTY0M2M4NTAxMC5wbmc.png)
+![img](assets/android-view/aHR0cHM6Ly91cGxvYWQtaW1hZ2VzLmppYW5zaHUuaW8vdXBsb2FkX2ltYWdlcy85NDQzNjUtYzlkOWZmZTY0M2M4NTAxMC5wbmc.png)
 
 #### 自定义 View
 
@@ -125,7 +135,7 @@ public class CounterView extends View implements OnClickListener {
 </RelativeLayout> 
 ```
 
-![img](/Users/zyt/GitProject/tips/assets/android-view/aHR0cDovL3VwbG9hZC1pbWFnZXMuamlhbnNodS5pby91cGxvYWRfaW1hZ2VzLzk0NDM2NS0wMDgyZGU0ZjQ3ZjJkMGMzLnBuZw.png)
+![img](assets/android-view/aHR0cDovL3VwbG9hZC1pbWFnZXMuamlhbnNodS5pby91cGxvYWRfaW1hZ2VzLzk0NDM2NS0wMDgyZGU0ZjQ3ZjJkMGMzLnBuZw.png)
 
 - 组合控件
 
