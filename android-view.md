@@ -51,6 +51,18 @@ Activity就像个控制器，不负责视图部分。Window像个承载器，装
 
 ![img](assets/android-view/15fbd92b32865b92.png)
 
+- 方法
+
+  - onAttachedToWindow()
+
+    该方法是在Act resume的时候被调用的，也就是act对应的window被添加的时候，且每个view只会被调用一次，父view的调用在前，不论view的visibility状态都会被调用，适合做些view特定的初始化操作；
+
+  - onDetachedFromWindow()
+
+    该方法是在Act destroy的时候被调用的，也就是act对应的window被删除的时候，且每个view只会被调用一次，父view的调用在后，也不论view的visibility状态都会被调用，适合做最后的清理操作；
+
+  这些结论也正好解释了方法名里带有window的原因，有些人可能会想，那为啥不叫`onAttachedToActivity / onDetachedFromActivity`，因为在Android里不止是Activity，这里说的内容同样适用于`Dialog /Toast`，`Window`只是个虚的概念，是Android抽象出来的，最终操作的实体还是View，这也说明了前面的`WindowManager`接口为啥是从`ViewManager`接口派生的，因为所有一切的基石归根结底还是对`View`的操作。
+
 #### View 的绘制流程
 
 每一个视图的绘制过程都必须经历三个最主要的阶段，即onMeasure()、onLayout()和onDraw()。

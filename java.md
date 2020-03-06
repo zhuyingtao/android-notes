@@ -517,6 +517,13 @@ public void release(int permits) { }    //释放permits个许可
    - 可达性分析法
 
      通过一系列“GC Roots”对象作为起点进行搜索。如果在“GC Roots”和一个对象之间没有可达路径，则称该对象是不可达的。
+     
+     可作为 GC Roots 的对象：
+     
+     - 虚拟机栈（栈帧中本地变量表）中引用的对象
+     - 方法区中静态属性引用的对象
+     - 方法区中常量引用的对象
+     - 本地方法栈中Native方法引用的对象
 
 2. 垃圾回收
 
@@ -553,6 +560,21 @@ public void release(int permits) { }    //释放permits个许可
      ![img](https://images0.cnblogs.com/i/288799/201406/181512325519249.jpg)
 
      对象主要分配在新生代的Eden Space和From Space，少数情况下会直接分配在老年代。如果新生代的 Eden Space和From Space的空间不足，则会发起一次GC，如果进行了GC之后，Eden Space和From Space能够容纳该对象就放在Eden Space和From Space。在GC的过程中，会将Eden Space和From Space中的存活对象移动到To Space，然后将Eden Space和From Space进行清理。如果在清理的过程中，To Space无法足够来存储某个对象，就会将该对象移动到老年代中。在进行了GC之后，使用的便是Eden space和To Space了，下次GC时会将存活对象复制到From Space，如此反复循环。当对象在Survivor区躲过一次GC的话，其对象年龄便会加1，默认情况下，如果对象年龄达到15岁，就会移动到老年代中。
+     
+     ![image-20200305232705354](assets/java/image-20200305232705354.png)
+     
+     Java堆的内存划分如图所示，分别为年轻代、Old Memory（老年代）、Perm（永久代）。其中在Jdk1.8中，永久代被移除，使用MetaSpace代替。
+     
+     1、新生代：
+     （1）使用复制清除算法（Copinng算法），原因是年轻代每次GC都要回收大部分对象。新生代里面分成一份较大的Eden空间和两份较小的Survivor空间。每次只使用Eden和其中一块Survivor空间，然后垃圾回收的时候，把存活对象放到未使用的Survivor（划分出from、to）空间中，清空Eden和刚才使用过的Survivor空间。
+     （2）分为Eden、Survivor From、Survivor To，比例默认为8：1：1
+     （3）内存不足时发生Minor GC
+     
+     2、老年代：
+     （1）采用标记-整理算法（mark-compact），原因是老年代每次GC只会回收少部分对象。
+     3、Perm：用来存储类的元数据，也就是方法区。
+     （1）Perm的废除：在jdk1.8中，Perm被替换成MetaSpace，MetaSpace存放在本地内存中。原因是永久代进场内存不够用，或者发生内存泄漏。
+     （2）MetaSpace（元空间）：元空间的本质和永久代类似，都是对JVM规范中方法区的实现。不过元空间与永久代之间最大的区别在于：元空间并不在虚拟机中，而是使用本地内存。
 
 3. 典型的垃圾回收器
 
