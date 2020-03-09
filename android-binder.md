@@ -233,6 +233,9 @@ public interface BookManager extends IInterface {
 public abstract class Stub extends Binder implements BookManager {
 
     ...
+    public Stub() {
+        this.attachInterface(this, DESCRIPTOR);
+    }
 
     public static BookManager asInterface(IBinder binder) {
         if (binder == null)
