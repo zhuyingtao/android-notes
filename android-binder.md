@@ -323,6 +323,65 @@ public class Proxy implements BookManager {
 
 这样一次跨进程调用就完成了。
 
+### 5. Binder 技术细节
+
+#### 5.1 Binder 死亡通知机制
+
+我们知道Binder是运行在服务进程，若服务端进程因为某种原因“死亡”，那么Binder对象也将随之而去，因为Binder对象是寄宿在服务端进程中的，这个时候我们的远程调用将会失败，客户端进程的功能也将受到影响。Binder类提供linkToDeath方法在客户端可以设置死亡代理，当服务端的Binder对象“死亡”，客户端可以受到死亡通知，这个时候我们可以重新恢复链接。
+
+```java
+IBinder.java
+		/**
+     * Register the recipient for a notification if this binder
+     * goes away.  If this binder object unexpectedly goes away
+     * (typically because its hosting process has been killed),
+     * then the given {@link DeathRecipient}'s
+     * {@link DeathRecipient#binderDied DeathRecipient.binderDied()} method
+     * will be called.
+     * 
+     * <p>You will only receive death notifications for remote binders,
+     * as local binders by definition can't die without you dying as well.
+     * 
+     * @throws RemoteException if the target IBinder's
+     * process has already died.
+     * 
+     * @see #unlinkToDeath
+     */
+    public void linkToDeath(@NonNull DeathRecipient recipient, int flags)
+            throws RemoteException;
+```
+
+如果Binder死亡，那么该方法会注册一个通知的接受者。若binder对象意外死亡（一个典型的例子就是宿主进程被系统回收），那么死亡代理DeathRecipient的binderDied()方法将被调用。另外注意，你只会收到远程binder对象的死亡通知，本地的binder对象是不会收到的。
+
+```java
+IBinder.java		
+		/**
+     * Remove a previously registered death notification.
+     * The recipient will no longer be called if this object
+     * dies.
+     * 
+     * @return {@code true} if the <var>recipient</var> is successfully
+     * unlinked, assuring you that its
+     * {@link DeathRecipient#binderDied DeathRecipient.binderDied()} method
+     * will not be called;  {@code false} if the target IBinder has already
+     * died, meaning the method has been (or soon will be) called.
+     * 
+     * @throws java.util.NoSuchElementException if the given
+     * <var>recipient</var> has not been registered with the IBinder, and
+     * the IBinder is still alive.  Note that if the <var>recipient</var>
+     * was never registered, but the IBinder has already died, then this
+     * exception will <em>not</em> be thrown, and you will receive a false
+     * return value instead.
+     */
+    public boolean unlinkToDeath(@NonNull DeathRecipient recipient, int flags);
+```
+
+该方法的作用是移除先前注册的死亡通知，如果binder对象死亡，那么死亡接受者将不再被调用。
+    1）方法返回true：如果死亡接受者已经成功断开，要确保其binderDied()方法不会再被调用。
+    2）方法返回false：如果目标IBinder对象已经死亡，意味着binderDied()方法已经（或者不久之后）被调用。
+
+通过上述两个方法，我们可以完成Binder死亡重连远程服务的操作，其实在onServiceDisconnected方法中我们也可以完成重连远程服务的操作，那么这两种方法有什么区别？区别就是binderDied()方法跑在Binder Thread中，onServiceDisconnected方法跑在客户端的UI线程中。
+
 ### 参考文章
 
 1. [写给 Android 应用工程师的 Binder 原理剖析](https://zhuanlan.zhihu.com/p/35519585)
