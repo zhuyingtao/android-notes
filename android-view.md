@@ -63,6 +63,51 @@ Activity就像个控制器，不负责视图部分。Window像个承载器，装
 
   这些结论也正好解释了方法名里带有window的原因，有些人可能会想，那为啥不叫`onAttachedToActivity / onDetachedFromActivity`，因为在Android里不止是Activity，这里说的内容同样适用于`Dialog /Toast`，`Window`只是个虚的概念，是Android抽象出来的，最终操作的实体还是View，这也说明了前面的`WindowManager`接口为啥是从`ViewManager`接口派生的，因为所有一切的基石归根结底还是对`View`的操作。
 
+#### ViewRoot
+
+ViewRoot，或者说它的实现类ViewRootImpl，跟View没有任何关系。它不是View的子类或父类，而是实现了 ViewParent 接口。在大部分正常情况下，一颗ViewTree的根节点往往是DecorView。
+
+frameworks/base/core/java/android/view/WIndowManagerGolobal.java
+
+```java
+public void addView(View view, ViewGroup.LayoutParams params,
+        Display display, Window parentWindow) {
+
+   //...略...
+
+    ViewRootImpl root;
+    View panelParentView = null;
+
+    synchronized (mLock) {
+        // Start watching for system property changes.
+        //...略...
+                    root = new ViewRootImpl(view.getContext(), display);
+
+        view.setLayoutParams(wparams);
+
+        mViews.add(view);
+        mRoots.add(root);
+        mParams.add(wparams);
+    }
+
+    // do this last because it fires off messages to start doing things
+    try {
+        root.setView(view, wparams, panelParentView);
+    } catch (RuntimeException e) {
+        // BadTokenException or InvalidDisplayException, clean up.
+        synchronized (mLock) {
+            final int index = findViewLocked(view, false);
+            if (index >= 0) {
+                removeViewLocked(index, true);
+            }
+        }
+        throw e;
+    }
+}
+```
+
+实际上ViewRoot的真正左右是作为一个DecorView的“管理者”，它确切的应该叫做ViewTreeManager或许比较合理。它本质上是一个管理类，将 DecoreView 和 PhoneWindow “组合”起来。
+
 #### View 的绘制流程
 
 每一个视图的绘制过程都必须经历三个最主要的阶段，即onMeasure()、onLayout()和onDraw()。
