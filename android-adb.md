@@ -123,17 +123,53 @@ adb uninstall [-k] <package_name>
 adb shell pm clear <package_name>
 ```
 
+- dumpsys
+
+  可通过dumpsys命令查询系统服务的运行状态(对象的成员变量属性值)
+
+  | 服务名       | 类名                   | 功能         |
+  | :----------- | :--------------------- | :----------- |
+  | activity     | ActivityManagerService | AMS相关信息  |
+  | package      | PackageManagerService  | PMS相关信息  |
+  | window       | WindowManagerService   | WMS相关信息  |
+  | input        | InputManagerService    | IMS相关信息  |
+  | power        | PowerManagerService    | PMS相关信息  |
+  | batterystats | BatterystatsService    | 电池统计信息 |
+  | battery      | BatteryService         | 电池信息     |
+  | alarm        | AlarmManagerService    | 闹钟信息     |
+  | dropbox      | DropboxManagerService  | 调试相关     |
+  | procstats    | ProcessStatsService    | 进程统计     |
+  | cpuinfo      | CpuBinder              | CPU          |
+  | meminfo      | MemBinder              | 内存         |
+  | gfxinfo      | GraphicsBinder         | 图像         |
+  | dbinfo       | DbBinder               | 数据库       |
+
 - 查看 activity
 
 ```sh
 adb shell dumpsys activity activities
 ```
 
-- 查看 service
+		- 查看 service
 
 ```sh
 adb shell dumpsys activity services [<package_name>]
 ```
+
+- 查看内存情况
+
+```shell
+adb shell dumpsys meminfo
+```
+
+| Item | 全称                  | 含义     | 等价                         |
+| :--- | :-------------------- | :------- | :--------------------------- |
+| USS  | Unique Set Size       | 物理内存 | 进程独占的内存               |
+| PSS  | Proportional Set Size | 物理内存 | PSS= USS+ 按比例包含共享库   |
+| RSS  | Resident Set Size     | 物理内存 | RSS= USS+ 包含共享库         |
+| VSS  | Virtual Set Size      | 虚拟内存 | VSS= RSS+ 未分配实际物理内存 |
+
+故内存的大小关系：VSS >= RSS >= PSS >= USS
 
 - 与应用交互，使用 `am <command>`命令，常用的<command>命令有：
 
@@ -231,7 +267,7 @@ adb shell wm [size|density]
 adb reboot [recovery|bootloader]
 ```
 
-- ##### am
+- am
 
 此命令是 **activity manager** 的缩写，用来执行各种系统操作，如启动 Activity、强行停止进程、广播 intent、修改设备屏幕属性等。命令格式如下：
 
@@ -241,3 +277,42 @@ adb shell am <command>
 
 可用的 am 命令：
 
+| 命令                              | 功能                      | 实现方法                   |
+| :-------------------------------- | :------------------------ | :------------------------- |
+| am start `[options`]  <INTENT>    | 启动Activity              | startActivityAsUser        |
+| am startservice <INTENT>          | 启动Service               | startService               |
+| am stopservice <INTENT>           | 停止Service               | stopService                |
+| am broadcast <INTENT>             | 发送广播                  | broadcastIntent            |
+| am kill <PACKAGE>                 | 杀指定后台进程            | killBackgroundProcesses    |
+| am kill-all                       | 杀所有后台进程            | killAllBackgroundProcesses |
+| am force-stop <PACKAGE>           | 强杀进程                  | forceStopPackage           |
+| am hang                           | 系统卡住                  | hang                       |
+| am restart                        | 重启                      | restart                    |
+| am bug-report                     | 创建bugreport             | requestBugReport           |
+| am dumpheap <pid> <file>          | 进程pid的堆信息输出到file | dumpheap                   |
+| am send-trim-memory <pid> <level> | 收紧进程的内存            | setProcessMemoryTrimLevel  |
+| am monitor                        | 监控                      | MyActivityController.run   |
+
+am命令实的实现方式在Am.java，最终几乎都是调用`ActivityManagerService`相应的方法来完成。
+
+- pm
+
+此命令是 package manager 的缩写，可执行的操作有：
+
+| 命令                            | 功能              | 实现方法                              |
+| :------------------------------ | :---------------- | :------------------------------------ |
+| list packages                   | 列举app包信息     | PMS.getInstalledPackages              |
+| install `[options`] <PACKAGE>   | 安装应用          | PMS.installPackageAsUser              |
+| uninstall `[options`] <PACKAGE> | 卸载应用          | IPackageInstaller.uninstall           |
+| enable `<包名或组件名`>         | enable            | PMS.setEnabledSetting                 |
+| disable `<包名或组件名`>        | disable           | PMS.setEnabledSetting                 |
+| hide <PACKAGE>                  | 隐藏应用          | PMS.setApplicationHiddenSettingAsUser |
+| unhide <PACKAGE>                | 显示应用          | PMS.setApplicationHiddenSettingAsUser |
+| get-install-location            | 获取安装位置      | PMS.getInstallLocation                |
+| set-install-location            | 设置安装位置      | PMS.setInstallLocation                |
+| path <PACKAGE>                  | 查看App路径       | PMS.getPackageInfo                    |
+| clear <PACKAGE>                 | 清空App数据       | AMS.clearApplicationUserData          |
+| get-max-users                   | 最大用户数        | UserManager.getMaxSupportedUsers      |
+| force-dex-opt <PACKAGE>         | dex优化           | PMS.forceDexOpt                       |
+| dump <PACKAGE>                  | dump信息          | AM.dumpPackageStateStatic             |
+| trim-caches `<目标size`>        | 紧缩cache目标大小 | PMS.freeStorageAndNotify              |

@@ -147,6 +147,43 @@ long personid = ContentUris.parseId(uri);
 
 ##### getContentResolver -> ApplicationContentResolver -> ContentProviderProxy <===IBidner====> Transport -> NameProvider
 
+先获取provider,然后安装provider信息,最后便是真正的查询操作.
+
+- 场景一（进程不存在）
+
+  Provider进程不存在: 当provider进程不存在时,先创建进程并publish相关的provider
+
+  ![content_provider_ipc](assets/android-contentprovider/content_provider_ipc.jpg)
+
+  图解:
+
+  1. client进程：通过binder(调用AMS.getContentProviderImpl)向system_server进程请求相应的provider；
+  2. system进程：如果目标provider所对应的进程尚未启动，system_server会调用startProcessLocked来启动provider进程； 当进程启动完成，此时cpr.provider ==null，则system_server便会进入wait()状态，等待目标provider发布；
+  3. provider进程：进程启动后执行完attch到system_server，紧接着执行bindApplication；在这个过程会installProvider以及 publishContentProviders；再binder call到system_server进程；
+  4. system进程：再回到system_server，发布provider信息，并且通过notify机制，唤醒前面处于wait状态的binder线程；并将 getContentProvider的结果返回给client进程；
+  5. client进程：接着执行installProvider操作，安装provider的(包含对象记录,引用计数维护等工作)；
+
+- 场景二（进程已存在）
+
+  provider未发布: 请求provider时,provider进程存在但provide的记录对象cpr ==null,这时的流程如下:
+
+  ![content_provider_ipc2](assets/android-contentprovider/content_provider_ipc2.jpg)
+
+  1. Client进程在获取provider的过程,发现cpr为空,则调用scheduleInstallProvider来向provider所在进程发出一个oneway的binder请求,并进入wait()状态.
+
+  2. provider进程安装完provider信息,则notifyAll()处于等待状态的进程/线程;
+
+  如果provider在publish完成之后, 这时再次请求该provider,那就便没有的最右侧的这个过程,直接在AMS.getContentProviderImpl之后便进入AT.installProvider的过程,而不会再次进入wait()过程.
+
+#### 引用计数
+
+关于provider分为stable provider和unstable provider，在于引用计数的不同，一句话来说就是stable provider建立的是强连接, 客户端进程的与provider进程是存在依赖关系, 即provider进程死亡则会导致客户端进程被杀。
+
+当Client进程存在对某个provider的引用时,则会根据provider类型进行不同的处理:
+
+- 对于stable provider: 会杀掉所有跟该provider建立stable连接的非persistent进程.
+- 对于unstable provider: 不会导致client进程被级联所杀,只会回调unstableProviderDied来清理相关信息.
+
 #### onCreate()
 
 ContentProvider 的 onCreate() 在 Application 的 onCreate() 之前执行

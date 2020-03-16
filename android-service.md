@@ -2,6 +2,10 @@
 
 Service作为Android四大组件之一，在每一个应用程序中都扮演着非常重要的角色。它主要用于在后台处理一些耗时的逻辑，或者去执行某些需要长期运行的任务。必要的时候我们甚至可以在程序退出的情况下，让Service在后台继续保持运行状态。
 
+#### 生命周期
+
+![service lifecycle](assets/android-service/service.png)
+
 #### 基本用法
 
 启动Service的方法和启动Activity很类似，都需要借助Intent来实现。
@@ -274,7 +278,7 @@ public class MyService extends Service {
 
 #### 实现原理
 
-![start_server_binder](http://gityuan.com/images/binder/binder_start_service/start_server_binder.jpg)
+![start_server_binder](assets/android-service/start_server_binder.jpg)
 
 首先在发起方进程调用AMP.startService，经过binder驱动，最终调用系统进程AMS.startService。AMP和AMN都是实现了IActivityManager接口,AMS继承于AMN. 其中AMP作为Binder的客户端,运行在各个app所在进程, AMN(或AMS)运行在系统进程system_server。
 
@@ -287,7 +291,7 @@ public class MyService extends Service {
 - **Zygote进程：**是由`init`进程孵化而来的，用于创建Java层进程的母体，所有的Java层进程都是由Zygote进程孵化而来；
 - **Remote Service进程：**远程服务所在进程，是由Zygote进程孵化而来的用于运行Remote服务的进程。主线程主要负责Activity/Service等组件的生命周期以及UI相关操作都运行在这个线程； 另外，每个App进程中至少会有两个binder线程 ApplicationThread(简称AT)和ActivityManagerProxy（简称AMP）。
 
-![start_service_process](http://gityuan.com/images/android-service/start_service/start_service_processes.jpg)
+![start_service_process](assets/android-service/start_service_processes.jpg)
 
 启动流程：
 

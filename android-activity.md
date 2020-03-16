@@ -9,7 +9,7 @@
 
 
 
-![activity 生命周期](https://developer.android.google.cn/images/activity_lifecycle.png?_=6367282)
+![activity 生命周期](assets/android-activity/activity_lifecycle.png)
 
 - `onStart()`和`onStop()`是从 activity **是否可见**这个角度来回调的；`onResume()`和`onPause()`是从 activity **是否位于前台**这个角度来回调的。
 - 启动一个新的 activity ，旧的 activity 先`onPause()`，新的 activity 再启动。
@@ -22,7 +22,7 @@ android:configChanges="orientation|keyboardHidden"
 
 另一种生命周期图
 
-![activity_lifecycle](http://gityuan.com/images/activity/activity_lifecycle.jpg)
+![activity_lifecycle](assets/android-activity/activity_lifecycle.jpg)
 
 #### 启动模式
 
@@ -57,7 +57,7 @@ android:configChanges="orientation|keyboardHidden"
 
 #### startActivity 流程
 
-![start_activity_process](http://gityuan.com/images/activity/start_activity_process.jpg)
+![start_activity_process](assets/android-activity/start_activity_process.jpg)
 
 1. 点击桌面App图标，Launcher进程采用Binder IPC向system_server进程发起startActivity请求；
 2. system_server进程接收到请求后，向zygote进程发送创建进程的请求；
@@ -75,7 +75,7 @@ android:configChanges="orientation|keyboardHidden"
 
 **App进程是应用程序所在进程**，主线程主要负责Activity/Service等组件的生命周期以及UI相关操作都运行在这个线程； 另外，每个App进程中至少会有两个binder线程 ApplicationThread(简称AT)和ActivityManagerProxy（简称AMP），除了下图中所示的线程，其实还有很多线程，比如signal catcher线程等。
 
-![app_process](http://gityuan.com/images/activity/app_process.jpg)
+![app_process](assets/android-activity/app_process.jpg)
 
 Activity的生命周期，都是其他线程通过handler发送消息给主线程，那么主线程中的`ActivityThread`的内部类`H`控制整个核心消息处理机制，通过`H.handleMessage()`来控制Activity的生命周期。
 
@@ -87,3 +87,14 @@ Activity的生命周期，都是其他线程通过handler发送消息给主线�
 - `主线程`在looper.loop()中循环遍历消息，当收到暂停Activity的消息(`PAUSE_ACTIVITY`)时，便将消息分发给ActivityThread.H.handleMessage()方法，再经过方法的层层调用，最后便会调用到Activity.onPause()方法。
 
 这便是由AMS完成了onPause()控制，那么同理Activity的其他生命周期也是这么个流程来进行控制的。
+
+#### Activity 对象
+
+下面列举Activity对象的部分常见成员变量：
+
+1. mWindow：数据类型为PhoneWindow，继承于Window对象；
+2. mWindowManager：数据类型为WindowManagerImpl，实现WindowManager接口;
+3. mMainThread：数据类型为ActivityThread, 并非真正的线程，只是运行在主线程的对象。
+4. mUiThread: 数据类型为Thread，当前activity所在线程，即主线程;
+5. mHandler：数据类型为Handler, 当前主线程的handler;
+6. mDecor: 数据类型为View, Activity执行完resume之后创建的视图对象；
