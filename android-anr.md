@@ -1,39 +1,48 @@
 ### 1. 概述
 
-ANR全称`Application Not Responding`，意思就是程序未响应。如果一个应用无法响应用户的输入，系统就会弹出一个ANR对话框。
+ANR全称`Application Not Responding`，即应用未响应。简单来说就是主线程在特定的时间内没有做完特定的事情。
 
-### 2. 出现场景
+##### ANR 类型
 
-- 主线程被IO操作（从4.0之后网络IO不允许在主线程中）阻塞。
-- 主线程中存在耗时的计算
-- 主线程中错误的操作，比如Thread.wait或者Thread.sleep等
+- Input事件（包括按键和触摸事件）超过5s没有被处理完
+- Service处理超时，前台20s，后台200s
+- BroadcastReceiver处理超时，前台10s，后台60s
+- ContentProvider执行超时，10s内没有处理完
 
-Android系统会监控程序的响应状况，一旦出现下面几种情况，则弹出ANR对话框
+### 2. ANR 分析
 
-- Service Timeout:  比如前台服务在20s内未执行完成，对于后台服务超时时间为 200s。
-- Broadcast Timeout：比如前台广播在10s内未执行完成，对于后台广播超时时间为 60s
-- ContentProvider Timeout：内容提供者执行超时时间10s
-- InputDispatching Timeout: 输入事件分发超时5s，包括按键和触摸事件
+##### ANR 产生原因
 
-### 3. 如何避免
+- 主线程有耗时操作，如有复杂的layout布局，IO操作等
+- 主线程被子线程同步锁block
+- 主线程被Binder对端block
+- Binder被占满导致主线程无法和SystemServer通信
+- 得不到系统资源（CPU/RAM/IO）
 
-基本的思路就是将IO操作在工作线程来处理，减少其他耗时操作和错误操作
+##### ANR 日志
 
-- 使用[AsyncTask](http://droidyue.com/blog/2014/11/08/bad-smell-of-asynctask-in-android/)处理耗时IO操作。
-- 使用Thread或者HandlerThread时，调用Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND)设置优先级，否则仍然会降低程序响应，因为默认Thread的优先级和主线程相同。
-- 使用[Handler](http://droidyue.com/blog/2014/12/28/in-android-handler-classes-should-be-static-or-leaks-might-occur/)处理工作线程结果，而不是使用Thread.wait()或者Thread.sleep()来阻塞主线程。
-- Activity的onCreate和onResume回调中尽量避免耗时的代码
-- BroadcastReceiver中onReceive代码也要尽量减少耗时，建议使用IntentService处理。
+发生ANR的过程中，系统会自动的获取并打印日志信息，从这些log中我们可以获取ANR的类型，CPU的情况（CPU使用率过高有可能是CPU饥饿导致了ANR；CPU使用率过低说明主线程被block了），每种ANR类型在规定时间内执行的具体操作等等。
 
-### 4. 如何定位
+- 发生KeyDispatchTimeout类型的ANR日志中出现的关键字：Reason: Input dispatching timed out xxxx
+- 发生ServiceTimeout类型的ANR日志中出现的关键字：Timeout executing service:/executing serviceXXX
+- 发生BroadcastTimeout类型的ANR日志中出现的关键字：Timeout of broadcast XXX/Receiver during timeout:XXX/Broadcast of XXX
+- 发生ProcessContentProviderPublishTimedOutLocked类型的ANR日志中出现的关键字：timeout publishing content providers
 
-如果开发机器上出现问题，我们可以通过查看`/data/anr/traces.txt`即可，最新的ANR信息在最开始部分。
+log输出以外，你会发现各个应用进程和系统进程的函数堆栈信息都输出到了一个/data/anr/traces.txt的文件中，这个文件是分析ANR原因的关键文件。
 
-触发 ANR 时系统会输出关键信息：
+##### ANR 分析
 
-1. 将am_anr信息,输出到EventLog.(ANR开始起点看EventLog)
-2. 获取重要进程trace信息，保存到/data/anr/traces.txt；(会先删除老的文件)
-   - Java进程的traces;
-   - Native进程的traces;
-3. ANR reason以及CPU使用情况信息，输出到main log;
-4. 再将CPU使用情况和进程trace文件信息，再保存到/data/system/dropbox；
+分析ANR大致分为以下几个步骤:
+
+1. 确定ANR发生时间,关键字:**am_anr**,**ANR in**
+2. 查看ANR发生时打印的trace,文件目录:**/data/anr/traces.txt**
+3. 查看系统耗时关键字:**binder_sample**,**dvm_lock_sample**,**am_lifecycle_sample**,**binder thread**
+4. 结合源码和以上的信息进行分析
+
+### 3. ANR 避免
+
+为了避免 ANR 发生的概率，基本的思路就是将IO操作在工作线程来处理，减少其他耗时操作和错误操作
+
+1：UI线程尽量只做跟UI相关的工作
+2：耗时的工作（比如数据库操作，I/O，连接网络或 者别的有可能阻碍UI线程的操作） 把它放入单独的线程处理
+3：尽量用Handler来处理UIthread和别的thread之间的交互
