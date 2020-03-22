@@ -150,7 +150,7 @@ adb shell pm clear <package_name>
 adb shell dumpsys activity activities
 ```
 
-		- 查看 service
+- 查看 service
 
 ```sh
 adb shell dumpsys activity services [<package_name>]
