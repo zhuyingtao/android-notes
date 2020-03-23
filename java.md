@@ -483,6 +483,19 @@ public class ThreadPoolExecutor extends AbstractExecutorService {
 
 - handler：表示当拒绝处理任务时的策略。
 
+在ThreadPoolExecutor类中有几个非常重要的方法：
+
+```java
+execute()
+submit()
+shutdown()
+shutdownNow()
+```
+
+- execute()方法实际上是Executor中声明的方法，在ThreadPoolExecutor进行了具体的实现，这个方法是ThreadPoolExecutor的核心方法，通过这个方法可以向线程池提交一个任务，交由线程池去执行。
+- submit()方法是在ExecutorService中声明的方法，在AbstractExecutorService就已经有了具体的实现，在ThreadPoolExecutor中并没有对其进行重写，这个方法也是用来向线程池提交任务的，但是它和execute()方法不同，它能够返回任务执行的结果，去看submit()方法的实现，会发现它实际上还是调用的execute()方法，只不过它利用了Future来获取任务执行结果。
+- shutdown()和shutdownNow()是用来关闭线程池的。
+
 ### 并发编程辅助类
 
 ##### CountDownLatch
