@@ -589,6 +589,123 @@ void recycleUnchecked() {
 - 经过dispatchMessage()后，交回给Handler的handleMessage()来进行相应地处理。
 - 将Message加入MessageQueue时，处往管道写入字符，可以会唤醒loop线程；如果MessageQueue中没有Message，并处于Idle状态，则会执行IdelHandler接口中的方法，往往用于做一些清理性地工作。
 
+### 扩展：IdleHandler
+
+IdleHandler 可以用来提升性能，主要用在我们希望能够在当前线程 **消息队列空闲时** 做些事情（例如UI线程在显示完成后，如果线程空闲我们就可以提前准备其他内容）的情况下，不过最好不要做耗时操作。
+
+`IdleHandler` 位于 `MessageQueue` 类中的一个静态接口，如下：
+
+```java
+ /**
+     * 当前队列将进入阻塞等待消息时调用该接口回调，即队列空闲
+     */
+    public static interface IdleHandler {
+        /**
+         * 返回true就是单次回调后不删除，下次进入空闲时继续回调该方法，false只回调单次。
+         */
+        boolean queueIdle();
+    }
+```
+
+MessageQueue 类中提供了一些辅助方法
+
+```java
+/**
+     * <p>This method is safe to call from any thread.
+     * 判断当前队列是不是空闲的，辅助方法
+     */
+    public boolean isIdle() {
+        synchronized (this) {
+            final long now = SystemClock.uptimeMillis();
+            return mMessages == null || now < mMessages.when;
+        }
+    }
+
+    /**
+     * <p>This method is safe to call from any thread.
+     * 添加一个IdleHandler到队列，如果IdleHandler接口方法返回false则执行完会自动删除，
+     * 否则需要手动removeIdleHandler。
+     */
+    public void addIdleHandler(@NonNull IdleHandler handler) {
+        if (handler == null) {
+            throw new NullPointerException("Can't add a null IdleHandler");
+        }
+        synchronized (this) {
+            mIdleHandlers.add(handler);
+        }
+    }
+
+    /**
+     * <p>This method is safe to call from any thread.
+     * 删除一个之前添加的 IdleHandler。
+     */
+    public void removeIdleHandler(@NonNull IdleHandler handler) {
+        synchronized (this) {
+            mIdleHandlers.remove(handler);
+        }
+    }
+```
+
+在 MessageQueue 的next()方法中，添加的 IdleHandler 被调用
+
+```java
+ ......
+    //Looper的prepare()方法会通过ThreadLocal准备当前线程的MessageQueue实例，
+    //然后在loop()方法中死循环调用当前队列的next()方法获取Message。
+    Message next() {
+        ......
+        for (;;) {
+            ......
+            nativePollOnce(ptr, nextPollTimeoutMillis);
+            synchronized (this) {
+                ......
+                //把通过addIdleHandler添加的IdleHandler转成数组存起来在mPendingIdleHandlers中
+                // If first time idle, then get the number of idlers to run.
+                // Idle handles only run if the queue is empty or if the first message
+                // in the queue (possibly a barrier) is due to be handled in the future.
+                if (pendingIdleHandlerCount < 0
+                        && (mMessages == null || now < mMessages.when)) {
+                    pendingIdleHandlerCount = mIdleHandlers.size();
+                }
+                if (pendingIdleHandlerCount <= 0) {
+                    // No idle handlers to run.  Loop and wait some more.
+                    mBlocked = true;
+                    continue;
+                }
+
+                if (mPendingIdleHandlers == null) {
+                    mPendingIdleHandlers = new IdleHandler[Math.max(pendingIdleHandlerCount, 4)];
+                }
+                mPendingIdleHandlers = mIdleHandlers.toArray(mPendingIdleHandlers);
+            }
+
+            // Run the idle handlers.
+            // We only ever reach this code block during the first iteration.
+            //循环遍历所有IdleHandler
+            for (int i = 0; i < pendingIdleHandlerCount; i++) {
+                final IdleHandler idler = mPendingIdleHandlers[i];
+                mPendingIdleHandlers[i] = null; // release the reference to the handler
+
+                boolean keep = false;
+                try {
+                    //调用IdleHandler接口的queueIdle方法并获取返回值。
+                    keep = idler.queueIdle();
+                } catch (Throwable t) {
+                    Log.wtf(TAG, "IdleHandler threw exception", t);
+                }
+                //如果IdleHandler接口的queueIdle方法返回false说明只执行一次需要删除。
+                if (!keep) {
+                    synchronized (this) {
+                        mIdleHandlers.remove(idler);
+                    }
+                }
+            }
+            ......
+        }
+    }
+}
+```
+
 ### 7. HandlerThread
 
 Android为了简化Handler的创建过程，提供了HandlerThread类。

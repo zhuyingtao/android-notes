@@ -130,6 +130,14 @@ public void addView(View view, ViewGroup.LayoutParams params,
 
 ![img](assets/android-view/aHR0cHM6Ly91cGxvYWQtaW1hZ2VzLmppYW5zaHUuaW8vdXBsb2FkX2ltYWdlcy85NDQzNjUtYzlkOWZmZTY0M2M4NTAxMC5wbmc.png)
 
+#### invalidate() 与 requestLayout()
+
+View有两个很重要的方法：invalidate和requestLayout，常用于View重绘和更新。
+
+View绘制分三个步骤，顺序是：onMeasure，onLayout，onDraw。经代码亲测，log输出显示：调用invalidate方法只会执行onDraw方法；调用requestLayout方法只会执行onMeasure方法和onLayout方法，并不会执行onDraw方法。
+
+所以当我们进行View更新时，若仅View的显示内容发生改变且新显示内容不影响View的大小、位置，则只需调用invalidate方法；若View宽高、位置发生改变且显示内容不变，只需调用requestLayout方法；若两者均发生改变，则需调用两者，按照View的绘制流程，推荐先调用requestLayout方法再调用invalidate方法。
+
 #### 自定义 View
 
 自定义View的实现方式大概可以分为三种，自绘控件、组合控件、以及继承控件。
