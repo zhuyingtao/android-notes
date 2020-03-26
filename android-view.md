@@ -126,6 +126,36 @@ public void addView(View view, ViewGroup.LayoutParams params,
 
 ![img](assets/android-view/aHR0cHM6Ly91cGxvYWQtaW1hZ2VzLmppYW5zaHUuaW8vdXBsb2FkX2ltYWdlcy85NDQzNjUtODU4ZGUxZmFhMzhkZjFiMi5wbmc.png)
 
+#### draw() 与 onDraw()
+
+draw()里面有 6 步操作
+
+```java
+ 				/*
+         * Draw traversal performs several drawing steps which must be executed
+         * in the appropriate order:
+         *
+         *      1. Draw the background
+         *      2. If necessary, save the canvas' layers to prepare for fading
+         *      3. Draw view's content -- onDraw()
+         *      4. Draw children
+         *      5. If necessary, draw the fading edges and restore layers
+         *      6. Draw decorations (scrollbars for instance)
+         */
+```
+
+简单来说，`View.draw`负责绘制当前View的所有内容以及子View的内容，是一个全集。而`View.onDraw`则只负责绘制本身相关的内容，是一个子集。
+
+```java
+// Step 3, draw the content
+if (!dirtyOpaque) onDraw(canvas);//调用onDraw
+```
+
+通过上述代码可知：
+
+1. `View.draw`方法中会调用`View.onDraw`
+2. 只有`dirtyOpaque`为false（透明，非实心），才会调用`View.onDraw`方法。
+
 ##### getMeasuredWidth() 与 getWidth() 区别
 
 ![img](assets/android-view/aHR0cHM6Ly91cGxvYWQtaW1hZ2VzLmppYW5zaHUuaW8vdXBsb2FkX2ltYWdlcy85NDQzNjUtYzlkOWZmZTY0M2M4NTAxMC5wbmc.png)
