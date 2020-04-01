@@ -132,3 +132,21 @@
 
    这种方式是 Effective Java 作者 Josh Bloch 提倡的方式，它不仅能避免多线程同步问题，而且还自动支持序列化机制，防止反序列化重新创建新的对象，绝对防止多次实例化。
 
+### 装饰模式
+
+也叫wrapper模式。动态地给一个对象添加一些额外的职责，就增加功能来说，装饰者模式相比生成子类更加灵活，提供了有别于继承的另一种选择。
+
+#### 示例 1
+
+Context是Android中一个几乎无处不在的角色，ContextWrapper/ContextThemeWrapper就在继承过程中承担了ContextImpl的装饰者角色。
+
+![img](assets/java-patterns/163f7c970d4f30be.png)
+
+#### 示例 2
+
+RecyclerView通过RecyclerView.ItemDecorator来扩展样式。 不过这个是一个变种的装饰者，这个实践比较另类的地方在于：我们通常是在装饰者的的执行方法中扩展被代理对象的行为，而RecyclerView+ItemDecorator的实践则恰恰相反，ItemDecorator反倒成了被代理对象，RecyclerView成了装饰
+
+### 享元模式
+
+享元模式是对象池的一种实现，尽可能减少内存的使用，使用缓存来共享可用的对象，避免创建过多的对象。Android中Message使用的设计模式就是享元模式，获取Message通过obtain方法从对象池获取，Message使用结束通过recycle将Message归还给对象池，达到循环利用对象，避免重复创建的目的。
+

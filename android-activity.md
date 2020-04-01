@@ -55,6 +55,42 @@ android:configChanges="orientation|keyboardHidden"
 
   taskAffinity属性接收一个字符串参数，你可以指定成任意的值(经我测试字符串中至少要包含一个.)，但必须不能和应用程序的包名相同，因为系统会使用包名来作为默认的affinity值。
 
+#### onNewIntent()
+
+```java
+		/**
+     * This is called for activities that set launchMode to "singleTop" in
+     * their package, or if a client used the {@link Intent#FLAG_ACTIVITY_SINGLE_TOP}
+     * flag when calling {@link #startActivity}.  In either case, when the
+     * activity is re-launched while at the top of the activity stack instead
+     * of a new instance of the activity being started, onNewIntent() will be
+     * called on the existing instance with the Intent that was used to
+     * re-launch it.
+     *
+     * <p>An activity can never receive a new intent in the resumed state. You can count on
+     * {@link #onResume} being called after this method, though not necessarily immediately after
+     * the completion this callback. If the activity was resumed, it will be paused and new intent
+     * will be delivered, followed by {@link #onResume}. If the activity wasn't in the resumed
+     * state, then new intent can be delivered immediately, with {@link #onResume()} called
+     * sometime later when activity becomes active again.
+     *
+     * <p>Note that {@link #getIntent} still returns the original Intent.  You
+     * can use {@link #setIntent} to update it to this new Intent.
+     *
+     * @param intent The new intent that was started for the activity.
+     *
+     * @see #getIntent
+     * @see #setIntent
+     * @see #onResume
+     */
+    protected void onNewIntent(Intent intent) {
+    }
+```
+
+Activity 的 onNewIntent 调用时机如下图所示。
+
+![git_update_author_1](assets/android-activity/activity_onnewintent.png)
+
 #### startActivity 流程
 
 ![start_activity_process](assets/android-activity/start_activity_process.jpg)
