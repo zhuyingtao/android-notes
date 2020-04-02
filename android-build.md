@@ -4,3 +4,5 @@
   [配置编译版本](https://developer.android.com/studio/build)
 
   ![img](https://developer.android.com/images/tools/studio/build-process_2x.png)
+
+#### ART 和 Dalvik
