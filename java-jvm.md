@@ -1,6 +1,6 @@
 ### JVM
 
-<img src="/Users/zyt/Library/Application Support/typora-user-images/image-20191119001446096.png" alt="image-20191119001446096"/>
+<img src="assets/java-jvm/image-20191119001446096.png" alt="image-20191119001446096"/>
 
 
 
