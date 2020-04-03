@@ -106,6 +106,12 @@ ImageRequest imageRequest = new ImageRequest(
 
 [从动态代理角度看Retrofit，这才是Retrofit的精髓！](https://mp.weixin.qq.com/s/_UqjC-fuDptjJCRvDsDlwQ)
 
+#### OkHttp
+
+![img](assets/android-networking/okhttp_full_process.png)
+
+https://www.jianshu.com/p/7b29b89cd7b5
+
 #### 开源库
 
 [Retrofit](https://github.com/square/retrofit)
