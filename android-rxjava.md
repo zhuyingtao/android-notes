@@ -48,3 +48,99 @@ RxJava 原理可总结为：被观察者（Observable）通过 订阅（Subscrib
 
 ![img](https://upload-images.jianshu.io/upload_images/944365-98ec92df0a4d7e0b.png)
 
+#### RxJava 示例
+
+这里我们就根据上面的步骤来实现这个例子
+
+```java
+        //步骤1. 创建被观察者(Observable),定义要发送的事件。
+        Observable observable = Observable.create(
+        new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter)
+            throws Exception {
+                emitter.onNext("文章1");
+                emitter.onNext("文章2");
+                emitter.onNext("文章3");
+                emitter.onComplete();
+            }
+        });
+       
+        //步骤2. 创建观察者(Observer)，接受事件并做出响应操作。
+        Observer<String> observer = new Observer<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                Log.d(TAG, "onSubscribe");
+            }
+
+            @Override
+            public void onNext(String s) {
+                Log.d(TAG, "onNext : " + s);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "onError : " + e.toString());
+            }
+
+            @Override
+            public void onComplete() {
+                Log.d(TAG, "onComplete");
+            }
+        };
+       
+        //步骤3. 观察者通过订阅（subscribe）被观察者把它们连接到一起。
+        observable.subscribe(observer);
+
+```
+
+线程切换
+
+```java
+        new Thread() {
+            @Override
+            public void run() {
+                Log.d(TAG, "Thread run() 所在线程为 :" + Thread.currentThread().getName());
+                Observable
+                        .create(new ObservableOnSubscribe<String>() {
+                            @Override
+                            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                                Log.d(TAG, "Observable subscribe() 所在线程为 :" + Thread.currentThread().getName());
+                                emitter.onNext("文章1");
+                                emitter.onNext("文章2");
+                                emitter.onComplete();
+                            }
+                        })
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<String>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
+                                Log.d(TAG, "Observer onSubscribe() 所在线程为 :" + Thread.currentThread().getName());
+                            }
+
+                            @Override
+                            public void onNext(String s) {
+                                Log.d(TAG, "Observer onNext() 所在线程为 :" + Thread.currentThread().getName());
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+                                Log.d(TAG, "Observer onError() 所在线程为 :" + Thread.currentThread().getName());
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                Log.d(TAG, "Observer onComplete() 所在线程为 :" + Thread.currentThread().getName());
+                            }
+                        });
+            }
+        }.start();
+
+```
+
+`Observer`（观察者）的`onSubscribe()`方法运行在当前线程中。
+
+`Observable`（被观察者）中的`subscribe()`运行在`subscribeOn()`指定的线程中。
+
+`Observer`（观察者）的`onNext()`和`onComplete()`等方法运行在`observeOn()`指定的线程中。
