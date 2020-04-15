@@ -6,3 +6,10 @@
   ![img](https://developer.android.com/images/tools/studio/build-process_2x.png)
 
 #### ART 和 Dalvik
+
+
+
+#### APK内部结构
+
+![image-20200415105041279](assets/android-build/image-20200415105041279.png)
+
