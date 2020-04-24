@@ -189,3 +189,117 @@ long personid = ContentUris.parseId(uri);
 ContentProvider 的 onCreate() 在 Application 的 onCreate() 之前执行
 
 ActivityThread -> handleBindApplication -> bindApplication -> installProviders -> localProvider.attachInfo -> provider. onCreate
+
+### 源码分析
+
+ContentResolver
+
+- 分析 1
+
+```java
+// query()
+IContentProvider unstableProvider = acquireUnstableProvider(uri);
+// insert()/delete()/update()/call()
+IContentProvider provider = acquireProvider(uri);
+```
+
+- 分析 2
+
+```java
+		/**
+     * Returns the content provider for the given content URI.
+     *
+     * @param uri The URI to a content provider
+     * @return The ContentProvider for the given URI, or null if no content provider is found.
+     * @hide
+     */
+    public final IContentProvider acquireProvider(Uri uri) {
+        if (!SCHEME_CONTENT.equals(uri.getScheme())) {
+            return null;
+        }
+        final String auth = uri.getAuthority();
+        if (auth != null) {
+            // 源码分析 4
+            return acquireProvider(mContext, auth);
+        }
+        return null;
+    }
+```
+
+- 分析 3
+
+```java
+    // 抽象方法，其具体实现是 ContextImpl 的内部类 ApplicationContentResolver
+    protected abstract IContentProvider acquireProvider(Context c, String name);
+```
+
+ContextImpl.ApplicationContentResolver
+
+```java
+        @Override
+        protected IContentProvider acquireProvider(Context context, String auth) {
+            return mMainThread.acquireProvider(context,
+                    ContentProvider.getAuthorityWithoutUserId(auth),
+                    resolveUserIdFromAuthority(auth), true);
+        }
+				
+				// mMainThread 是类中的成员变量，在构造方法中传入
+				private final ActivityThread mMainThread;
+				public ApplicationContentResolver(Context context, ActivityThread mainThread) {
+            super(context);
+            mMainThread = Preconditions.checkNotNull(mainThread);
+        }
+```
+
+ContextImpl
+
+```java
+// ContextImpl 中的成员变量
+private final ApplicationContentResolver mContentResolver;
+// 在构造方法中初始化
+mContentResolver = new ApplicationContentResolver(this, mainThread);
+```
+
+- 分析 4
+
+ActivityThread
+
+```java
+    public final IContentProvider acquireProvider(
+            Context c, String auth, int userId, boolean stable) {
+        // 如果 Provider 已经存在，则直接返回
+        final IContentProvider provider = acquireExistingProvider(c, auth, userId, stable);
+        if (provider != null) {
+            return provider;
+        }
+
+        // There is a possible race here.  Another thread may try to acquire
+        // the same provider at the same time.  When this happens, we want to ensure
+        // that the first one wins.
+        // Note that we cannot hold the lock while acquiring and installing the
+        // provider since it might take a long time to run and it could also potentially
+        // be re-entrant in the case where the provider is in the same process.
+        ContentProviderHolder holder = null;
+        try {
+            synchronized (getGetProviderLock(auth, userId)) {
+                holder = ActivityManager.getService().getContentProvider(
+                        getApplicationThread(), auth, userId, stable);
+            }
+        } catch (RemoteException ex) {
+            throw ex.rethrowFromSystemServer();
+        }
+        if (holder == null) {
+            Slog.e(TAG, "Failed to find provider info for " + auth);
+            return null;
+        }
+
+        // Install provider will increment the reference count for us, and break
+        // any ties in the race.
+        holder = installProvider(c, holder, holder.info,
+                true /*noisy*/, holder.noReleaseNeeded, stable);
+        return holder.provider;
+    }
+```
+
+
+
