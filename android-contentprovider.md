@@ -9,6 +9,12 @@
 
 ### ContentProvider
 
+#### 为什么设计 ContentProvider
+
+- 隐藏数据的实现方式，对外提供统一的数据访问接口，使用者完全不用关心数据的实现细节与获取方式。
+- 更好的数据访问权限管理。 `ContentProvider` 可以对开发的数据进行权限设置，不同的 `URI` 可以对应不同的权限，只有符合权限要求的组件才能访问到 `ContentProvider` 的具体操作。
+- `ContentProvider` 封装了跨进程共享的逻辑，我们只需要 `Uri` 即可访问数据。由系统来管理 `ContentProvider` 的创建、生命周期及访问的线程分配，简化我们在应用间共享数据（ 进程间通信 ）的方式。我们只管通过 `ContentResolver` 访问 `ContentProvider` 所提示的数据接口，而不需要担心它所在进程是启动还是未启动。
+
 进程间共享数据的本质是：添加、删除、获取 & 修改（更新）数据，所以`ContentProvider`的核心方法也主要是上述4个作用。
 
 ```java
@@ -39,6 +45,11 @@ public boolean onCreate()
 public String getType(Uri uri)
 // 得到数据类型，即返回当前 Url 所代表数据的MIME类型
 ```
+
+#### 权限控制
+
+- `android:exported` ，这个属性用于指示该服务是否能够被其他应用程序组件调用。如果设置为 `true` ，则能够被调用或交互，否则不能。设置为 `false` 时，只有同一个应用程序的组件或带有相同用户 `ID` 的应用程序才能启动或绑定该服务。
+- 对于需要开放的组件应设置合理的权限，如果只需要对同一个签名的其它应用开放 `ContentProvider` ，则可以设置 `signature` 级别的权限。
 
 ### ContentResolver
 

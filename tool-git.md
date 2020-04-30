@@ -26,3 +26,13 @@ git log --left-right dev...alpha	// 列出两个分支的差异，同时指明�
 ```
 
 git difftool
+
+- 查看分支，按更新时间排序
+
+  ```bash
+  git branch -a --sort=-committerdate // 降序
+  git branch -a --sort=committerdate // 升序
+  ```
+
+  
+

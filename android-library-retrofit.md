@@ -10,12 +10,22 @@ github 地址：[retrofit](https://github.com/square/retrofit)
 
 准确的说，Retrofit 是一个 RESTful 的 Http 网络请求框架的封装。网络请求的工作本质上是 OkHttp 完成，而 Retrofit 仅负责网络请求接口的封装。
 
-常见网络请求开源库：
+##### 为什么使用网络库？
 
-- android-async-http
-- volley
-- OkHttp
-- Retrofit
+实现网络请求的需求同时不需要考虑: 异步请求、线程池、缓存等。同时还可以：降低开发难度、缩短开发周期、使用方便
+
+##### 常见网络请求开源库：
+
+- [android-async-http](https://github.com/android-async-http/android-async-http)
+- [volley](https://github.com/google/volley)
+- [OkHttp](https://github.com/square/okhttp)
+- [Retrofit](https://github.com/square/retrofit)
+
+![img](assets/android-library-retrofit/5258053-a0c27ef2ca086e0a.png)
+
+四大网络库的详细对比
+
+![img](assets/android-library-retrofit/5258053-70a442d6abb1f883.png)
 
 ### 使用说明
 
