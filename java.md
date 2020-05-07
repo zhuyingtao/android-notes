@@ -311,3 +311,21 @@ synchronized关键字是防止多个线程同时执行一段代码，那么就�
 - 动态分派
 
   应用场景：方法重写（Override），根据变量的动态类型确定执行哪个方法
+
+#### 异常
+
+![img](assets/java/16754b811d2f324f.jpeg)
+
+- 非受检异常
+
+  RuntimeException 及其子类。这类异常由程序员逻辑错误导致，应该人为承担责任。Java编译器不要求强制处理，即可以捕获或抛出，也可以不捕获或抛出。
+
+  举例：RuntimeException,ArithmeticException,NullPointerException,ClassCastException,ArrayIndexsOutOfBoundsException
+
+- 受检异常
+
+  非RuntimeException异常。这类异常是由于外部的一些偶然因素引起的。Java编译器要求强制处理，即必须得到捕获或抛出。
+
+  举例：
+
+  IOException,SQLException,FileNotFoundException
