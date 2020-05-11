@@ -316,3 +316,10 @@ am命令实的实现方式在Am.java，最终几乎都是调用`ActivityManagerS
 | force-dex-opt <PACKAGE>         | dex优化           | PMS.forceDexOpt                       |
 | dump <PACKAGE>                  | dump信息          | AM.dumpPackageStateStatic             |
 | trim-caches `<目标size`>        | 紧缩cache目标大小 | PMS.freeStorageAndNotify              |
+
+卸载系统应用（/system/app）
+
+```shell
+adb shell pm uninstall -k --user 0 package-name
+```
+
