@@ -93,6 +93,30 @@ https://juejin.im/entry/5a9a61e4f265da23945eeee1
 
 
 
+![img](assets/android-view-perform/2922217-b01724b799d440fa.png)
+
+```java
+event.getX():表示的是触摸的点距离自身左边界的距离 
+event.getY():表示的是触摸的点距离自身上边界的距离
+event.getRawX():表示的是触摸点距离屏幕左边界的距离
+event.getRawY():表示的是触摸点距离屏幕上边界的距离
+
+view.getTop():子View的顶部到父View顶部的距离
+view.getRight():子View的右边界到父View的左边界的距离 
+view.getBottom():子View的底部到父View的顶部的距离 
+view.getLeft():子View的左边界到父View的左边界的距离
+
+view.getWidth():表示的是当前控件的宽度，即getRight()-getLeft()
+view.getHeight()：表示的是当前控件的高度，即getBottom()-getTop() 
+
+view.getTranslationX()计算的是该View在X轴的偏移量。初始值为0，向左偏移值为负，向右偏移值为正。 
+view.getTranslationY()计算的是该View在Y轴的偏移量。初始值为0，向上偏移为负，向下偏移为正。 
+```
+
+
+
+
+
 
 
 
