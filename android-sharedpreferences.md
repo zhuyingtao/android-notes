@@ -152,3 +152,9 @@ private void enqueueDiskWrite(final MemoryCommitResult mcr,final Runnable postWr
 ```
 
 这两个方法都是首先修改内存中缓存的mMap的值，然后将数据写到磁盘中。它们的主要区别是commit会等待写入磁盘后再返回，而apply则在调用写磁盘操作后就直接返回了，**但是这时候可能磁盘中数据还没有被修改。**
+
+
+
+[SP vs MMKV vs DataStore](https://www.jianshu.com/p/e2113f501cf9)
+
+[MMKV 使用与原理](https://www.jianshu.com/p/13b889028326)

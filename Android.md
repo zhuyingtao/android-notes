@@ -15,6 +15,7 @@
 * [郭霖的专栏](http://blog.csdn.net/guolin_blog)
 * [Hongyang](http://blog.csdn.net/lmj623565791)
 * [技术小黑屋](http://droidyue.com/)
+* [jsonchao(最全 Android 学习渠道分享)](https://juejin.cn/post/6844903544965824519)
 
 #### Title
 * Device

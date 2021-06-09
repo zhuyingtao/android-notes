@@ -430,4 +430,41 @@ Android 事件分发流程是 Activity -> ViewGroup -> View，所以要充分理
 
    但 onTouch() 优先于 onTouchEvent() 执行，如果手动复写在 onTouch() 中返回 true，则不再执行 onTouchEvent()
 
- 
+### 滑动冲突
+
+#### 场景
+
+产生滑动冲突的场景主要有两种:
+
+- 父ViewGroup和子View的滑动方向一致
+- 父ViewGroup和子View的滑动方向不一致
+
+#### 原因
+
+ViewGroup的**onInterceptTouchEvent**方法默认情况下是返回false，也就是ViewGroup默认情况下是不会拦截事件的。当ViewGroup接收到事件时，由于不拦截事件，会去寻找能够处理事件的子View。此时，一旦子View处理了DOWN事件，默认情况下接下来同一事件序列的其他事件都交由子View处理，此时可以看到的效果是子View可以滑动，但是父ViewGroup始终滑动不了，此时滑动冲突就出现了。
+
+#### 解决方式
+
+- 外部拦截法
+
+  所谓外部拦截法，就是当事件传递到父容器时，通过父容器去判断自己是否需要此事件，若需要则拦截事件，不需要则不拦截事件，将事件传递给子View。
+
+  以 ViewPager 和 ListView 滑动冲突为例，我们要的效果是在水平方向上滑动时ViewPager可以水平滚动，在竖直方向上滑动时，ListView可以滚动但ViewPager不动。
+
+  ```java
+  @Override
+  public boolean onInterceptTouchEvent(MotionEvent ev) {
+      switch (ev.getAction()) {
+          case MotionEvent.ACTION_MOVE:
+              if (ViewPager需要此事件) {
+                  return true;
+              }
+              break;
+          default:
+              break;
+      }
+      return false;
+  }
+  ```
+
+  ![img](https://user-gold-cdn.xitu.io/2019/3/22/169a4340d77b065b?imageslim)

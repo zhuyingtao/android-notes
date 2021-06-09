@@ -323,3 +323,15 @@ am命令实的实现方式在Am.java，最终几乎都是调用`ActivityManagerS
 adb shell pm uninstall -k --user 0 package-name
 ```
 
+- wm
+
+  ```shell
+  adb shell wm size //查看手机分辨率
+  adb shell wm density //查看手机 dpi
+  adb shell wm size reset //恢复默认分辨率
+  adb shell wm 1080x1920 //设置手机分辨率为 1080*1920
+  adb shell wm density 320 //设置手机 dpi 为 320
+  ```
+
+  
+
