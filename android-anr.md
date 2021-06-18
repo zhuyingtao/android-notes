@@ -1,6 +1,6 @@
 ### 1. 概述
 
-ANR全称`Application Not Responding`，即应用未响应。简单来说就是主线程在特定的时间内没有做完特定的事情。
+ANR全称`Application Not Responding`，即应用未响应。简单来说就是**主线程在特定的时间内没有做完特定的事情**。
 
 ##### ANR 类型
 
@@ -28,16 +28,16 @@ ANR全称`Application Not Responding`，即应用未响应。简单来说就是�
 - 发生BroadcastTimeout类型的ANR日志中出现的关键字：Timeout of broadcast XXX/Receiver during timeout:XXX/Broadcast of XXX
 - 发生ProcessContentProviderPublishTimedOutLocked类型的ANR日志中出现的关键字：timeout publishing content providers
 
-log输出以外，你会发现各个应用进程和系统进程的函数堆栈信息都输出到了一个/data/anr/traces.txt的文件中，这个文件是分析ANR原因的关键文件。
+log输出以外，你会发现各个应用进程和系统进程的函数堆栈信息都输出到了一个`/data/anr/traces.txt`的文件中，这个文件是分析ANR原因的关键文件。
 
 ##### ANR 分析
 
 分析ANR大致分为以下几个步骤:
 
-1. 确定ANR发生时间,关键字:**am_anr**,**ANR in**
-2. 查看ANR发生时打印的trace,文件目录:**/data/anr/traces.txt**
-3. 查看系统耗时关键字:**binder_sample**,**dvm_lock_sample**,**am_lifecycle_sample**,**binder thread**
-4. 结合源码和以上的信息进行分析
+1. 根据 log 确定ANR发生进程、时间及现场信息，关键字:**am_anr**,**ANR in**
+2. 查看ANR发生时打印的trace，关注主线程是否存在耗时、死锁、等锁等问题，可以基本看出是 APP 问题还是系统问题，文件目录:**/data/anr/traces.txt**
+3. 如果是系统问题，再根据  log 查看系统耗时关键字:**binder_sample**,**dvm_lock_sample**,**am_lifecycle_sample**,**binder thread** ，分别定位 binder call 耗时和系统持锁耗时问题
+4. 结合源码和以上的信息进行分析有问题的点
 
 ### 3. ANR 避免
 

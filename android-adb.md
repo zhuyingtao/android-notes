@@ -123,38 +123,79 @@ adb uninstall [-k] <package_name>
 adb shell pm clear <package_name>
 ```
 
-- dumpsys
+##### dumpsys
 
-  可通过dumpsys命令查询系统服务的运行状态(对象的成员变量属性值)
+可通过dumpsys命令查询系统服务的运行状态(对象的成员变量属性值)。对于分析调试问题，dumpsys 非常好用，可以避免每次修改都要加 log 重新编译。
 
-  | 服务名       | 类名                   | 功能         |
-  | :----------- | :--------------------- | :----------- |
-  | activity     | ActivityManagerService | AMS相关信息  |
-  | package      | PackageManagerService  | PMS相关信息  |
-  | window       | WindowManagerService   | WMS相关信息  |
-  | input        | InputManagerService    | IMS相关信息  |
-  | power        | PowerManagerService    | PMS相关信息  |
-  | batterystats | BatterystatsService    | 电池统计信息 |
-  | battery      | BatteryService         | 电池信息     |
-  | alarm        | AlarmManagerService    | 闹钟信息     |
-  | dropbox      | DropboxManagerService  | 调试相关     |
-  | procstats    | ProcessStatsService    | 进程统计     |
-  | cpuinfo      | CpuBinder              | CPU          |
-  | meminfo      | MemBinder              | 内存         |
-  | gfxinfo      | GraphicsBinder         | 图像         |
-  | dbinfo       | DbBinder               | 数据库       |
+dumpsys 支持查询的服务列表：
 
-- 查看 activity
+| 服务名       | 类名                   | 功能         |
+| :----------- | :--------------------- | :----------- |
+| activity     | ActivityManagerService | AMS相关信息  |
+| package      | PackageManagerService  | PMS相关信息  |
+| window       | WindowManagerService   | WMS相关信息  |
+| input        | InputManagerService    | IMS相关信息  |
+| power        | PowerManagerService    | PMS相关信息  |
+| batterystats | BatterystatsService    | 电池统计信息 |
+| battery      | BatteryService         | 电池信息     |
+| alarm        | AlarmManagerService    | 闹钟信息     |
+| dropbox      | DropboxManagerService  | 调试相关     |
+| procstats    | ProcessStatsService    | 进程统计     |
+| cpuinfo      | CpuBinder              | CPU          |
+| meminfo      | MemBinder              | 内存         |
+| gfxinfo      | GraphicsBinder         | 图像         |
+| dbinfo       | DbBinder               | 数据库       |
 
-```sh
-adb shell dumpsys activity activities
+直接 dumpsys 某个服务打出的信息量巨大，可以选择性的加一些参数进行过滤，可通过 `-h ` 命令来查看帮助信息
+
+```bash
+▶ adb shell dumpsys activity -h
+Activity manager dump options:
+  [-a] [-c] [-p PACKAGE] [-h] [WHAT] ...
+  WHAT may be one of:
+    a[ctivities]: activity stack state
+    r[recents]: recent activities state
+    b[roadcasts] [PACKAGE_NAME] [history [-s]]: broadcast state
+    broadcast-stats [PACKAGE_NAME]: aggregated broadcast statistics
+    i[ntents] [PACKAGE_NAME]: pending intent state
+    p[rocesses] [PACKAGE_NAME]: process state
+    o[om]: out of memory management
+    perm[issions]: URI permission grant state
+    prov[iders] [COMP_SPEC ...]: content provider state
+    provider [COMP_SPEC]: provider client-side state
+    s[ervices] [COMP_SPEC ...]: service state
+    allowed-associations: current package association restrictions
+    as[sociations]: tracked app associations
+    lmk: stats on low memory killer
+    lru: raw LRU process list
+    binder-proxies: stats on binder objects and IPCs
+    settings: currently applied config settings
+    service [COMP_SPEC]: service client-side state
+    package [PACKAGE_NAME]: all state related to given package
+    all: dump all activities
+    top: dump the top activity
+  WHAT may also be a COMP_SPEC to dump activities.
+  COMP_SPEC may be a component name (com.foo/.myApp),
+    a partial substring in a component name, a
+    hex object identifier.
+  -a: include all available server state.
+  -c: include client state.
+  -p: limit output to given package.
+  --checkin: output checkin format, resetting data.
+  --C: output checkin format, not resetting data.
+  --proto: output dump in protocol buffer format.
+  --autofill: dump just the autofill-related state of an activity
 ```
 
-- 查看 service
+使用示例：
 
-```sh
-adb shell dumpsys activity services [<package_name>]
+```shell
+adb shell dumpsys activity s <package> // 查看 app 的所有 service 状态
+adb shell dumpsys activity b <package> // 查看 app 的所有 broadcast 状态
+adb shell dumpsys activity top // 查看UI界面信息
 ```
+
+
 
 - 查看内存情况
 
