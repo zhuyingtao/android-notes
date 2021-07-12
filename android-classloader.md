@@ -32,8 +32,6 @@
 
 ![img](https://imgconvert.csdnimg.cn/aHR0cDovL3VwbG9hZC1pbWFnZXMuamlhbnNodS5pby91cGxvYWRfaW1hZ2VzLzk0NDM2NS0xNTUwMjFhNWI4MzBjZjQ4LnBuZw?x-oss-process=image/format,png)
 
-
-
 #### Java 类加载器
 
 Java 中的类加载器主要分为两类：
