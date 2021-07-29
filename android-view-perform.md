@@ -74,6 +74,8 @@ MeasureSpec，它用来把测量要求从父View传递给子View，我们知道V
         public static final int AT_MOST     = 2 << MODE_SHIFT;
 ```
 
+![img](assets/android-view-perform/1785445-4197b43a5b361f31.png)
+
 ##### measure 流程
 
 View的measure（）方法是一个final修饰的，意味着我们不能够重写他，最终它会调用onMeasure()方法进行真正的测量，测量原则就是循环遍历子类，遍历每一个子节点对View进行测量，直到最后一个View为止。
