@@ -22,3 +22,18 @@ window 的 type 属性，决定 window 的显示次序，其值为 Z-Order，代
 - 系统级窗口：系统级窗口一般位于最顶层，不会被其他的 window 遮住，如 Toast，Z-Order在2000-2999。**如果要弹出自定义系统级窗口需要动态申请权限**。
 
 Z-Order越大，window越靠近用户，也就显示越高，高度高的window会覆盖高度低的window。
+
+
+
+1. `View` 的显示离不开`Window`。
+
+2. `WindowManager`属于`Window`，负责管理`Window`中`View`的显示。在`Window`中显示`View`我们应使用它的接口
+
+3. 一个`Window`可以有多个子View，每个子`View`都对应一个`ViewRootImpl`。
+
+4. `ViewRootImpl`会通过IPC来与`WindowManagerService`交互，来实现`View`的显示
+
+
+
+![image-20211215154139210](assets/android-window/image-20211215154139210.png)
+

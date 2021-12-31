@@ -82,6 +82,10 @@ Android 类加载器也分为两类：
 
 4. CustomClassLoader
 
+##### PathClassLoader 与 DexClassLoader 区别
+
+PathClassLoader 和 DexClassLoader 都是继承了 BaseDexClassLoader，PathClassLoader 和 DexClassLoader **都能加载外部的 dex／apk**，只不过区别是 DexClassLoader 可以**指定 optimizedDirectory**，也就是 dex2oat 的产物 .odex 存放的位置，而 PathClassLoader 只能使用系统默认位置。但是这个 optimizedDirectory 在 Android 8.0 以后也被舍弃了，只能使用系统默认的位置了。
+
 #### 类加载器原理
 
 双亲委派模式
