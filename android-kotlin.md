@@ -29,4 +29,7 @@ Kotlin 团队为 Android 开发提供了一套超越标准语言功能的工具�
 - [Kotlin Android 扩展](https://www.kotlincn.net/docs/tutorials/android-plugin.html)是一个编译器扩展， 可以让你摆脱代码中的 `findViewById()` 调用，并将其替换为合成的编译器生成的属性。
 - [Anko](http://github.com/kotlin/anko) 是一个提供围绕 Android API 的 Kotlin 友好的包装器的库，以及一个可以用 Kotlin 代码替换布局 .xml 文件的 DSL。
 
- 
+
+
+[Kotlin 单例](https://juejin.cn/post/6844903590545326088)
+
