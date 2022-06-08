@@ -466,5 +466,3 @@ ViewGroup的**onInterceptTouchEvent**方法默认情况下是返回false，也�
       return false;
   }
   ```
-
-  ![img](https://user-gold-cdn.xitu.io/2019/3/22/169a4340d77b065b?imageslim)
