@@ -86,3 +86,11 @@ JetPack里目前包含的内容，未来也会是Google大力维护和扩展的�
 
 https://juejin.im/post/5c4e9e8ce51d451bb73ad665
 
+
+
+#### LifeCycles
+
+https://juejin.cn/post/7069641711835676702
+
+https://juejin.cn/post/7071144317636575262
+
