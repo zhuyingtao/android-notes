@@ -7,7 +7,7 @@
 2. git status中文文件名乱码
 > git config --global core.quotepath false
 
-### [git cheat sheet](https://services.github.com/on-demand/downloads/github-git-cheat-sheet.pdf)
+#### [git cheat sheet](https://services.github.com/on-demand/downloads/github-git-cheat-sheet.pdf)
 
 - 比较两个分支的异同
 
@@ -26,15 +26,6 @@ git log --left-right dev...alpha	// 列出两个分支的差异，同时指明�
 ```
 
 git difftool
-
-- 查看分支，按更新时间排序
-
-  ```bash
-  git branch -a --sort=-committerdate // 降序
-  git branch -a --sort=committerdate // 升序
-  ```
-
-
 
 
 #### git merge 与 git rebase
@@ -132,3 +123,21 @@ $ git merge --no-ff -m "Merge branch 'feature-a'" feature-a
 ```
 
 就这么简单。
+
+#### 小技巧总结
+
+- git 删除某个中间提交的记录
+
+  1. git log获取commit信息  
+  2. git rebase -i (commit-id)   commit-id 为要删除的commit的下一个commit号
+  3. 编辑文件，将要删除的commit之前的单词改为drop  
+  4. 保存文件退出  
+  5. git log查看
+
+- 查看分支，按更新时间排序
+
+  ```bash
+  git branch -a --sort=-committerdate // 降序
+  git branch -a --sort=committerdate // 升序
+  ```
+
