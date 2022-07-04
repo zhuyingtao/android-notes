@@ -1,4 +1,6 @@
-## SharedPreferences
+## Preference
+
+### SharedPreferences
 
 - SharedPreferences是个单例，所以任意Context拿到的都是同一个实例。
 
@@ -158,3 +160,7 @@ private void enqueueDiskWrite(final MemoryCommitResult mcr,final Runnable postWr
 [SP vs MMKV vs DataStore](https://www.jianshu.com/p/e2113f501cf9)
 
 [MMKV 使用与原理](https://www.jianshu.com/p/13b889028326)
+
+重点阅读：
+
+https://mp.weixin.qq.com/s/w3uZR6us1MMVYzfzD1PCiQ
