@@ -161,6 +161,6 @@ private void enqueueDiskWrite(final MemoryCommitResult mcr,final Runnable postWr
 
 [MMKV 使用与原理](https://www.jianshu.com/p/13b889028326)
 
-重点阅读：
+##### 重点阅读：
 
 https://mp.weixin.qq.com/s/w3uZR6us1MMVYzfzD1PCiQ
