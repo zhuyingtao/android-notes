@@ -1,8 +1,6 @@
 
 ### github
 
-testtest
-
 1. 设置传输方式为ssh
 > git remote set-url
 
@@ -136,10 +134,18 @@ $ git merge --no-ff -m "Merge branch 'feature-a'" feature-a
   4. 保存文件退出  
   5. git log查看
 
+- git 修改某个中间提交的记录
+
+  1. git rebase -i 进入交互界面
+  2. 编辑，将要修改的 commit 之前的单次改为 edit
+  3. 保存文件退出
+  4. 修改，重新提交 git commit -a --amend
+  5. git rebase --continue
+  6. git log 查看
+
 - 查看分支，按更新时间排序
 
   ```bash
   git branch -a --sort=-committerdate // 降序
   git branch -a --sort=committerdate // 升序
   ```
-
