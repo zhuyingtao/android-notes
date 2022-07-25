@@ -61,6 +61,12 @@ public synchronized ExecutorService executorService() {
 
 显然，当线程池不存在的时候会去创建一个线程池。除了上面的这种方式，我们还可以在构建 OkHttpClient 的时候，自定义一个 Dispacher，并在其构造方法中为其指定一个线程池。
 
+#### OkHttp 责任链
+
+我们知道，无论同步还是异步请求都会调用 RealCall#getResponseWithInterceptorChain() 发起请求并获取最终的 Response。
+
+这个方法会根据用户设置的 Interceptor 以及默认的几个 Interceptor 组装 Interceptor 列表，然后创建责任链。责任链创建好后会调用其 process 方法获取 Response 并返回，其中涉及两个概念：**Interceptor、Chain**。
+
 #### 拦截器 Interceptors
 
 1. 在配置 OkHttpClient时设置的interceptors；[eg. 最常用的:日志拦截器]
