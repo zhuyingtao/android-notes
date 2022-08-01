@@ -69,6 +69,23 @@ public synchronized ExecutorService executorService() {
 
 #### 拦截器 Interceptors
 
+**Interceptor 接口作为一个拦截器的抽象概念，被设计为责任链上的单位节点，用于观察、拦截、处理请求等**，例如添加 Header、重定向、数据处理等等。
+Interceptor 之间**互相独立**，每个 Interceptor 只负责自己关注的任务，不与其他 Interceptor 接触。
+
+Interceptor 接口定义
+
+```java
+public interface Interceptor {
+  Response intercept(Chain chain) throws IOException;
+}
+```
+
+intercept 方法接收一个 Chain 作为参数，并返回一个 Response，该方法的一般处理逻辑如下：
+
+![img](assets/android-okhttp/v2-9be6c7aea6b19c1e9673e17eed472d70_1440w.jpg)
+
+OkHttp 源码 RealCall 中 interceptor 的添加顺序：
+
 1. 在配置 OkHttpClient时设置的interceptors；[eg. 最常用的:日志拦截器]
 
 2. 负责失败重试以及重定向的 RetryAndFollowUpInterceptor；会根据服务器返回的信息判断这个请求是否可以重定向，或者是否有必要进行重试
@@ -132,6 +149,14 @@ Response getResponseWithInterceptorChain() throws IOException {
 ```
 
 这里，我们创建了一个列表对象之后把 client 中的拦截器、重连拦截器、桥拦截器、缓存拦截器、网络连接拦截器和服务器请求拦截器等依次加入到列表中。然后，我们用这个列表创建了一个拦截器链。这里使用了责任链设计模式，每当一个拦截器执行完毕之后会调用下一个拦截器或者不调用并返回结果。显然，我们最终拿到的响应就是这个链条执行之后返回的结果。当我们自定义一个拦截器的时候，也会被加入到这个拦截器链条里。
+
+#### Chain
+
+Chain 被用来**描述责任链**，通过其中的 process 方法开始**依次执行链上的每个节点**，并返回处理后的 Response。
+
+Chain 的唯一实现为 RealInterceptorChain（下文简称 RIC），RIC 可以称之为**拦截器责任链**，其中的节点由 RealCall 中添加进来的 Interceptor 们组成。由于 Interceptor 的互相独立性，RIC 中还会包含一些公共参数及共享的对象。
+
+Interceptor 与 Chain 彼此互相依赖，互相调用，共同发展，形成了一个完美的调用链
 
 #### 连接管理 ConnectionPool
 
