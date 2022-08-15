@@ -158,6 +158,70 @@ Chain 的唯一实现为 RealInterceptorChain（下文简称 RIC），RIC 可以
 
 Interceptor 与 Chain 彼此互相依赖，互相调用，共同发展，形成了一个完美的调用链
 
+#### 网络连接过程
+
+我们之前看的 Volley 啊等等很多网络请求框架很多底层都是通过 HttpURLConnection 来与服务端建立连接的，而 OkHttp 就比较优秀了。因为 HTTP 协议是建立在 TCP/IP 协议基础之上的，底层还是走的 Socket，所以 **OkHttp 直接使用 Socket 来完成 HTTP 请**求。
+
+连接过程涉及到的类：
+
+- Route
+
+  Route 为用于连接到服务器的具体路由。其中包含了 IP 地址、端口、代理等参数。
+  由于存在代理或者 DNS 可能返回多个 IP 地址的情况，所以同一个接口地址可能会对应多个 route。
+  在创建 Connection 时将会使用 Route 而不是直接用 IP 地址。
+
+- RouteSelector
+
+  Route 选择器，其中存储了所有可用的 Route，在准备连接时会通过 RouteSelector#next 方法获取下一个 Route。
+  值得注意的是，RouteSelector 中包含了一个 routeDatabase 对象，其中存放着连接失败的 Route，RouteSelector 会将其中存储的上次连接失败的 route 放在最后，以此提高连接速度。
+
+- RealConnection
+
+  RealConnection 实现了 Connection 接口，其中使用 Socket 建立 HTTP/HTTPS 连接,并且获取 I/O 流，**同一个 Connection 可能会承载多个 HTTP 的请求与响应**。
+  其实可以大概的理解为是对 Socket 、I/O 流以及一些协议的封装，这个里面涉及到的计算机网络相关的知识较多，例如 TLS 握手，HTTPS 验证等等。
+
+- RealConnectionPool
+
+  这是用来存储 RealConnection 的池子，内部使用一个双端队列来进行存储。
+  在 OkHttp 中，一个连接（RealConnection）用完后不会立马被关闭并释放掉，而且是会存储到连接池（RealConnectionPool）中。
+  除了缓存连接外，缓存池还负责定期清理过期的连接，在 RealConnection 中会维护一个用来描述该连接空闲时间的字段，每添加一个新的连接到连接池中时都会进行一次检测，遍历所有的连接，找出当前未被使用且空闲时间最长的那个连接，如果该连接空闲时长超出阈值，或者连接池已满，将会关闭该连接。
+  另外 RealConnection 中还维护一个 Transmitter 的弱引用列表，用来存储当前正在使用该连接的 Transmitter。当列表为空时表示该连接已经未在使用。
+
+- ExchangeCodec
+
+  **ExchangeCodec 负责对 Request 编码及解码 Response**，也就是写入请求及读取响应，我们的请求及响应数据都通过它来读写。
+  所以 Connection 负责建立连接，ExchangeCodec 负责收发数据。
+  ExchangeCodec 接口的实现类有两个：Http1ExchangeCodec 及 Http2ExchangeCodec，分别对应两种协议版本。
+
+- Exchange
+
+  Exchange 功能类似 ExchangeCodec，但它是对应的是单个请求，其在 ExchangeCodec 基础上担负了一些连接管理及事件分发的作用。
+  具体而言，**Exchange 与 Request 一一对应**，新建一个请求时就会创建一个 Exchange，该 Exchange 负责将这个请求发送出去并读取到响应数据，而发送与接收数据使用的是 ExchangeCodec。
+
+- Transmitter
+
+  Transmitter 是 OkHttp 网络层的桥梁，我们上面说的这些概念最终都是通过 Transmitter 来融合在一起，并对外提供功能实现。
+
+好了，现在基本概念介绍完毕，开始看看 interceptor 吧，具体看看每个 interceptor 都干了哪些事情。
+
+- RetryAndFollowUpInterceptor
+
+  这个 interceptor 顾名思义，负责失败重试以及重定向。
+  可能出触发重试或重定向的条件如下：
+
+  - **401：未授权**
+  - **407：代理未授权**
+  - **503：服务未授权**
+  - **3xx：请求重定向**
+  - **408：请求超时**
+  - **以及一些 I/O 异常等等连接失败的情况**
+
+  下面看一下其中的逻辑：
+
+  ![img](assets/android-okhttp/v2-934e44fe9de66ca885657735a5a4ba2b_1440w.jpg)
+
+
+
 #### 连接管理 ConnectionPool
 
 与请求的缓存类似，OkHttp 的连接池也使用一个双端队列来缓存已经创建的连接：
